@@ -16,9 +16,10 @@ fn main() {
 
 fn part_one(v: &Vec<u32>) {
     let mut v = v.clone();
+    let length = v.len();
 
-    if v.len() >= 3 {
-        let last = v[v.len() - 1];
+    if length >= 3 {
+        let last = v[length - 1];
         v.insert(0, last);
     }
 
