@@ -1,7 +1,6 @@
 extern crate failure;
 
 use std::io::{self, Read};
-use std::env;
 use std::process;
 use failure::Error;
 
@@ -11,22 +10,13 @@ fn main() {
         process::exit(1);
     });
 
-    let mut args = env::args();
-    args.next();
-
-    match args.next() {
-        Some(arg) => if arg == "2" {
-            part_two(parsed_input);
-        } else {
-            part_one(parsed_input);
-        },
-        None => {
-            part_one(parsed_input);
-        }
-    }
+    part_one(&parsed_input);
+    part_two(&parsed_input);
 }
 
-fn part_one(mut v: Vec<u32>) {
+fn part_one(v: &Vec<u32>) {
+    let mut v = v.clone();
+
     if v.len() >= 3 {
         let last = v[v.len() - 1];
         v.insert(0, last);
@@ -50,10 +40,10 @@ fn part_one(mut v: Vec<u32>) {
         }
     }
 
-    println!("{:?}", sum);
+    println!("Part one solution: {}", sum);
 }
 
-fn part_two(v: Vec<u32>) {
+fn part_two(v: &Vec<u32>) {
     let mut sum = 0;
     let length = v.len();
     let distance = length / 2;
@@ -70,7 +60,7 @@ fn part_two(v: Vec<u32>) {
         }
     }
 
-    println!("{}", sum);
+    println!("Part two solution: {}", sum);
 }
 
 fn parse_input() -> Result<Vec<u32>, Error> {
