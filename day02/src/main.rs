@@ -43,7 +43,6 @@ fn part_two(v: &Vec<Vec<u32>>) {
     for row in v.iter() {
         for (row_elem_index, row_elem) in row.iter().enumerate() {
             for row_elem_pair in row[row_elem_index + 1..].iter() {
-                println!("{}, {}", row_elem, row_elem_pair);
                 if row_elem % row_elem_pair == 0 {
                     sum_of_even_divisons = sum_of_even_divisons + row_elem / row_elem_pair;
                 } else if row_elem_pair % row_elem == 0 {
