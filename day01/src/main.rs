@@ -10,59 +10,13 @@ fn main() {
         process::exit(1);
     });
 
-    part_one(&parsed_input);
-    part_two(&parsed_input);
-}
 
-fn part_one(v: &Vec<u32>) {
-    let mut v = v.clone();
-    let length = v.len();
 
-    if length >= 3 {
-        if let Some(&a) = v.last() {
-            v.insert(0, a);
-        }
-    }
+    let part_one = check_pairs(&parsed_input, 1);
+    let part_two = check_pairs(&parsed_input, &parsed_input.len() / 2);
 
-    let mut sum = 0;
-
-    let mut p = v.iter().peekable();
-
-    loop {
-        let num = match p.next() {
-            Some(n) => n,
-            None => break,
-        };
-
-        match p.peek() {
-            Some(&next_num) => if num == next_num {
-                sum = num + sum;
-            },
-            None => break,
-        }
-    }
-
-    println!("Part one solution: {}", sum);
-}
-
-fn part_two(v: &Vec<u32>) {
-    let mut sum = 0;
-    let length = v.len();
-    let distance = length / 2;
-
-    for (index, elem) in v.iter().enumerate() {
-        let mut pair_index = index + distance;
-
-        if pair_index > length - 1 {
-            pair_index = pair_index - length;
-        }
-
-        if &v[pair_index] == elem {
-            sum = sum + elem;
-        }
-    }
-
-    println!("Part two solution: {}", sum);
+    println!("Part one solution: {}", part_one);
+    println!("Part two solution: {}", part_two);
 }
 
 fn parse_input() -> Result<Vec<u32>, Error> {
@@ -75,4 +29,19 @@ fn parse_input() -> Result<Vec<u32>, Error> {
     let v: Vec<u32> = buff.chars().filter_map(|c| c.to_digit(10)).collect();
 
     Ok(v)
+}
+
+fn check_pairs(v: &Vec<u32>, look_ahead: usize) -> u32 {
+    let mut sum = 0;
+    let length = v.len();
+
+    for (index, elem) in v.iter().enumerate() {
+        let pair_index: usize = ((index + look_ahead) as i32 - length as i32).abs() as usize;
+
+        if &v[pair_index] == elem {
+            sum = sum + elem;
+        }
+    }
+
+    sum
 }
