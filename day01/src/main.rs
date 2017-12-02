@@ -10,8 +10,6 @@ fn main() {
         process::exit(1);
     });
 
-
-
     let part_one = check_pairs(&parsed_input, 1);
     let part_two = check_pairs(&parsed_input, &parsed_input.len() / 2);
 
