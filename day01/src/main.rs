@@ -10,12 +10,8 @@ fn main() {
         process::exit(1);
     });
 
-
-
     part_one(&parsed_input);
-    let part_two = check_pairs(&parsed_input, &parsed_input.len() / 2);
-
-    println!("Part two solution: {}", part_two);
+    part_two(&parsed_input);
 }
 
 fn part_one(v: &Vec<u32>) {
@@ -49,21 +45,26 @@ fn part_one(v: &Vec<u32>) {
     println!("Part one solution: {}", sum);
 }
 
-fn check_pairs(v: &Vec<u32>, look_ahead: usize) -> u32 {
+fn part_two(v: &Vec<u32>) {
     let mut sum = 0;
     let length = v.len();
+    let distance = length / 2;
 
     for (index, elem) in v.iter().enumerate() {
-        let pair_index = index as i32 + look_ahead as i32;
-        let pair_index = (pair_index - length as i32).abs() as usize;
+        let mut pair_index = index + distance;
+
+        if pair_index > length - 1 {
+            pair_index = pair_index - length;
+        }
 
         if &v[pair_index] == elem {
             sum = sum + elem;
         }
     }
 
-    sum
+    println!("{}", sum);
 }
+
 
 fn parse_input() -> Result<Vec<u32>, Error> {
     let mut stdin = io::stdin();
