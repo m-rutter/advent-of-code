@@ -17,7 +17,6 @@ fn main() {
     println!("Part two solution: {}", part_two);
 }
 
-
 fn parse_input() -> Result<Vec<u32>, Error> {
     let mut stdin = io::stdin();
 
