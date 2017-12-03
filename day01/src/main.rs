@@ -5,19 +5,19 @@ use std::process;
 use failure::Error;
 
 fn main() {
-    let parsed_input = parse_input().unwrap_or_else(|err| {
+    let input = parser().unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
 
-    let part_one = check_pairs(&parsed_input, 1);
-    let part_two = check_pairs(&parsed_input, parsed_input.len() / 2);
+    let part_one = circular_match_and_sum(&input, 1);
+    let part_two = circular_match_and_sum(&input, input.len() / 2);
 
     println!("Part one solution: {}", part_one);
     println!("Part two solution: {}", part_two);
 }
 
-fn parse_input() -> Result<Vec<u32>, Error> {
+fn parser() -> Result<Vec<u32>, Error> {
     let mut stdin = io::stdin();
 
     let mut buff = String::new();
@@ -29,12 +29,12 @@ fn parse_input() -> Result<Vec<u32>, Error> {
     Ok(v)
 }
 
-fn check_pairs(v: &Vec<u32>, distance: usize) -> u32 {
+fn circular_match_and_sum(v: &Vec<u32>, offset: usize) -> u32 {
     let mut sum = 0;
     let length = v.len();
 
     for (index, elem) in v.iter().enumerate() {
-        let mut pair_index = index + distance;
+        let mut pair_index = index + offset;
 
         if pair_index > length - 1 {
             pair_index = pair_index - length;
