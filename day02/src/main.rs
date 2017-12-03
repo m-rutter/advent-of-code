@@ -1,9 +1,11 @@
 extern crate failure;
+extern crate itertools;
 
 use failure::Error;
 
 use std::io::{self, Read};
 use std::process;
+use itertools::Itertools;
 
 fn main() {
     let input = parse_input().unwrap_or_else(|err| {
@@ -40,6 +42,8 @@ fn part_one(v: &Vec<Vec<u32>>) {
 fn part_two(v: &Vec<Vec<u32>>) {
     let mut sum_of_even_divisons = 0;
 
+    v.iter().map(|row| row);
+
     for row in v.iter() {
         for (row_elem_index, row_elem) in row.iter().enumerate() {
             for row_elem_pair in row[row_elem_index + 1..].iter() {
@@ -63,22 +67,13 @@ fn parse_input() -> Result<Vec<Vec<u32>>, Error> {
 
     stdin.read_to_string(&mut buff)?;
 
-    let lines: Vec<&str> = buff.lines().collect();
+    let table: Vec<Vec<u32>> = buff.lines()
+        .map(|line| {
+            line.split_whitespace()
+                .filter_map(|elem| elem.parse().ok())
+                .collect()
+        })
+        .collect();
 
-    let mut v: Vec<Vec<u32>> = Vec::new();
-
-    for line in lines.iter() {
-        let mut row: Vec<u32> = Vec::new();
-
-        for sub in line.split_whitespace() {
-            match sub.parse() {
-                Ok(num) => row.push(num),
-                _ => continue,
-            };
-        }
-
-        v.push(row);
-    }
-
-    Ok(v)
+    Ok(table)
 }
