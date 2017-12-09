@@ -38,9 +38,6 @@ fn part_one(v: &Vec<Vec<u32>>) {
     println!("Part one solution: {}", checksum);
 }
 
-
-
-
 fn part_two(v: &Vec<Vec<u32>>) {
     let sum_of_even_divisons: u32 = v.iter()
         .map(|inner_v| {
@@ -54,7 +51,7 @@ fn part_two(v: &Vec<Vec<u32>>) {
                     }
 
                     if b % a == 0 {
-                        sum = b / a
+                        sum = b / a + sum
                     }
 
                     sum
