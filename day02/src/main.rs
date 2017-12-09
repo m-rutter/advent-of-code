@@ -18,44 +18,50 @@ fn main() {
 }
 
 fn part_one(v: &Vec<Vec<u32>>) {
-    let mut checksum = 0;
+    let checksum: u32 = v.iter()
+        .map(|row| {
+            let max = match row.iter().max() {
+                Some(&num) => num,
+                None => 0,
+            };
 
-    for row in v.iter() {
-        let max = match row.iter().max() {
-            Some(&num) => num,
-            None => 0,
-        };
+            let min = match row.iter().min() {
+                Some(&num) => num,
+                None => 0,
+            };
 
-        let min = match row.iter().min() {
-            Some(&num) => num,
-            None => 0,
-        };
+            max - min
+        })
+        .sum();
 
-        let difference = max - min;
-
-        checksum = checksum + difference;
-    }
 
     println!("Part one solution: {}", checksum);
 }
 
+
+
+
 fn part_two(v: &Vec<Vec<u32>>) {
-    let mut sum_of_even_divisons = 0;
+    let sum_of_even_divisons: u32 = v.iter()
+        .map(|inner_v| {
+            inner_v
+                .iter()
+                .tuple_combinations()
+                .map(|(a, b)| {
+                    let mut sum = 0;
+                    if a % b == 0 {
+                        sum = a / b
+                    }
 
-    v.iter().map(|row| row);
+                    if b % a == 0 {
+                        sum = b / a
+                    }
 
-    for row in v.iter() {
-        for (row_elem_index, row_elem) in row.iter().enumerate() {
-            for row_elem_pair in row[row_elem_index + 1..].iter() {
-                if row_elem % row_elem_pair == 0 {
-                    sum_of_even_divisons = sum_of_even_divisons + row_elem / row_elem_pair;
-                } else if row_elem_pair % row_elem == 0 {
-                    sum_of_even_divisons = sum_of_even_divisons + row_elem_pair / row_elem;
-                }
-            }
-        }
-    }
-
+                    sum
+                })
+                .sum::<u32>()
+        })
+        .sum();
 
     println!("Part two solution: {}", sum_of_even_divisons);
 }
