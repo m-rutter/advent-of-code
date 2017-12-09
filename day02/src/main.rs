@@ -45,16 +45,13 @@ fn part_two(v: &Vec<Vec<u32>>) {
                 .iter()
                 .tuple_combinations()
                 .map(|(a, b)| {
-                    let mut sum = 0;
-                    if a % b == 0 {
-                        sum = a / b
-                    }
+                    let sum = if a % b == 0 { a / b } else { 0 };
 
                     if b % a == 0 {
-                        sum = b / a + sum
+                        b / a + sum
+                    } else {
+                        sum
                     }
-
-                    sum
                 })
                 .sum::<u32>()
         })
