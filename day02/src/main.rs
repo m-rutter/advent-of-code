@@ -13,12 +13,16 @@ fn main() {
         process::exit(1);
     });
 
-    part_one(&input);
-    part_two(&input);
+    let checksum = gen_checksum(&input);
+    let sum_of_even_divisons = users_are_odd(&input);
+
+
+    println!("Part one solution: {}", checksum);
+    println!("Part two solution: {}", sum_of_even_divisons);
 }
 
-fn part_one(v: &Vec<Vec<u32>>) {
-    let checksum: u32 = v.iter()
+fn gen_checksum(v: &Vec<Vec<u32>>) -> u32 {
+    v.iter()
         .map(|row| {
             let max = match row.iter().max() {
                 Some(&num) => num,
@@ -32,14 +36,11 @@ fn part_one(v: &Vec<Vec<u32>>) {
 
             max - min
         })
-        .sum();
-
-
-    println!("Part one solution: {}", checksum);
+        .sum()
 }
 
-fn part_two(v: &Vec<Vec<u32>>) {
-    let sum_of_even_divisons: u32 = v.iter()
+fn users_are_odd(v: &Vec<Vec<u32>>) -> u32 {
+    v.iter()
         .map(|inner_v| {
             inner_v
                 .iter()
@@ -55,9 +56,7 @@ fn part_two(v: &Vec<Vec<u32>>) {
                 })
                 .sum::<u32>()
         })
-        .sum();
-
-    println!("Part two solution: {}", sum_of_even_divisons);
+        .sum()
 }
 
 fn parse_input() -> Result<Vec<Vec<u32>>, Error> {
