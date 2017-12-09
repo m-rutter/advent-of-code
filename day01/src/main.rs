@@ -30,19 +30,10 @@ fn parser() -> Result<Vec<u32>, Error> {
 }
 
 fn circular_match_and_sum(v: &Vec<u32>, offset: usize) -> u32 {
-    let mut sum = 0;
-    let length = v.len();
-
-    for (index, elem) in v.iter().enumerate() {
-        let mut pair_index = index + offset;
-
-        if pair_index > length - 1 {
-            pair_index = pair_index - length;
-        }
-
-        if &v[pair_index] == elem {
-            sum = sum + elem;
-        }
-    }
-    sum
+    v.iter()
+        .cycle()
+        .skip(offset)
+        .zip(v.iter())
+        .filter_map(|(a, b)| if a == b { Some(a) } else { None })
+        .sum()
 }
