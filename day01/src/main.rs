@@ -34,6 +34,6 @@ fn circular_match_and_sum(v: &Vec<u32>, offset: usize) -> u32 {
         .cycle()
         .skip(offset)
         .zip(v.iter())
-        .filter_map(|(a, b)| if a == b { Some(a) } else { None })
+        .filter_map(|(a, b)| if a == b { Some(a) } else { None }) // if blocks are expressions? awesome!
         .sum()
 }
