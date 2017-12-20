@@ -29,7 +29,7 @@ fn parser() -> Result<Vec<u32>, Error> {
     Ok(v)
 }
 
-fn circular_match_and_sum(v: &Vec<u32>, offset: usize) -> u32 {
+fn circular_match_and_sum(v: &[u32], offset: usize) -> u32 {
     v.iter()
         .cycle()
         .skip(offset)

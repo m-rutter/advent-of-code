@@ -21,7 +21,7 @@ fn main() {
     println!("Part two solution: {}", sum_of_even_divisons);
 }
 
-fn gen_checksum(v: &Vec<Vec<u32>>) -> u32 {
+fn gen_checksum(v: &[Vec<u32>]) -> u32 {
     v.iter()
         .map(|row| {
             let max = match row.iter().max() {
@@ -39,7 +39,7 @@ fn gen_checksum(v: &Vec<Vec<u32>>) -> u32 {
         .sum()
 }
 
-fn users_are_odd(v: &Vec<Vec<u32>>) -> u32 {
+fn users_are_odd(v: &[Vec<u32>]) -> u32 {
     v.iter()
         .map(|inner_v| {
             inner_v
