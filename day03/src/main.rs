@@ -104,7 +104,7 @@ fn distance(limit: u32) -> u32 {
         };
     }
 
-    (previous.x + previous.y.abs()) as u32
+    (previous.x.abs() + previous.y.abs()) as u32
 }
 
 fn parser() -> Result<u32, Error> {
