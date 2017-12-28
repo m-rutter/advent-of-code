@@ -12,10 +12,10 @@ fn main() {
         process::exit(1);
     });
 
-    let part_one = relocate_until_repeat(&input);
+    let (part_one, part_two) = relocate_until_repeat(&input);
 
-    println!("Part one solution is: {}", part_one.0);
-    println!("Part two solution is: {}", part_one.1);
+    println!("Part one solution is: {}", part_one);
+    println!("Part two solution is: {}", part_two);
 }
 
 fn relocate_until_repeat(banks: &Vec<u32>) -> (u32, u32) {
