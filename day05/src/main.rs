@@ -18,21 +18,21 @@ fn main() {
 }
 
 
-fn steps_to_exit<T>(v: &Vec<i32>, f: T) -> u32
+fn steps_to_exit<T>(jumps: &Vec<i32>, change_jump: T) -> u32
 where
     T: Fn(i32) -> i32,
 {
-    let mut v = v.clone();
+    let mut jumps = jumps.clone();
 
-    let max_position = v.len() as i32 - 1;
+    let max_position = jumps.len() as i32 - 1;
     let mut steps = 0;
     let mut position: usize = 0;
 
     loop {
         steps += 1;
 
-        let next_position = v[position] + position as i32;
-        v[position] += f(v[position]);
+        let next_position = jumps[position] + position as i32;
+        jumps[position] += change_jump(jumps[position]);
 
         if next_position > max_position || next_position < 0 {
             break;
