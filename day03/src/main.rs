@@ -4,7 +4,7 @@ use failure::Error;
 
 use std::io::{self, Read};
 use std::ops::Add;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::process;
 
 fn main() {
@@ -13,10 +13,11 @@ fn main() {
         process::exit(1);
     });
 
-
     let part_one = distance(input);
+    let part_two = memory_walk(input);
 
     println!("Part one solution: {:?}", part_one);
+    println!("Part two solution: {:?}", part_two);
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -29,12 +30,27 @@ impl Cell {
     fn new(x: i64, y: i64) -> Cell {
         Cell { x, y }
     }
+
+    fn get_adjacent(c: Cell) -> Vec<Cell> {
+        vec![
+            Cell::new(1, 0),
+            Cell::new(1, 1),
+            Cell::new(0, 1),
+            Cell::new(-1, 1),
+            Cell::new(-1, 0),
+            Cell::new(-1, -1),
+            Cell::new(0, -1),
+            Cell::new(1, -1),
+        ].iter()
+            .map(|&a| a + c)
+            .collect()
+    }
 }
 
 impl Add for Cell {
     type Output = Cell;
 
-    fn add(self, other: Cell) -> Cell {
+    fn add(self, other: Self) -> Cell {
         Cell {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -78,12 +94,13 @@ impl Orientation {
     }
 }
 
-fn distance(limit: u32) -> u32 {
+fn distance(limit: u64) -> u64 {
     let mut direction = Orientation::East;
     let mut matrix = HashSet::new();
-    let mut previous = Cell::new(1, 0);
 
     matrix.insert(Cell::new(0, 0));
+
+    let mut previous = Cell::new(1, 0);
     matrix.insert(previous);
 
     let range = 2..limit;
@@ -93,6 +110,7 @@ fn distance(limit: u32) -> u32 {
 
         if matrix.contains(&look_at) {
             let next_step = direction.move_to(previous);
+
             matrix.insert(next_step);
 
             previous = next_step;
@@ -104,17 +122,64 @@ fn distance(limit: u32) -> u32 {
         };
     }
 
-    (previous.x.abs() + previous.y.abs()) as u32
+    (previous.x.abs() + previous.y.abs()) as u64
 }
 
-fn parser() -> Result<u32, Error> {
+fn memory_walk(limit: u64) -> u64 {
+    let mut direction = Orientation::East;
+    let mut matrix: HashMap<Cell, u64> = HashMap::new();
+
+    matrix.insert(Cell::new(0, 0), 1);
+
+    let mut previous = Cell::new(1, 0);
+    matrix.insert(previous, 1);
+
+    let range = 2..limit;
+
+    for _ in range {
+        let look_at = direction.look_left(previous);
+
+        if matrix.contains_key(&look_at) {
+            let next_step = direction.move_to(previous);
+            let value = Cell::get_adjacent(next_step)
+                .iter()
+                .filter_map(|c| matrix.get(c))
+                .sum();
+
+            matrix.insert(next_step, value);
+            previous = next_step;
+
+            if value > limit {
+                break;
+            }
+        } else {
+            let value = Cell::get_adjacent(look_at)
+                .iter()
+                .filter_map(|c| matrix.get(c))
+                .sum();
+
+            matrix.insert(look_at, value);
+
+            previous = look_at;
+            direction = direction.orient_left();
+
+            if value > limit {
+                break;
+            }
+        };
+    }
+
+    matrix.get(&previous).unwrap().clone()
+}
+
+fn parser() -> Result<u64, Error> {
     let mut stdin = io::stdin();
 
     let mut buff = String::new();
 
     stdin.read_to_string(&mut buff)?;
 
-    let num = buff.parse()?;
+    let num = buff.trim().parse()?;
 
     Ok(num)
 }
