@@ -1,8 +1,6 @@
 extern crate failure;
-extern crate itertools;
 
 use failure::Error;
-use itertools::Itertools;
 
 use std::io::{self, Read};
 use std::process;
@@ -25,14 +23,24 @@ fn main() {
 fn get_valid_passprase_anagrams(v: &[Vec<String>]) -> u32 {
     v.iter()
         .map(|passprase| {
-            let mut pass = 1;
+            let pass_len = passprase.len();
 
-            passprase.iter().tuple_combinations().for_each(|(a, b)| {
-                let mut set = HashSet::new();
-            });
+            let set_len = passprase
+                .iter()
+                .map(|word| {
+                    let mut chars = word.chars().collect::<Vec<char>>();
+                    chars.sort();
 
+                    chars
+                })
+                .collect::<HashSet<Vec<char>>>()
+                .len();
 
-            pass
+            if set_len == pass_len {
+                1
+            } else {
+                0
+            }
         })
         .sum()
 }
