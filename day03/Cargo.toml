@@ -1,7 +1,0 @@
-[package]
-name = "day03"
-version = "0.1.0"
-authors = ["Michael Rutter <michael.john.rutter@gmail.com>"]
-
-[dependencies]
-failure = "0.1.1"
