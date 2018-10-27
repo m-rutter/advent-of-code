@@ -7,3 +7,6 @@ version = "0.1.0"
 clap = "*"
 failure = "*"
 itertools = "*"
+
+[[bin]]
+name = "aoc-cli"
