@@ -1,4 +1,4 @@
-use aoc_2017::{solve_day, Config};
+use aoc_2017::{solve_day, AoCSolution, Config};
 
 use clap::{App, Arg, ArgMatches};
 
@@ -22,7 +22,7 @@ fn main() {
     run(matches).unwrap();
 }
 
-fn run(matches: ArgMatches) -> Result<(), String> {
+fn run(matches: ArgMatches) -> Result<AoCSolution, String> {
     let config = Config::new(1);
 
     println!("{:?}", config);

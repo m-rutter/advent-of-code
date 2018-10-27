@@ -29,8 +29,19 @@ impl Default for ConfigInput {
     }
 }
 
+pub struct AoCSolution {
+    pub part_one: String,
+    pub part_two: String,
+}
+
 impl Config {
     /// Creates a instance of AoC Config defaulting to using stdin
+    /// # Example
+    /// ```
+    /// use aoc_2017::Config;
+    ///
+    /// let config = Config::new(1);
+    /// ```
     pub fn new(day: u8) -> Config {
         Config {
             day: day,
@@ -39,33 +50,72 @@ impl Config {
     }
 
     /// Set the day to compute
+    /// # Example
+    /// ```
+    /// use aoc_2017::Config;
+    ///
+    /// let mut config = Config::new(1);
+    ///
+    /// config.with_day(23);
+    /// ```
     pub fn with_day(&mut self, day: u8) {
         self.day = day;
     }
 
     /// Use stdin for providing input
+    /// # Example
+    /// ```
+    /// use aoc_2017::Config;
+    ///
+    /// let mut config = Config::new(1);
+    ///
+    /// config.with_stdin();
+    /// ```
     pub fn with_stdin(&mut self) {
         self.input = ConfigInput::Stdin;
     }
 
     /// Provide the input to evaluate
+    /// # Example
+    /// ```
+    /// use aoc_2017::Config;
+    ///
+    /// let mut config = Config::new(1);
+    ///
+    /// config.with_input("42347238904723984524532543234");
+    /// ```
     pub fn with_input(&mut self, input: &str) {
         self.input = ConfigInput::Input(String::from(input));
     }
 
     /// Provide file path to read input
+    /// # Example
+    /// ```
+    /// use aoc_2017::Config;
+    ///
+    /// let mut config = Config::new(1);
+    ///
+    /// config.with_input_file_path("./input");
+    /// ```
     pub fn with_input_file_path(&mut self, input: &str) {
         self.input = ConfigInput::InputPath(String::from(input));
     }
 
     /// Use the built-in sample input
+    /// # Example
+    /// ```
+    /// use aoc_2017::Config;
+    ///
+    /// let mut config = Config::new(1);
+    ///
+    /// config.with_sample_input();
+    /// ```
     pub fn with_sample_input(&mut self) {
         self.input = ConfigInput::Sample;
     }
 }
 
-/// Computes the solution to a day in Advent of Code 2017 with input provided
-/// either via stdin or reading from a file
+/// Computes the solution to a day in Advent of Code 2017
 /// # Examples
 /// ```rust
 /// use aoc_2017::{solve_day, Config};
@@ -76,8 +126,8 @@ impl Config {
 /// solve_day(config).unwrap();
 ///
 /// ```
-pub fn solve_day(config: Config) -> Result<(), String> {
-    Ok(match config.day {
+pub fn solve_day(config: Config) -> Result<AoCSolution, String> {
+    match config.day {
         1 => day01::run(config),
         2 => day02::run(config),
         3 => day03::run(config),
@@ -86,5 +136,10 @@ pub fn solve_day(config: Config) -> Result<(), String> {
         6 => day06::run(config),
         7 => day07::run(config),
         _ => return Err(format!("Day {} is not yet supported", config.day)),
+    }
+
+    Ok(AoCSolution {
+        part_one: String::new(),
+        part_two: String::new(),
     })
 }
