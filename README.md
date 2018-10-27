@@ -3,7 +3,7 @@
 
 aoc-cli:
 ```
-Advent of Code 2017 Solver in Rust 0.1.0
+Advent of Code 2017 CLI 0.1.0
 Michael Rutter <michael.john.rutter@gmail.com>
 Solves 2017 Advent of Code problems
 
