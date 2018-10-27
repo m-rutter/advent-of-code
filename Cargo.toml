@@ -1,7 +1,7 @@
 [package]
 authors = ["Michael Rutter <michael.john.rutter@gmail.com>"]
 edition = "2018"
-name = "advent-of-code-2017"
+name = "aoc-2017"
 version = "0.1.0"
 [dependencies]
 clap = "*"

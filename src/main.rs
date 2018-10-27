@@ -1,6 +1,6 @@
-use advent_of_code_2017::{run_day, Config};
+use aoc_2017::{solve_day, Config};
 
-use clap::{App, Arg, ArgMatches, SubCommand};
+use clap::{App, Arg, ArgMatches};
 
 fn main() {
     let matches = App::new("Advent of Code 2017 Solver in Rust")
@@ -23,11 +23,9 @@ fn main() {
 }
 
 fn run(matches: ArgMatches) -> Result<(), String> {
-    let config = Config {
-        day: 24,
-        stdin: false,
-        path: Some(String::from("dd")),
-    };
+    let config = Config::new(1);
 
-    run_day(config)
+    println!("{:?}", config);
+
+    solve_day(config)
 }
