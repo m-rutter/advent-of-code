@@ -44,7 +44,7 @@ impl Config {
 ///
 /// let mut config = Config::new(1, String::from("6497139596"));
 ///  
-/// match solve_day(config) {
+/// match solve_day(&config) {
 ///     Ok(solution) => {
 ///         println!("Part 1 solution for day 1: {}", solution.part_one);
 ///         println!("Part 2 solution for day 1: {}", solution.part_two);
