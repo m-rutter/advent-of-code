@@ -4,5 +4,6 @@ edition = "2018"
 name = "advent-of-code-2017"
 version = "0.1.0"
 [dependencies]
+clap = "*"
 failure = "*"
 itertools = "*"

@@ -3,7 +3,9 @@ use std::collections::HashMap;
 use std::io::{self, Read};
 use std::process;
 
-pub fn run() {
+use super::Config;
+
+pub fn run(config: Config) {
     let input = parser().unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
