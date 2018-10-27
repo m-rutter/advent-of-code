@@ -49,17 +49,21 @@ fn parser(input: &str) -> Result<Vec<i32>, Error> {
     Ok(jumps)
 }
 
-#[test]
-fn matches_offical_result() {
-    let input = include_str!("./input");
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn matches_offical_result() {
+        let input = include_str!("./input");
 
-    let config = Config {
-        day: 1,
-        input: input.to_string(),
-    };
+        let config = Config {
+            day: 1,
+            input: input.to_string(),
+        };
 
-    let result = run(&config);
+        let result = run(&config);
 
-    assert_eq!(result.part_one, "325922");
-    assert_eq!(result.part_two, "24490906");
+        assert_eq!(result.part_one, "325922");
+        assert_eq!(result.part_two, "24490906");
+    }
 }

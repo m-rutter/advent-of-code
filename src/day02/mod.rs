@@ -71,17 +71,21 @@ fn parse_input(input: &str) -> Result<Vec<Vec<u32>>, Error> {
     Ok(table)
 }
 
-#[test]
-fn matches_offical_result() {
-    let input = include_str!("./input");
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn matches_offical_result() {
+        let input = include_str!("./input");
 
-    let config = Config {
-        day: 1,
-        input: input.to_string(),
-    };
+        let config = Config {
+            day: 1,
+            input: input.to_string(),
+        };
 
-    let result = run(&config);
+        let result = run(&config);
 
-    assert_eq!(result.part_one, "36766");
-    assert_eq!(result.part_two, "261");
+        assert_eq!(result.part_one, "36766");
+        assert_eq!(result.part_two, "261");
+    }
 }

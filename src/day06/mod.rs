@@ -83,17 +83,22 @@ fn parser(input: &str) -> Result<Vec<u32>, Error> {
     Ok(banks)
 }
 
-#[test]
-fn matches_offical_result() {
-    let input = include_str!("./input");
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn matches_offical_result() {
+        let input = include_str!("./input");
 
-    let config = Config {
-        day: 1,
-        input: input.to_string(),
-    };
+        let config = Config {
+            day: 1,
+            input: input.to_string(),
+        };
 
-    let result = run(&config);
+        let result = run(&config);
 
-    assert_eq!(result.part_one, "12841");
-    assert_eq!(result.part_two, "8038");
+        assert_eq!(result.part_one, "12841");
+        assert_eq!(result.part_two, "8038");
+    }
+
 }

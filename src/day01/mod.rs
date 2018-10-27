@@ -32,18 +32,22 @@ fn circular_match_and_sum(v: &[u32], offset: usize) -> u32 {
         .filter_map(|(a, b)| if a == b { Some(a) } else { None }) // if blocks are expressions? awesome!
         .sum()
 }
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn matches_offical_result() {
-    let input = include_str!("./input");
+    #[test]
+    fn matches_offical_result() {
+        let input = include_str!("./input");
 
-    let config = Config {
-        day: 1,
-        input: input.to_string(),
-    };
+        let config = Config {
+            day: 1,
+            input: input.to_string(),
+        };
 
-    let result = run(&config);
+        let result = run(&config);
 
-    assert_eq!(result.part_one, "1228");
-    assert_eq!(result.part_two, "1238");
+        assert_eq!(result.part_one, "1228");
+        assert_eq!(result.part_two, "1238");
+    }
 }

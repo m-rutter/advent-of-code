@@ -21,16 +21,22 @@ fn parser(input: &str) -> Result<Vec<u32>, Error> {
     Ok(v)
 }
 
-#[test]
-fn matches_offical_result() {
-    let input = include_str!("./input");
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    let config = Config {
-        day: 1,
-        input: input.to_string(),
-    };
+    #[test]
+    fn matches_offical_result() {
+        let input = include_str!("./input");
 
-    let result = run(&config);
+        let config = Config {
+            day: 1,
+            input: input.to_string(),
+        };
 
-    unimplemented!()
+        let result = run(&config);
+
+        unimplemented!()
+    }
+
 }
