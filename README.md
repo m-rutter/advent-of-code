@@ -5,7 +5,7 @@
 
 To use and install the cli tool that uses the library with `cargo`, clone the repo and run `cargo install --path .` in the project directory. If cargo was installed using `rustup` the resulting binary ought to be in your PATH as `aoc-cli`. Uninstall with `cargo uninstall aoc-cli`.
 
-## Use
+## Usage
 
 aoc-cli:
 ```
