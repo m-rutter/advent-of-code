@@ -6,7 +6,7 @@ use std::process;
 use clap::{App, Arg, ArgMatches};
 
 fn main() {
-    let matches = App::new("Advent of Code 2017 Solver in Rust")
+    let matches = App::new("Advent of Code 2017 CLI")
         .version("0.1.0")
         .author("Michael Rutter <michael.john.rutter@gmail.com>")
         .about("Solves 2017 Advent of Code problems")
