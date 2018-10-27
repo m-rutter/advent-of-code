@@ -1,6 +1,8 @@
 # advent-of-code-2017
 [Advent of Code 2017](https://adventofcode.com/2017) solutions library crate and simple cli tool that uses it. All written in Rust as a learning project.
 
+To install the cli tool using cargo, clone the repo and run `cargo install --path .` in the project directory.
+
 aoc-cli:
 ```
 Advent of Code 2017 CLI 0.1.0
