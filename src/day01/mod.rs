@@ -32,6 +32,7 @@ fn circular_match_and_sum(v: &[u32], offset: usize) -> u32 {
         .filter_map(|(a, b)| if a == b { Some(a) } else { None }) // if blocks are expressions? awesome!
         .sum()
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
