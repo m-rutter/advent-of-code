@@ -25,7 +25,7 @@ OPTIONS:
     -p, --path <INPUT PATH>    Set the input file as problem input
 ```
 
-### CLI Examples
+### Examples
 
 #### Reading input from a file
 ```sh
