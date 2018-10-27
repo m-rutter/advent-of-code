@@ -24,3 +24,16 @@ OPTIONS:
     -d, --day <NUMBER>         Set the day to solve
     -p, --path <INPUT PATH>    Set the input file as problem input
 ```
+
+### Examples
+
+#### Reading input from a file
+```sh
+aoc-cli --day 1 --path ./input
+```
+
+#### Using stdin
+```sh
+cat ./input | aoc-cli --day 1
+```
+
