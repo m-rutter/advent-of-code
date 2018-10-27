@@ -4,7 +4,7 @@ use std::process;
 use super::{AoCSolution, Config};
 
 pub fn run(config: &Config) -> AoCSolution {
-    let input = parser(&config.input).unwrap_or_else(|err| {
+    let _input = parser(&config.input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
@@ -34,7 +34,7 @@ mod tests {
             input: input.to_string(),
         };
 
-        let result = run(&config);
+        let _result = run(&config);
 
         unimplemented!()
     }

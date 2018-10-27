@@ -127,6 +127,7 @@ fn distance(limit: u64) -> u64 {
     (previous.x.abs() + previous.y.abs()) as u64
 }
 
+#[allow(clippy::map_entry)]
 fn memory_walk(limit: u64) -> u64 {
     let mut direction = Orientation::East;
     let mut matrix: HashMap<Cell, u64> = HashMap::new();
@@ -171,7 +172,7 @@ fn memory_walk(limit: u64) -> u64 {
         };
     }
 
-    matrix.get(&previous).unwrap().clone()
+    matrix[&previous]
 }
 
 fn parser(input: &str) -> Result<u64, Error> {

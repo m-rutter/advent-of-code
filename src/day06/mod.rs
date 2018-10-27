@@ -17,12 +17,12 @@ pub fn run(config: &Config) -> AoCSolution {
     }
 }
 
-fn relocate_until_repeat(banks: &Vec<u32>) -> (u32, u32) {
+fn relocate_until_repeat(banks: &[u32]) -> (u32, u32) {
     let mut set = HashMap::new();
     let loop_size;
-    set.insert(banks.clone(), 0);
+    set.insert(banks.to_vec(), 0);
 
-    let mut banks = banks.clone();
+    let mut banks = banks.to_vec();
 
     let mut cycles = 0;
 
@@ -44,7 +44,7 @@ fn relocate_until_repeat(banks: &Vec<u32>) -> (u32, u32) {
         cycle(&mut banks, max_bank_index);
 
         if set.contains_key(&banks) {
-            loop_size = cycles - set.get(&banks).unwrap();
+            loop_size = cycles - set[&banks];
 
             break;
         }

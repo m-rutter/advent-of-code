@@ -18,11 +18,11 @@ pub fn run(config: &Config) -> AoCSolution {
     }
 }
 
-fn steps_to_exit<T>(jumps: &Vec<i32>, change_jump: T) -> u32
+fn steps_to_exit<T>(jumps: &[i32], change_jump: T) -> u32
 where
     T: Fn(i32) -> i32,
 {
-    let mut jumps = jumps.clone();
+    let mut jumps = jumps.to_vec();
 
     let max_position = jumps.len() as i32 - 1;
     let mut steps = 0;

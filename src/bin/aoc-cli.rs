@@ -1,7 +1,6 @@
 use aoc_2017::{solve_day, Config};
 use std::fs::File;
 use std::io::{self, Read};
-use std::process;
 
 use clap::{App, Arg, ArgMatches};
 
