@@ -1,13 +1,12 @@
 use failure::Error;
 
 use itertools::Itertools;
-use std::io::{self, Read};
 use std::process;
 
-use super::Config;
+use super::{AoCSolution, Config};
 
-pub fn run(config: Config) {
-    let input = parse_input().unwrap_or_else(|err| {
+pub fn run(config: &Config) -> AoCSolution {
+    let input = parse_input(&config.input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
@@ -15,8 +14,10 @@ pub fn run(config: Config) {
     let checksum = gen_checksum(&input);
     let sum_of_even_divisons = users_are_odd(&input);
 
-    println!("Part one solution: {}", checksum);
-    println!("Part two solution: {}", sum_of_even_divisons);
+    AoCSolution {
+        part_one: checksum.to_string(),
+        part_two: sum_of_even_divisons.to_string(),
+    }
 }
 
 fn gen_checksum(v: &[Vec<u32>]) -> u32 {
@@ -57,14 +58,8 @@ fn users_are_odd(v: &[Vec<u32>]) -> u32 {
         .sum()
 }
 
-fn parse_input() -> Result<Vec<Vec<u32>>, Error> {
-    let mut stdin = io::stdin();
-
-    let mut buff = String::new();
-
-    stdin.read_to_string(&mut buff)?;
-
-    let table: Vec<Vec<u32>> = buff
+fn parse_input(input: &str) -> Result<Vec<Vec<u32>>, Error> {
+    let table: Vec<Vec<u32>> = input
         .lines()
         .map(|line| {
             line.split_whitespace()

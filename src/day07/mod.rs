@@ -1,24 +1,22 @@
 use failure::Error;
-use std::io::{self, Read};
 use std::process;
 
-use super::Config;
+use super::{AoCSolution, Config};
 
-pub fn run(config: Config) {
-    let input = parser().unwrap_or_else(|err| {
+pub fn run(config: &Config) -> AoCSolution {
+    let input = parser(&config.input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
+
+    AoCSolution {
+        part_one: String::new(),
+        part_two: String::new(),
+    }
 }
 
-fn parser() -> Result<Vec<u32>, Error> {
-    let mut stdin = io::stdin();
-
-    let mut buff = String::new();
-
-    stdin.read_to_string(&mut buff)?;
-
-    let v: Vec<u32> = buff.chars().filter_map(|c| c.to_digit(10)).collect();
+fn parser(input: &str) -> Result<Vec<u32>, Error> {
+    let v: Vec<u32> = input.chars().filter_map(|c| c.to_digit(10)).collect();
 
     Ok(v)
 }

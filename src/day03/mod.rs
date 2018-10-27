@@ -1,14 +1,13 @@
 use failure::Error;
 
 use std::collections::{HashMap, HashSet};
-use std::io::{self, Read};
 use std::ops::Add;
 use std::process;
 
-use super::Config;
+use super::{AoCSolution, Config};
 
-pub fn run(config: Config) {
-    let input = parser().unwrap_or_else(|err| {
+pub fn run(config: &Config) -> AoCSolution {
+    let input = parser(&config.input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
@@ -16,8 +15,10 @@ pub fn run(config: Config) {
     let part_one = distance(input);
     let part_two = memory_walk(input);
 
-    println!("Part one solution: {:?}", part_one);
-    println!("Part two solution: {:?}", part_two);
+    AoCSolution {
+        part_one: part_one.to_string(),
+        part_two: part_two.to_string(),
+    }
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -69,28 +70,28 @@ enum Orientation {
 impl Orientation {
     fn look_left(&self, position: Cell) -> Cell {
         match self {
-            &Orientation::East => Cell::new(0, 1) + position,
-            &Orientation::North => Cell::new(-1, 0) + position,
-            &Orientation::West => Cell::new(0, -1) + position,
-            &Orientation::South => Cell::new(1, 0) + position,
+            Orientation::East => Cell::new(0, 1) + position,
+            Orientation::North => Cell::new(-1, 0) + position,
+            Orientation::West => Cell::new(0, -1) + position,
+            Orientation::South => Cell::new(1, 0) + position,
         }
     }
 
     fn move_to(&self, position: Cell) -> Cell {
         match self {
-            &Orientation::East => Cell::new(1, 0) + position,
-            &Orientation::North => Cell::new(0, 1) + position,
-            &Orientation::West => Cell::new(-1, 0) + position,
-            &Orientation::South => Cell::new(0, -1) + position,
+            Orientation::East => Cell::new(1, 0) + position,
+            Orientation::North => Cell::new(0, 1) + position,
+            Orientation::West => Cell::new(-1, 0) + position,
+            Orientation::South => Cell::new(0, -1) + position,
         }
     }
 
     fn orient_left(&self) -> Orientation {
         match self {
-            &Orientation::East => Orientation::North,
-            &Orientation::North => Orientation::West,
-            &Orientation::West => Orientation::South,
-            &Orientation::South => Orientation::East,
+            Orientation::East => Orientation::North,
+            Orientation::North => Orientation::West,
+            Orientation::West => Orientation::South,
+            Orientation::South => Orientation::East,
         }
     }
 }
@@ -173,14 +174,8 @@ fn memory_walk(limit: u64) -> u64 {
     matrix.get(&previous).unwrap().clone()
 }
 
-fn parser() -> Result<u64, Error> {
-    let mut stdin = io::stdin();
-
-    let mut buff = String::new();
-
-    stdin.read_to_string(&mut buff)?;
-
-    let num = buff.trim().parse()?;
+fn parser(input: &str) -> Result<u64, Error> {
+    let num = input.trim().parse()?;
 
     Ok(num)
 }

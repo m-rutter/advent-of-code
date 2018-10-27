@@ -1,13 +1,12 @@
 use failure::Error;
 
 use std::collections::HashSet;
-use std::io::{self, Read};
 use std::process;
 
-use super::Config;
+use super::{AoCSolution, Config};
 
-pub fn run(config: Config) {
-    let input = parser().unwrap_or_else(|err| {
+pub fn run(config: &Config) -> AoCSolution {
+    let input = parser(&config.input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
@@ -15,8 +14,10 @@ pub fn run(config: Config) {
     let valid_passprase_count = get_valid_passprase_count(&input);
     let valid_passprase_count_no_anagrams = get_valid_passprase_anagrams(&input);
 
-    println!("Part one solution: {}", valid_passprase_count);
-    println!("Part two solution: {}", valid_passprase_count_no_anagrams);
+    AoCSolution {
+        part_one: valid_passprase_count.to_string(),
+        part_two: valid_passprase_count_no_anagrams.to_string(),
+    }
 }
 
 fn get_valid_passprase_anagrams(v: &[Vec<String>]) -> u32 {
@@ -64,14 +65,8 @@ fn get_valid_passprase_count(v: &[Vec<String>]) -> u32 {
         .sum()
 }
 
-fn parser() -> Result<Vec<Vec<String>>, Error> {
-    let mut stdin = io::stdin();
-
-    let mut buff = String::new();
-
-    stdin.read_to_string(&mut buff)?;
-
-    let passwords: Vec<Vec<String>> = buff
+fn parser(input: &str) -> Result<Vec<Vec<String>>, Error> {
+    let passwords: Vec<Vec<String>> = input
         .lines()
         .map(|line| {
             line.split_whitespace()

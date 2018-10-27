@@ -1,20 +1,20 @@
 use failure::Error;
 use std::collections::HashMap;
-use std::io::{self, Read};
 use std::process;
 
-use super::Config;
+use super::{AoCSolution, Config};
 
-pub fn run(config: Config) {
-    let input = parser().unwrap_or_else(|err| {
+pub fn run(config: &Config) -> AoCSolution {
+    let input = parser(&config.input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
 
     let (part_one, part_two) = relocate_until_repeat(&input);
-
-    println!("Part one solution is: {}", part_one);
-    println!("Part two solution is: {}", part_two);
+    AoCSolution {
+        part_one: part_one.to_string(),
+        part_two: part_two.to_string(),
+    }
 }
 
 fn relocate_until_repeat(banks: &Vec<u32>) -> (u32, u32) {
@@ -73,14 +73,8 @@ fn cycle(banks: &mut Vec<u32>, start: usize) {
     }
 }
 
-fn parser() -> Result<Vec<u32>, Error> {
-    let mut stdin = io::stdin();
-
-    let mut buff = String::new();
-
-    stdin.read_to_string(&mut buff)?;
-
-    let banks = buff
+fn parser(input: &str) -> Result<Vec<u32>, Error> {
+    let banks = input
         .trim()
         .split_whitespace()
         .filter_map(|bank| bank.parse().ok())

@@ -1,4 +1,7 @@
-use aoc_2017::{solve_day, AoCSolution, Config};
+use aoc_2017::{solve_day, Config};
+use std::fs::File;
+use std::io::{self, Read};
+use std::process;
 
 use clap::{App, Arg, ArgMatches};
 
@@ -16,16 +19,71 @@ fn main() {
                 .required(true)
                 .takes_value(true),
         )
-        .arg(Arg::with_name("INPUT PATH").help("Set the input file as problem input"))
+        .arg(
+            Arg::with_name("path")
+                .short("p")
+                .long("path")
+                .value_name("INPUT PATH")
+                .help("Set the input file as problem input"),
+        )
         .get_matches();
 
-    run(matches).unwrap();
+    run(&matches);
 }
 
-fn run(matches: ArgMatches) -> Result<AoCSolution, String> {
-    let config = Config::new(1);
+fn run(matches: &ArgMatches) {
+    let day = matches.value_of("day").unwrap();
+    let config = create_config(matches);
 
-    println!("{:?}", config);
+    match solve_day(&config) {
+        Ok(solution) => {
+            println!(
+                "Solution to part 1 of day {} is: {}",
+                day, solution.part_one
+            );
+            println!(
+                "Solution to part 2 of day {} is: {}",
+                day, solution.part_two
+            );
+        }
+        Err(s) => {
+            eprintln!("{}", s);
+        }
+    }
+}
 
-    solve_day(config)
+enum InputType {
+    Stdin,
+    InputPath(String),
+}
+
+fn create_config(matches: &ArgMatches) -> Config {
+    let day = matches.value_of("day").unwrap();
+    let day: u8 = day.parse().unwrap();
+
+    let input_type = match matches.value_of("path") {
+        Some(path) => InputType::InputPath(path.to_string()),
+        None => InputType::Stdin,
+    };
+
+    let input = get_input_data(input_type);
+
+    Config::new(day, input)
+}
+
+fn get_input_data(input_type: InputType) -> String {
+    let mut buff = String::new();
+
+    match input_type {
+        InputType::Stdin => {
+            let mut stdin = io::stdin();
+            stdin.read_to_string(&mut buff).unwrap();
+        }
+        InputType::InputPath(path) => {
+            let mut file = File::open(path).unwrap();
+            file.read_to_string(&mut buff).unwrap();
+        }
+    }
+
+    buff
 }

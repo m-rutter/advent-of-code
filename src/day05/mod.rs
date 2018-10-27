@@ -1,11 +1,10 @@
 use failure::Error;
-use std::io::{self, Read};
 use std::process;
 
-use super::Config;
+use super::{AoCSolution, Config};
 
-pub fn run(config: Config) {
-    let input = parser().unwrap_or_else(|err| {
+pub fn run(config: &Config) -> AoCSolution {
+    let input = parser(&config.input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
@@ -13,8 +12,10 @@ pub fn run(config: Config) {
     let part_one = steps_to_exit(&input, |_| 1);
     let part_two = steps_to_exit(&input, |item| if item >= 3 { -1 } else { 1 });
 
-    println!("Solution to part one: {}", part_one);
-    println!("Solution to part two: {}", part_two);
+    AoCSolution {
+        part_one: part_one.to_string(),
+        part_two: part_two.to_string(),
+    }
 }
 
 fn steps_to_exit<T>(jumps: &Vec<i32>, change_jump: T) -> u32
@@ -42,14 +43,8 @@ where
     steps
 }
 
-fn parser() -> Result<Vec<i32>, Error> {
-    let mut stdin = io::stdin();
-
-    let mut buff = String::new();
-
-    stdin.read_to_string(&mut buff)?;
-
-    let jumps = buff.lines().filter_map(|line| line.parse().ok()).collect();
+fn parser(input: &str) -> Result<Vec<i32>, Error> {
+    let jumps = input.lines().filter_map(|line| line.parse().ok()).collect();
 
     Ok(jumps)
 }

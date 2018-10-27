@@ -1,11 +1,10 @@
 use failure::Error;
-use std::io::{self, Read};
 use std::process;
 
-use super::Config;
+use super::{AoCSolution, Config};
 
-pub fn run(config: Config) {
-    let input = parser().unwrap_or_else(|err| {
+pub fn run(config: &Config) -> AoCSolution {
+    let input = parser(&config.input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
@@ -13,14 +12,14 @@ pub fn run(config: Config) {
     let part_one = circular_match_and_sum(&input, 1);
     let part_two = circular_match_and_sum(&input, input.len() / 2);
 
-    println!("Part one solution: {}", part_one);
-    println!("Part two solution: {}", part_two);
+    AoCSolution {
+        part_one: part_one.to_string(),
+        part_two: part_two.to_string(),
+    }
 }
 
-fn parser() -> Result<Vec<u32>, Error> {
-    let str = include_str!("input");
-
-    let v: Vec<u32> = str.chars().filter_map(|c| c.to_digit(10)).collect();
+fn parser(input: &str) -> Result<Vec<u32>, Error> {
+    let v: Vec<u32> = input.chars().filter_map(|c| c.to_digit(10)).collect();
 
     Ok(v)
 }
