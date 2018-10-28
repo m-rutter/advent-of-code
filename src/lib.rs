@@ -50,7 +50,7 @@ impl Config {
     /// ```
     /// use aoc_2017::Config;
     ///
-    /// let config = Config::new(1, String::from("6497139596"));
+    /// let config = Config::new(2017, 1, String::from("6497139596"));
     /// ```
     pub fn new(year: u16, day: u8, input: String) -> Config {
         Config {
@@ -66,7 +66,7 @@ impl Config {
 /// ```rust
 /// use aoc_2017::{solve_day, Config};
 ///
-/// let mut config = Config::new(1, String::from("91212129"));
+/// let mut config = Config::new(2017, 1, String::from("91212129"));
 ///  
 /// match solve_day(&config) {
 ///     Ok(solution) => {
