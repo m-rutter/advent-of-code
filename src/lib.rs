@@ -1,4 +1,4 @@
-//! Advent of Code (AoC) 2017 solutions library written in Rust.
+//! Advent of Code (AoC) solutions library written in Rust.
 //! Personal learning project.
 use failure::Fail;
 
