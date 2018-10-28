@@ -1,10 +1,11 @@
 use failure::Error;
 use std::process;
 
-use super::{AoCError, AoCSolution, Config};
+use super::{AoCError, AoCSolution};
 
-pub fn run(config: &Config) -> Result<AoCSolution, AoCError> {
-    let _input = parser(&config.input).unwrap_or_else(|err| {
+/// Compute the solution to day 7 of AoC 2017
+pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
+    let _input = parser(&input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
@@ -23,9 +24,9 @@ fn parser(input: &str) -> Result<Vec<u32>, Error> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     // TODO: Solve test and put the offical answer here
+    // use super::*;
+
     // #[test]
     // fn matches_offical_result() {
     //     let input = include_str!("./input");
@@ -35,7 +36,7 @@ mod tests {
     //         input: input.to_string(),
     //     };
 
-    //     let _result = run(&config).unwrap();
+    //     let _result = run(&config.input).unwrap();
     // }
 
 }

@@ -1,9 +1,10 @@
 use itertools::Itertools;
 
-use super::{AoCError, AoCSolution, Config};
+use super::{AoCError, AoCSolution};
 
-pub fn run(config: &Config) -> Result<AoCSolution, AoCError> {
-    let input = parse_input(&config.input);
+/// Compute the solution to day 2 of AoC 2017
+pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
+    let input = parse_input(&input);
 
     let checksum = gen_checksum(&input);
     let sum_of_even_divisons = users_are_odd(&input);
@@ -70,12 +71,7 @@ mod tests {
     fn matches_offical_result() {
         let input = include_str!("./input");
 
-        let config = Config {
-            day: 1,
-            input: input.to_string(),
-        };
-
-        let result = run(&config).unwrap();
+        let result = run(&input).unwrap();
 
         assert_eq!(result.part_one, "36766");
         assert_eq!(result.part_two, "261");

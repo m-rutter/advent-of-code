@@ -1,7 +1,8 @@
-use super::{AoCError, AoCSolution, Config};
+use super::{AoCError, AoCSolution};
 
-pub fn run(config: &Config) -> Result<AoCSolution, AoCError> {
-    let input = parser(&config.input);
+/// Compute the solution to day 1 of AoC 2017
+pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
+    let input = parser(&input);
 
     let part_one = circular_match_and_sum(&input, 1);
     let part_two = circular_match_and_sum(&input, input.len() / 2);
@@ -33,12 +34,7 @@ mod tests {
     fn matches_offical_result() {
         let input = include_str!("./input");
 
-        let config = Config {
-            day: 1,
-            input: input.to_string(),
-        };
-
-        let result = run(&config).unwrap();
+        let result = run(&input).unwrap();
 
         assert_eq!(result.part_one, "1228");
         assert_eq!(result.part_two, "1238");

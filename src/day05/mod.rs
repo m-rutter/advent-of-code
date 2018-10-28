@@ -1,10 +1,11 @@
 use failure::Error;
 use std::process;
 
-use super::{AoCError, AoCSolution, Config};
+use super::{AoCError, AoCSolution};
 
-pub fn run(config: &Config) -> Result<AoCSolution, AoCError> {
-    let input = parser(&config.input).unwrap_or_else(|err| {
+/// Compute the solution to day 5 of AoC 2017
+pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
+    let input = parser(&input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
@@ -56,12 +57,7 @@ mod tests {
     fn matches_offical_result() {
         let input = include_str!("./input");
 
-        let config = Config {
-            day: 1,
-            input: input.to_string(),
-        };
-
-        let result = run(&config).unwrap();
+        let result = run(&input).unwrap();
 
         assert_eq!(result.part_one, "325922");
         assert_eq!(result.part_two, "24490906");
