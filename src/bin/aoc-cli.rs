@@ -1,4 +1,4 @@
-use aoc_2017::{solve_day, Config};
+use advent_of_code::{solve_day, Config};
 use std::fs::File;
 use std::io::{self, Read};
 

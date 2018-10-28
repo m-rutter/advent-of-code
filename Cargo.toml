@@ -1,11 +1,11 @@
 [package]
 authors = ["Michael Rutter <michael.john.rutter@gmail.com>"]
 edition = "2018"
-name = "aoc-2017"
+name = "advent_of_code"
 version = "0.1.0"
 
 [lib]
-name = "aoc_2017"
+name = "advent_of_code"
 path = "src/lib.rs"
 
 [[bin]]
