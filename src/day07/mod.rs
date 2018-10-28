@@ -25,18 +25,17 @@ fn parser(input: &str) -> Result<Vec<u32>, Error> {
 mod tests {
     use super::*;
 
-    #[test]
-    fn matches_offical_result() {
-        let input = include_str!("./input");
+    // TODO: Solve test and put the offical answer here
+    // #[test]
+    // fn matches_offical_result() {
+    //     let input = include_str!("./input");
 
-        let config = Config {
-            day: 1,
-            input: input.to_string(),
-        };
+    //     let config = Config {
+    //         day: 1,
+    //         input: input.to_string(),
+    //     };
 
-        let _result = run(&config).unwrap();
-
-        unimplemented!()
-    }
+    //     let _result = run(&config).unwrap();
+    // }
 
 }
