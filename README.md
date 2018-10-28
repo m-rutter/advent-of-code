@@ -14,7 +14,7 @@ Michael Rutter <michael.john.rutter@gmail.com>
 Solves Advent of Code problems
 
 USAGE:
-    aoc-cli.exe [OPTIONS] --day <NUMBER> --year <NUMBER>
+    aoc-cli [OPTIONS] --day <NUMBER> --year <NUMBER>
 
 FLAGS:
     -h, --help       Prints help information
