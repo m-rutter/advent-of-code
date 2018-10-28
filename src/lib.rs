@@ -32,7 +32,7 @@ pub struct AoCSolution {
     pub part_two: String,
 }
 
-/// Aoc Error type
+/// AoC Error type
 #[derive(Debug, Fail)]
 pub enum AoCError {
     /// Error when something is wrong with the input data when being parsed
