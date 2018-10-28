@@ -30,11 +30,11 @@ OPTIONS:
 
 #### Reading input from a file
 ```sh
-aoc-cli --day 1 --path ./input
+aoc-cli --day 1 --year 2017 --path ./input
 ```
 
 #### Using stdin
 ```sh
-cat ./input | aoc-cli --day 1
+cat ./input | aoc-cli --day 1 --year 2017
 ```
 
