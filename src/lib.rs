@@ -36,8 +36,8 @@ pub struct AoCSolution {
 #[derive(Debug, Fail)]
 pub enum AoCError {
     /// Error when something is wrong with the input data when being parsed
-    #[fail(display = "Invalid input for day {}: {}", day, input)]
-    InvalidInput { day: u8, input: String },
+    #[fail(display = "Invalid input for day {} of year {}: {}", day, year, input)]
+    InvalidInput { day: u8, year: u16, input: String },
 
     /// Error when the day is not implemented or does not exist
     #[fail(display = "Day {} of year {} is not implemented", day, year)]
