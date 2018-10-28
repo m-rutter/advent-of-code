@@ -2,19 +2,20 @@ use failure::Error;
 use std::collections::HashMap;
 use std::process;
 
-use super::{AoCSolution, Config};
+use super::{AoCError, AoCSolution, Config};
 
-pub fn run(config: &Config) -> AoCSolution {
+pub fn run(config: &Config) -> Result<AoCSolution, AoCError> {
     let input = parser(&config.input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
 
     let (part_one, part_two) = relocate_until_repeat(&input);
-    AoCSolution {
+
+    Ok(AoCSolution {
         part_one: part_one.to_string(),
         part_two: part_two.to_string(),
-    }
+    })
 }
 
 fn relocate_until_repeat(banks: &[u32]) -> (u32, u32) {
@@ -95,7 +96,7 @@ mod tests {
             input: input.to_string(),
         };
 
-        let result = run(&config);
+        let result = run(&config).unwrap();
 
         assert_eq!(result.part_one, "12841");
         assert_eq!(result.part_two, "8038");

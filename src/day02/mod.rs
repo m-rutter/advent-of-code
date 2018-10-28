@@ -1,23 +1,17 @@
-use failure::Error;
-
 use itertools::Itertools;
-use std::process;
 
-use super::{AoCSolution, Config};
+use super::{AoCError, AoCSolution, Config};
 
-pub fn run(config: &Config) -> AoCSolution {
-    let input = parse_input(&config.input).unwrap_or_else(|err| {
-        eprintln!("Problem parsing input: {}", err);
-        process::exit(1);
-    });
+pub fn run(config: &Config) -> Result<AoCSolution, AoCError> {
+    let input = parse_input(&config.input);
 
     let checksum = gen_checksum(&input);
     let sum_of_even_divisons = users_are_odd(&input);
 
-    AoCSolution {
+    Ok(AoCSolution {
         part_one: checksum.to_string(),
         part_two: sum_of_even_divisons.to_string(),
-    }
+    })
 }
 
 fn gen_checksum(v: &[Vec<u32>]) -> u32 {
@@ -58,17 +52,15 @@ fn users_are_odd(v: &[Vec<u32>]) -> u32 {
         .sum()
 }
 
-fn parse_input(input: &str) -> Result<Vec<Vec<u32>>, Error> {
-    let table: Vec<Vec<u32>> = input
+fn parse_input(input: &str) -> Vec<Vec<u32>> {
+    input
         .lines()
         .map(|line| {
             line.split_whitespace()
                 .filter_map(|elem| elem.parse().ok())
                 .collect()
         })
-        .collect();
-
-    Ok(table)
+        .collect()
 }
 
 #[cfg(test)]
@@ -83,7 +75,7 @@ mod tests {
             input: input.to_string(),
         };
 
-        let result = run(&config);
+        let result = run(&config).unwrap();
 
         assert_eq!(result.part_one, "36766");
         assert_eq!(result.part_two, "261");

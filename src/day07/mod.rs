@@ -1,18 +1,18 @@
 use failure::Error;
 use std::process;
 
-use super::{AoCSolution, Config};
+use super::{AoCError, AoCSolution, Config};
 
-pub fn run(config: &Config) -> AoCSolution {
+pub fn run(config: &Config) -> Result<AoCSolution, AoCError> {
     let _input = parser(&config.input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
     });
 
-    AoCSolution {
+    Ok(AoCSolution {
         part_one: String::new(),
         part_two: String::new(),
-    }
+    })
 }
 
 fn parser(input: &str) -> Result<Vec<u32>, Error> {
@@ -34,7 +34,7 @@ mod tests {
             input: input.to_string(),
         };
 
-        let _result = run(&config);
+        let _result = run(&config).unwrap();
 
         unimplemented!()
     }

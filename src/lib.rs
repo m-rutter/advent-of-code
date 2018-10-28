@@ -1,5 +1,7 @@
 //! Advent of Code (AoC) 2017 solutions library written in Rust.
 //! Personal learning project.
+use failure::Fail;
+
 mod day01;
 mod day02;
 mod day03;
@@ -19,6 +21,16 @@ pub struct Config {
 pub struct AoCSolution {
     pub part_one: String,
     pub part_two: String,
+}
+
+/// Aoc Error type
+#[derive(Debug, Fail)]
+pub enum AoCError {
+    #[fail(display = "Invalid input for day {}: {}", day, input)]
+    InvalidInput { day: u8, input: String },
+
+    #[fail(display = "Day {} is not implemented", day)]
+    InvalidDay { day: u8 },
 }
 
 impl Config {
@@ -55,8 +67,8 @@ impl Config {
 /// };
 ///
 /// ```
-pub fn solve_day(config: &Config) -> Result<AoCSolution, String> {
-    Ok(match config.day {
+pub fn solve_day(config: &Config) -> Result<AoCSolution, AoCError> {
+    match config.day {
         1 => day01::run(&config),
         2 => day02::run(&config),
         3 => day03::run(&config),
@@ -64,6 +76,6 @@ pub fn solve_day(config: &Config) -> Result<AoCSolution, String> {
         5 => day05::run(&config),
         6 => day06::run(&config),
         7 => day07::run(&config),
-        _ => return Err(format!("Day {} is not yet supported", config.day)),
-    })
+        _ => Err(AoCError::InvalidDay { day: config.day }),
+    }
 }

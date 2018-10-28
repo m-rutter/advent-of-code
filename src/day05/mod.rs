@@ -1,9 +1,9 @@
 use failure::Error;
 use std::process;
 
-use super::{AoCSolution, Config};
+use super::{AoCError, AoCSolution, Config};
 
-pub fn run(config: &Config) -> AoCSolution {
+pub fn run(config: &Config) -> Result<AoCSolution, AoCError> {
     let input = parser(&config.input).unwrap_or_else(|err| {
         eprintln!("Problem parsing input: {}", err);
         process::exit(1);
@@ -12,10 +12,10 @@ pub fn run(config: &Config) -> AoCSolution {
     let part_one = steps_to_exit(&input, |_| 1);
     let part_two = steps_to_exit(&input, |item| if item >= 3 { -1 } else { 1 });
 
-    AoCSolution {
+    Ok(AoCSolution {
         part_one: part_one.to_string(),
         part_two: part_two.to_string(),
-    }
+    })
 }
 
 fn steps_to_exit<T>(jumps: &[i32], change_jump: T) -> u32
@@ -61,7 +61,7 @@ mod tests {
             input: input.to_string(),
         };
 
-        let result = run(&config);
+        let result = run(&config).unwrap();
 
         assert_eq!(result.part_one, "325922");
         assert_eq!(result.part_two, "24490906");
