@@ -5,10 +5,19 @@ use std::io::{self, Read};
 use clap::{App, Arg, ArgMatches};
 
 fn main() {
-    let matches = App::new("Advent of Code 2017 CLI")
+    let matches = App::new("Advent of Code CLI")
         .version("0.1.0")
         .author("Michael Rutter <michael.john.rutter@gmail.com>")
-        .about("Solves 2017 Advent of Code problems")
+        .about("Solves Advent of Code problems")
+        .arg(
+            Arg::with_name("year")
+                .short("y")
+                .long("year")
+                .value_name("NUMBER")
+                .help("Set the year")
+                .required(true)
+                .takes_value(true),
+        )
         .arg(
             Arg::with_name("day")
                 .short("d")
@@ -60,6 +69,9 @@ fn create_config(matches: &ArgMatches) -> Config {
     let day = matches.value_of("day").unwrap();
     let day: u8 = day.parse().unwrap();
 
+    let year = matches.value_of("year").unwrap();
+    let year: u16 = year.parse().unwrap();
+
     let input_type = match matches.value_of("path") {
         Some(path) => InputType::InputPath(path.to_string()),
         None => InputType::Stdin,
@@ -67,7 +79,7 @@ fn create_config(matches: &ArgMatches) -> Config {
 
     let input = get_input_data(input_type);
 
-    Config::new(day, input)
+    Config::new(year, day, input)
 }
 
 fn get_input_data(input_type: InputType) -> String {

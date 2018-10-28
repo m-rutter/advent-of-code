@@ -21,6 +21,7 @@ pub use self::day07::run as day07_run;
 /// AoC config
 #[derive(Debug)]
 pub struct Config {
+    year: u16,
     day: u8,
     input: String,
 }
@@ -39,8 +40,8 @@ pub enum AoCError {
     InvalidInput { day: u8, input: String },
 
     /// Error when the day is not implemented or does not exist
-    #[fail(display = "Day {} is not implemented", day)]
-    InvalidDay { day: u8 },
+    #[fail(display = "Day {} of year {} is not implemented", day, year)]
+    InvalidDay { year: u16, day: u8 },
 }
 
 impl Config {
@@ -51,8 +52,9 @@ impl Config {
     ///
     /// let config = Config::new(1, String::from("6497139596"));
     /// ```
-    pub fn new(day: u8, input: String) -> Config {
+    pub fn new(year: u16, day: u8, input: String) -> Config {
         Config {
+            year: year,
             day: day,
             input: input,
         }
@@ -78,14 +80,23 @@ impl Config {
 ///
 /// ```
 pub fn solve_day(config: &Config) -> Result<AoCSolution, AoCError> {
-    match config.day {
-        1 => day01::run(&config.input),
-        2 => day02::run(&config.input),
-        3 => day03::run(&config.input),
-        4 => day04::run(&config.input),
-        5 => day05::run(&config.input),
-        6 => day06::run(&config.input),
-        7 => day07::run(&config.input),
-        _ => Err(AoCError::InvalidDay { day: config.day }),
+    match config.year {
+        2017 => match config.day {
+            1 => day01::run(&config.input),
+            2 => day02::run(&config.input),
+            3 => day03::run(&config.input),
+            4 => day04::run(&config.input),
+            5 => day05::run(&config.input),
+            6 => day06::run(&config.input),
+            7 => day07::run(&config.input),
+            _ => Err(AoCError::InvalidDay {
+                year: 2017,
+                day: config.day,
+            }),
+        },
+        _ => Err(AoCError::InvalidDay {
+            year: config.year,
+            day: config.day,
+        }),
     }
 }
