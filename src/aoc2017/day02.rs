@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-use super::{AoCError, AoCSolution};
+use crate::{AoCError, AoCSolution};
 
 /// Compute the solution to day 2 of AoC 2017
 pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
@@ -69,7 +69,7 @@ mod tests {
     use super::*;
     #[test]
     fn matches_offical_result() {
-        let input = include_str!("./input");
+        let input = include_str!("./input/day02");
 
         let result = run(&input).unwrap();
 

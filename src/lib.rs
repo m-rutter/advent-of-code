@@ -2,21 +2,7 @@
 //! Personal learning project.
 use failure::Fail;
 
-mod day01;
-mod day02;
-mod day03;
-mod day04;
-mod day05;
-mod day06;
-mod day07;
-
-pub use self::day01::run as day01_run;
-pub use self::day02::run as day02_run;
-pub use self::day03::run as day03_run;
-pub use self::day04::run as day04_run;
-pub use self::day05::run as day05_run;
-pub use self::day06::run as day06_run;
-pub use self::day07::run as day07_run;
+mod aoc2017;
 
 /// AoC config
 #[derive(Debug)]
@@ -82,13 +68,13 @@ impl Config {
 pub fn solve_day(config: &Config) -> Result<AoCSolution, AoCError> {
     match config.year {
         2017 => match config.day {
-            1 => day01::run(&config.input),
-            2 => day02::run(&config.input),
-            3 => day03::run(&config.input),
-            4 => day04::run(&config.input),
-            5 => day05::run(&config.input),
-            6 => day06::run(&config.input),
-            7 => day07::run(&config.input),
+            1 => aoc2017::day01::run(&config.input),
+            2 => aoc2017::day02::run(&config.input),
+            3 => aoc2017::day03::run(&config.input),
+            4 => aoc2017::day04::run(&config.input),
+            5 => aoc2017::day05::run(&config.input),
+            6 => aoc2017::day06::run(&config.input),
+            7 => aoc2017::day07::run(&config.input),
             _ => Err(AoCError::InvalidDay {
                 year: 2017,
                 day: config.day,

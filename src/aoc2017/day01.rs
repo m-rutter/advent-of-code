@@ -1,4 +1,4 @@
-use super::{AoCError, AoCSolution};
+use crate::{AoCError, AoCSolution};
 
 /// Compute the solution to day 1 of AoC 2017
 pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
@@ -32,7 +32,7 @@ mod tests {
 
     #[test]
     fn matches_offical_result() {
-        let input = include_str!("./input");
+        let input = include_str!("./input/day01");
 
         let result = run(&input).unwrap();
 

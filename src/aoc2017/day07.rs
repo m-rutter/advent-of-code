@@ -1,7 +1,7 @@
 use failure::Error;
 use std::process;
 
-use super::{AoCError, AoCSolution};
+use crate::{AoCError, AoCSolution};
 
 /// Compute the solution to day 7 of AoC 2017
 pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
@@ -29,7 +29,7 @@ mod tests {
 
     // #[test]
     // fn matches_offical_result() {
-    //     let input = include_str!("./input");
+    //     let input = include_str!("./input/day07");
 
     //     let config = Config {
     //         day: 1,
