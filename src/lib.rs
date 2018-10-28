@@ -26,7 +26,7 @@ pub struct Config {
     input: String,
 }
 
-/// Solution for a day in AoC 2017
+/// Solution for a day in AoC
 pub struct AoCSolution {
     pub part_one: String,
     pub part_two: String,
@@ -48,7 +48,7 @@ impl Config {
     /// Creates a instance of AoC Config defaulting to using stdin
     /// # Example
     /// ```
-    /// use aoc_2017::Config;
+    /// use advent_of_code::Config;
     ///
     /// let config = Config::new(2017, 1, String::from("6497139596"));
     /// ```
@@ -64,7 +64,7 @@ impl Config {
 /// Computes the solution to a day in Advent of Code 2017
 /// # Examples
 /// ```rust
-/// use aoc_2017::{solve_day, Config};
+/// use advent_of_code::{solve_day, Config};
 ///
 /// let mut config = Config::new(2017, 1, String::from("91212129"));
 ///  
