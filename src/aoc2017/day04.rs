@@ -1,16 +1,10 @@
-use failure::Error;
-
 use std::collections::HashSet;
-use std::process;
 
-use crate::{AoCError, AoCSolution};
+use crate::{error, AoCSolution};
 
 /// Compute the solution to day 4 of AoC 2017
-pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
-    let input = parser(&input).unwrap_or_else(|err| {
-        eprintln!("Problem parsing input: {}", err);
-        process::exit(1);
-    });
+pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+    let input = parser(&input);
 
     let valid_passprase_count = get_valid_passprase_count(&input);
     let valid_passprase_count_no_anagrams = get_valid_passprase_anagrams(&input);
@@ -66,17 +60,15 @@ fn get_valid_passprase_count(v: &[Vec<String>]) -> u32 {
         .sum()
 }
 
-fn parser(input: &str) -> Result<Vec<Vec<String>>, Error> {
-    let passwords: Vec<Vec<String>> = input
+fn parser(input: &str) -> Vec<Vec<String>> {
+    input
         .lines()
         .map(|line| {
             line.split_whitespace()
                 .map(|word| word.to_string())
                 .collect()
         })
-        .collect();
-
-    Ok(passwords)
+        .collect()
 }
 
 #[cfg(test)]

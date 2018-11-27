@@ -1,16 +1,11 @@
-use failure::Error;
 use std::collections::{HashMap, HashSet};
 use std::ops::Add;
-use std::process;
 
-use crate::{AoCError, AoCSolution};
+use crate::{error, AoCSolution};
 
 /// Compute the solution to day 3 of AoC 2017
-pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
-    let input = parser(&input).unwrap_or_else(|err| {
-        eprintln!("Problem parsing input: {}", err);
-        process::exit(1);
-    });
+pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+    let input = parser(&input)?;
 
     let part_one = distance(input);
     let part_two = memory_walk(input);
@@ -175,7 +170,7 @@ fn memory_walk(limit: u64) -> u64 {
     matrix[&previous]
 }
 
-fn parser(input: &str) -> Result<u64, Error> {
+fn parser(input: &str) -> error::AoCResult<u64> {
     let num = input.trim().parse()?;
 
     Ok(num)

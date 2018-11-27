@@ -1,14 +1,8 @@
-use failure::Error;
-use std::process;
-
-use crate::{AoCError, AoCSolution};
+use crate::{error, AoCSolution};
 
 /// Compute the solution to day 5 of AoC 2017
-pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
-    let input = parser(&input).unwrap_or_else(|err| {
-        eprintln!("Problem parsing input: {}", err);
-        process::exit(1);
-    });
+pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+    let input = parser(&input);
 
     let part_one = steps_to_exit(&input, |_| 1);
     let part_two = steps_to_exit(&input, |item| if item >= 3 { -1 } else { 1 });
@@ -44,10 +38,8 @@ where
     steps
 }
 
-fn parser(input: &str) -> Result<Vec<i32>, Error> {
-    let jumps = input.lines().filter_map(|line| line.parse().ok()).collect();
-
-    Ok(jumps)
+fn parser(input: &str) -> Vec<i32> {
+    input.lines().filter_map(|line| line.parse().ok()).collect()
 }
 
 #[cfg(test)]

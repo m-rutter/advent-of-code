@@ -1,15 +1,10 @@
-use failure::Error;
 use std::collections::HashMap;
-use std::process;
 
-use crate::{AoCError, AoCSolution};
+use crate::{error, AoCSolution};
 
 /// Compute the solution to day 6 of AoC 2017
-pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
-    let input = parser(&input).unwrap_or_else(|err| {
-        eprintln!("Problem parsing input: {}", err);
-        process::exit(1);
-    });
+pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+    let input = parser(&input);
 
     let (part_one, part_two) = relocate_until_repeat(&input);
 
@@ -75,14 +70,12 @@ fn cycle(banks: &mut Vec<u32>, start: usize) {
     }
 }
 
-fn parser(input: &str) -> Result<Vec<u32>, Error> {
-    let banks = input
+fn parser(input: &str) -> Vec<u32> {
+    input
         .trim()
         .split_whitespace()
         .filter_map(|bank| bank.parse().ok())
-        .collect();
-
-    Ok(banks)
+        .collect()
 }
 
 #[cfg(test)]

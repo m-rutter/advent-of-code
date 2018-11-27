@@ -1,8 +1,8 @@
 //! Advent of Code (AoC) solutions library written in Rust.
 //! Personal learning project.
-use failure::Fail;
 
-mod aoc2017;
+pub mod aoc2017;
+pub mod error;
 
 /// AoC config
 #[derive(Debug)]
@@ -14,20 +14,10 @@ pub struct Config {
 
 /// Solution for a day in AoC
 pub struct AoCSolution {
+    /// Answer to part one of challenge
     pub part_one: String,
+    /// Answer to part two of challenge
     pub part_two: String,
-}
-
-/// AoC Error type
-#[derive(Debug, Fail)]
-pub enum AoCError {
-    /// Error when something is wrong with the input data when being parsed
-    #[fail(display = "Invalid input for day {} of year {}: {}", day, year, input)]
-    InvalidInput { day: u8, year: u16, input: String },
-
-    /// Error when the day is not implemented or does not exist
-    #[fail(display = "Day {} of year {} is not implemented", day, year)]
-    InvalidDay { year: u16, day: u8 },
 }
 
 impl Config {
@@ -65,7 +55,7 @@ impl Config {
 /// };
 ///
 /// ```
-pub fn solve_day(config: &Config) -> Result<AoCSolution, AoCError> {
+pub fn solve_day(config: &Config) -> error::AoCResult<AoCSolution> {
     match config.year {
         2017 => match config.day {
             1 => aoc2017::day01::run(&config.input),
@@ -75,14 +65,8 @@ pub fn solve_day(config: &Config) -> Result<AoCSolution, AoCError> {
             5 => aoc2017::day05::run(&config.input),
             6 => aoc2017::day06::run(&config.input),
             7 => aoc2017::day07::run(&config.input),
-            _ => Err(AoCError::InvalidDay {
-                year: 2017,
-                day: config.day,
-            }),
+            _ => Err(error::AoCErrorKind::InvalidDay)?,
         },
-        _ => Err(AoCError::InvalidDay {
-            year: config.year,
-            day: config.day,
-        }),
+        _ => Err(error::AoCErrorKind::InvalidDay)?,
     }
 }

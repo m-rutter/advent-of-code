@@ -1,25 +1,14 @@
-use failure::Error;
-use std::process;
-
-use crate::{AoCError, AoCSolution};
+use crate::{error, AoCSolution};
 
 /// Compute the solution to day 7 of AoC 2017
-pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
-    let _input = parser(&input).unwrap_or_else(|err| {
-        eprintln!("Problem parsing input: {}", err);
-        process::exit(1);
-    });
+pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+    let _input = parser(&input);
 
-    Ok(AoCSolution {
-        part_one: String::new(),
-        part_two: String::new(),
-    })
+    unimplemented!()
 }
 
-fn parser(input: &str) -> Result<Vec<u32>, Error> {
-    let v: Vec<u32> = input.chars().filter_map(|c| c.to_digit(10)).collect();
-
-    Ok(v)
+fn parser(input: &str) -> Vec<u32> {
+    input.chars().filter_map(|c| c.to_digit(10)).collect()
 }
 
 #[cfg(test)]

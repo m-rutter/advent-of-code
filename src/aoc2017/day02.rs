@@ -1,9 +1,9 @@
 use itertools::Itertools;
 
-use crate::{AoCError, AoCSolution};
+use crate::{error, AoCSolution};
 
 /// Compute the solution to day 2 of AoC 2017
-pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
+pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
     let input = parse_input(&input);
 
     let checksum = gen_checksum(&input);

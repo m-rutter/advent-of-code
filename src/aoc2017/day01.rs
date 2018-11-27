@@ -1,11 +1,18 @@
-use crate::{AoCError, AoCSolution};
+use crate::error;
+use crate::AoCSolution;
 
 /// Compute the solution to day 1 of AoC 2017
-pub fn run(input: &str) -> Result<AoCSolution, AoCError> {
-    let input = parser(&input);
+pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+    let parsed_input = parser(&input);
 
-    let part_one = circular_match_and_sum(&input, 1);
-    let part_two = circular_match_and_sum(&input, input.len() / 2);
+    if parsed_input.len() <= 1 {
+        Err(error::AoCErrorKind::InvalidInput {
+            message: "Not enough numeric chars in input",
+        })?;
+    }
+
+    let part_one = circular_match_and_sum(&parsed_input, 1);
+    let part_two = circular_match_and_sum(&parsed_input, parsed_input.len() / 2);
 
     Ok(AoCSolution {
         part_one: part_one.to_string(),
