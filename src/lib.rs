@@ -21,7 +21,7 @@ pub struct AoCSolution {
 }
 
 impl Config {
-    /// Creates a instance of AoC Config defaulting to using stdin
+    /// Creates a instance of AoC Config
     /// # Example
     /// ```
     /// use advent_of_code::Config;
