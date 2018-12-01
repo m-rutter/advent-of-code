@@ -7,7 +7,7 @@ pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
 
     Ok(AoCSolution {
         part_one: fold_frequency_modulations(&modulations).to_string(),
-        part_two: find_repeating_modulation(&modulations).to_string(),
+        part_two: find_repeating_frequency(&modulations).to_string(),
     })
 }
 
@@ -15,7 +15,7 @@ fn fold_frequency_modulations(modulations: &[i32]) -> i32 {
     modulations.iter().sum()
 }
 
-fn find_repeating_modulation(modulations: &[i32]) -> i32 {
+fn find_repeating_frequency(modulations: &[i32]) -> i32 {
     let mut frequencies: HashSet<i32> = HashSet::new();
     let mut current_frequency: i32 = 0;
 
