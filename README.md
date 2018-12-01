@@ -1,5 +1,5 @@
 # advent-of-code
-[Advent of Code](https://adventofcode.com) solutions library crate and a simple cli tool that uses it. All written in Rust as a learning project. So far only supports a small subset of AoC 2017.
+[Advent of Code](https://adventofcode.com) solutions library crate and a simple cli tool that uses it. All written in Rust as a learning project. Does not have full coverage of all days.
 
 ## Install CLI
 
