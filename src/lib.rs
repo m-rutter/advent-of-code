@@ -2,6 +2,7 @@
 //! Personal learning project.
 
 pub mod aoc2017;
+pub mod aoc2018;
 pub mod error;
 
 /// AoC config
@@ -65,6 +66,10 @@ pub fn solve_day(config: &Config) -> error::AoCResult<AoCSolution> {
             5 => aoc2017::day05::run(&config.input),
             6 => aoc2017::day06::run(&config.input),
             7 => aoc2017::day07::run(&config.input),
+            _ => Err(error::AoCErrorKind::InvalidDay)?,
+        },
+        2018 => match config.day {
+            1 => aoc2018::day01::run(&config.input),
             _ => Err(error::AoCErrorKind::InvalidDay)?,
         },
         _ => Err(error::AoCErrorKind::InvalidDay)?,
