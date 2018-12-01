@@ -5,8 +5,6 @@ use std::collections::HashSet;
 pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
     let modulations = parse(&input);
 
-    println!("{:?}", modulations);
-
     Ok(AoCSolution {
         part_one: fold_frequency_modulations(&modulations).to_string(),
         part_two: find_repeating_modulation(&modulations).to_string(),
