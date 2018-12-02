@@ -14,7 +14,7 @@ fn find_common_char(ids: &[String]) -> Vec<char> {
     let mut common_chars = vec![];
 
     for (index, id) in ids.iter().enumerate() {
-        for id_to_compare in ids.iter().skip(index) {
+        for id_to_compare in ids.iter().skip(index + 1) {
             let difference_count =
                 id.chars()
                     .zip(id_to_compare.chars())
