@@ -34,9 +34,7 @@ fn find_root_node(nodes: &HashMap<String, Node>) -> String {
         }
     }
 
-    let root = names.drain().nth(0).unwrap().to_string();
-
-    root
+    names.into_iter().nth(0).unwrap().to_string()
 }
 fn parser(input: &str) -> HashMap<String, Node> {
     let mut nodes = HashMap::new();
