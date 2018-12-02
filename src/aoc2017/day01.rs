@@ -11,6 +11,23 @@ pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
         })?;
     }
 
+    let v = vec![1, 2, 3, 4];
+
+    let v: Vec<i32> = v
+        .iter()
+        .scan(1, |state, &x| {
+            *state += 11;
+
+            if *state % 2 == 0 {
+                Some(x + *state)
+            } else {
+                None
+            }
+        })
+        .collect();
+
+    println!("{:?}", v);
+
     let part_one = circular_match_and_sum(&parsed_input, 1);
     let part_two = circular_match_and_sum(&parsed_input, parsed_input.len() / 2);
 

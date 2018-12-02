@@ -1,0 +1,7 @@
+WHITESPACE = _{ " " }
+id = { (ASCII_ALPHA)+ }
+weight = { (ASCII_DIGIT)+ }
+children = { ("->" ~ id ~ ("," ~ id)* ) }
+node = { id ~ "(" ~  weight ~ ")" ~ (children)? }
+
+file = {SOI ~ (node? ~ NEWLINE)* ~ EOI}
