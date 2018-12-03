@@ -21,7 +21,7 @@ fn find_repeating_frequency(modulations: &[i32]) -> i32 {
 
     frequencies.insert(current_frequency);
 
-    for modulation in modulations.iter().cycle() {
+    for modulation in modulations.iter().cycle().take(1_000_000) {
         current_frequency += modulation;
 
         if frequencies.contains(&current_frequency) {

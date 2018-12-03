@@ -18,7 +18,7 @@ struct Node {
 pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
     let nodes = parser(&input);
 
-    println!("{}", find_root_node(&nodes));
+    let _root = find_root_node(&nodes);
 
     Err(error::AoCError::from(error::AoCErrorKind::InvalidDay))
 }
@@ -36,6 +36,7 @@ fn find_root_node(nodes: &HashMap<String, Node>) -> String {
 
     names.into_iter().nth(0).unwrap().to_string()
 }
+
 fn parser(input: &str) -> HashMap<String, Node> {
     let mut nodes = HashMap::new();
 
