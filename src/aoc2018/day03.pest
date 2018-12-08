@@ -1,0 +1,10 @@
+WHITESPACE = _{" "}
+id = @{ (ASCII_DIGIT)* }
+left = @{ (ASCII_DIGIT)* }
+top = @{ (ASCII_DIGIT)* }
+height = @{ (ASCII_DIGIT)* }
+width = @{ (ASCII_DIGIT)* }
+
+record = { "#" ~ id ~ "@" ~ left ~ "," ~ top ~ ":" ~ height ~ "x" ~ width }
+
+file = {SOI ~ (record? ~ NEWLINE)* ~ EOI}

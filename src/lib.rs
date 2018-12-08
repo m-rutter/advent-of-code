@@ -71,6 +71,7 @@ pub fn solve_day(config: &Config) -> error::AoCResult<AoCSolution> {
         2018 => match config.day {
             1 => aoc2018::day01::run(&config.input),
             2 => aoc2018::day02::run(&config.input),
+            3 => aoc2018::day03::run(&config.input),
             _ => Err(error::AoCErrorKind::InvalidDay)?,
         },
         _ => Err(error::AoCErrorKind::InvalidDay)?,

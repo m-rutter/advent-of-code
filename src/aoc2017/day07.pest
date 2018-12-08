@@ -1,6 +1,6 @@
 WHITESPACE = _{ " " }
-id = { (ASCII_ALPHA)+ }
-weight = { (ASCII_DIGIT)+ }
+id = @{ (ASCII_ALPHA)+ }
+weight = @{ (ASCII_DIGIT)+ }
 children = { ("->" ~ id ~ ("," ~ id)* ) }
 node = { id ~ "(" ~  weight ~ ")" ~ (children)? }
 
