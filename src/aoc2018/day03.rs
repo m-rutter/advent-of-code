@@ -16,18 +16,21 @@ struct Claim {
     height: u32,
 }
 
+type Cloth = HashMap<(u32, u32), u32>;
+
 pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
     let claims = parse(&input);
 
+    let cloth = create_cloth(&claims);
+
     Ok(AoCSolution {
-        part_one: count_overlapping_claims(&claims).to_string(),
-        part_two: String::new(),
+        part_one: count_overlapping_claims(&cloth).to_string(),
+        part_two: find_single_claim(&claims, &cloth).unwrap().to_string(),
     })
 }
 
-fn count_overlapping_claims(claims: &[Claim]) -> u32 {
+fn create_cloth(claims: &[Claim]) -> Cloth {
     let mut cloth: HashMap<(u32, u32), u32> = HashMap::new();
-    let mut count = 0;
 
     for claim in claims.iter() {
         let x_range = claim.left..(claim.width + claim.left);
@@ -38,15 +41,45 @@ fn count_overlapping_claims(claims: &[Claim]) -> u32 {
                 let value = cloth.entry((x, y)).or_insert(0);
 
                 *value += 1;
-
-                if *value == 2 {
-                    count += 1;
-                }
             }
         }
     }
 
-    count
+    cloth
+}
+
+fn count_overlapping_claims(cloth: &Cloth) -> u32 {
+    cloth.iter().filter(|(_, &v)| v > 1).count() as u32
+}
+
+fn find_single_claim(claims: &[Claim], cloth: &Cloth) -> Option<u32> {
+    let mut claim_id: Option<u32> = None;
+
+    for claim in claims.iter() {
+        let mut overlapping = false;
+        let x_range = claim.left..(claim.width + claim.left);
+        let y_range = claim.top..(claim.height + claim.top);
+        for x in x_range {
+            for y in y_range.clone() {
+                let cood = (x, y);
+                let value = cloth.get(&cood);
+
+                if let Some(v) = value {
+                    if *v > 1 {
+                        overlapping = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if !overlapping {
+            claim_id = Some(claim.id);
+            break;
+        }
+    }
+
+    claim_id
 }
 
 fn parse(input: &str) -> Vec<Claim> {
@@ -86,26 +119,28 @@ mod test {
         #3 @ 5,5: 2x2
         "#;
 
-        let c = parse(s);
+        let claims = parse(s);
+        let cloth = create_cloth(&claims);
 
-        assert_eq!(c[0].id, 1);
-        assert_eq!(c[0].left, 1);
-        assert_eq!(c[0].top, 3);
-        assert_eq!(c[0].width, 4);
-        assert_eq!(c[0].height, 4);
+        assert_eq!(claims[0].id, 1);
+        assert_eq!(claims[0].left, 1);
+        assert_eq!(claims[0].top, 3);
+        assert_eq!(claims[0].width, 4);
+        assert_eq!(claims[0].height, 4);
 
-        assert_eq!(c[1].id, 2);
-        assert_eq!(c[1].left, 3);
-        assert_eq!(c[1].top, 1);
-        assert_eq!(c[1].width, 4);
-        assert_eq!(c[1].height, 4);
+        assert_eq!(claims[1].id, 2);
+        assert_eq!(claims[1].left, 3);
+        assert_eq!(claims[1].top, 1);
+        assert_eq!(claims[1].width, 4);
+        assert_eq!(claims[1].height, 4);
 
-        assert_eq!(c[2].id, 3);
-        assert_eq!(c[2].left, 5);
-        assert_eq!(c[2].top, 5);
-        assert_eq!(c[2].width, 2);
-        assert_eq!(c[2].height, 2);
+        assert_eq!(claims[2].id, 3);
+        assert_eq!(claims[2].left, 5);
+        assert_eq!(claims[2].top, 5);
+        assert_eq!(claims[2].width, 2);
+        assert_eq!(claims[2].height, 2);
 
-        assert_eq!(count_overlapping_claims(&c), 4);
+        assert_eq!(count_overlapping_claims(&cloth), 4);
+        assert_eq!(find_single_claim(&claims, &cloth), Some(3));
     }
 }
