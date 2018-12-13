@@ -5,6 +5,6 @@ top = @{ (ASCII_DIGIT)* }
 height = @{ (ASCII_DIGIT)* }
 width = @{ (ASCII_DIGIT)* }
 
-record = { "#" ~ id ~ "@" ~ left ~ "," ~ top ~ ":" ~ height ~ "x" ~ width }
+record = { "#" ~ id ~ "@" ~ left ~ "," ~ top ~ ":" ~ width ~ "x" ~ height }
 
 file = {SOI ~ (record? ~ NEWLINE)* ~ EOI}

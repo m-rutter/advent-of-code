@@ -7,13 +7,13 @@ use std::collections::HashMap;
 #[grammar = "aoc2018/day03.pest"]
 struct Day03Parser;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Claim {
     id: u32,
     left: u32,
     top: u32,
-    height: u32,
     width: u32,
+    height: u32,
 }
 
 pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
@@ -64,8 +64,8 @@ fn parse(input: &str) -> Vec<Claim> {
                         id: record_pair.next().unwrap().as_str().parse().unwrap(),
                         left: record_pair.next().unwrap().as_str().parse().unwrap(),
                         top: record_pair.next().unwrap().as_str().parse().unwrap(),
-                        height: record_pair.next().unwrap().as_str().parse().unwrap(),
                         width: record_pair.next().unwrap().as_str().parse().unwrap(),
+                        height: record_pair.next().unwrap().as_str().parse().unwrap(),
                     });
                 }
             }
@@ -79,7 +79,7 @@ fn parse(input: &str) -> Vec<Claim> {
 mod test {
     use super::*;
     #[test]
-    fn correct_result_original_example() {
+    fn original_example() {
         let s = r#"
         #1 @ 1,3: 4x4
         #2 @ 3,1: 4x4
@@ -87,6 +87,24 @@ mod test {
         "#;
 
         let c = parse(s);
+
+        assert_eq!(c[0].id, 1);
+        assert_eq!(c[0].left, 1);
+        assert_eq!(c[0].top, 3);
+        assert_eq!(c[0].width, 4);
+        assert_eq!(c[0].height, 4);
+
+        assert_eq!(c[1].id, 2);
+        assert_eq!(c[1].left, 3);
+        assert_eq!(c[1].top, 1);
+        assert_eq!(c[1].width, 4);
+        assert_eq!(c[1].height, 4);
+
+        assert_eq!(c[2].id, 3);
+        assert_eq!(c[2].left, 5);
+        assert_eq!(c[2].top, 5);
+        assert_eq!(c[2].width, 2);
+        assert_eq!(c[2].height, 2);
 
         assert_eq!(count_overlapping_claims(&c), 4);
     }
