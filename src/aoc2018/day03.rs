@@ -20,27 +20,32 @@ pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
 
     println!("{:?}", claims);
 
-    unimplemented!()
+    Ok(AoCSolution {
+        part_one: String::new(),
+        part_two: String::new(),
+    })
 }
 
 fn parse(input: &str) -> Vec<Claim> {
     let mut claims = vec![];
 
-    let file = Day03Parser::parse(Rule::file, input)
-        .expect("unable to parse input")
-        .next()
-        .unwrap();
+    if let Ok(files) = Day03Parser::parse(Rule::file, input) {
+        for file in files {
+            for record in file.into_inner() {
+                if let Rule::record = record.as_rule() {
+                    let mut record_pair = record.into_inner();
 
-    for record in file.into_inner() {
-        if let Rule::record = record.as_rule() {
-            let mut record = record.into_inner();
-            claims.push(Claim {
-                id: record.next().unwrap().as_str().parse().unwrap(),
-                left: record.next().unwrap().as_str().parse().unwrap(),
-                top: record.next().unwrap().as_str().parse().unwrap(),
-                height: record.next().unwrap().as_str().parse().unwrap(),
-                width: record.next().unwrap().as_str().parse().unwrap(),
-            });
+                    // if the pest libary is to be believed, it is literately
+                    // impossible for these to be Result::Err at this point
+                    claims.push(Claim {
+                        id: record_pair.next().unwrap().as_str().parse().unwrap(),
+                        left: record_pair.next().unwrap().as_str().parse().unwrap(),
+                        top: record_pair.next().unwrap().as_str().parse().unwrap(),
+                        height: record_pair.next().unwrap().as_str().parse().unwrap(),
+                        width: record_pair.next().unwrap().as_str().parse().unwrap(),
+                    });
+                }
+            }
         }
     }
 
