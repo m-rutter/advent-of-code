@@ -1,0 +1,4 @@
+WHITESPACE = _{" "}
+timestamp = @{ "[" (ASCII_DIGIT | "-")* "]" }
+
+file = {SOI ~ (record? ~ NEWLINE)* ~ EOI}
