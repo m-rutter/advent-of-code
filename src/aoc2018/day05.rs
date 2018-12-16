@@ -2,62 +2,42 @@ use crate::{error, AoCSolution};
 use std::collections::HashSet;
 
 pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+    let v: Vec<u8> = input.into();
+
     Ok(AoCSolution {
-        part_one: reduce_polymer(&input).len().to_string(),
-        part_two: optimial_polymer_length(&input).to_string(),
+        part_one: reduce_polymer(v.iter()).to_string(),
+        part_two: optimial_polymer_length(&v).to_string(),
     })
 }
 
-fn reduce_polymer(input: &str) -> String {
-    let mut current_lenth = input.len();
-    let mut new_length = 0;
-    let mut s = String::from(input);
+fn reduce_polymer<'a>(input: impl Iterator<Item = &'a u8>) -> u32 {
+    let mut v: Vec<u8> = Vec::new();
 
-    while current_lenth != new_length {
-        current_lenth = new_length;
-
-        let mut new_string = String::new();
-        {
-            let mut peakable = s.chars().peekable();
-
-            loop {
-                let current = peakable.next();
-                let next = peakable.peek();
-
-                if let Some(current_char) = current {
-                    if let Some(next_char) = next {
-                        if current_char.to_ascii_lowercase() == next_char.to_ascii_lowercase()
-                            && current_char != *next_char
-                        {
-                            peakable.next();
-                            continue;
-                        }
-                    }
-                    new_string.push(current_char);
+    for ch1 in input {
+        match v.last() {
+            None => v.push(*ch1),
+            Some(ch2) => {
+                if ch1.to_ascii_lowercase() == ch2.to_ascii_lowercase() && ch1 != ch2 {
+                    v.pop();
                 } else {
-                    break;
+                    v.push(*ch1)
                 }
             }
         }
-        new_length = new_string.len();
-        s = new_string;
     }
 
-    s
+    v.len() as u32
 }
 
-fn optimial_polymer_length(input: &str) -> u32 {
-    let char_set: HashSet<char> = input.chars().map(|c| c.to_ascii_lowercase()).collect();
+fn optimial_polymer_length(input: &[u8]) -> u32 {
+    let char_set: HashSet<u8> = input.iter().map(|c| c.to_ascii_lowercase()).collect();
 
     char_set
         .iter()
         .map(|c1| {
-            let s: String = input
-                .chars()
-                .filter(|c2| *c1 != c2.to_ascii_lowercase())
-                .collect();
+            let v = input.iter().filter(|c2| *c1 != c2.to_ascii_lowercase());
 
-            reduce_polymer(&s).len()
+            reduce_polymer(v)
         })
         .min()
         .unwrap() as u32
@@ -71,8 +51,10 @@ mod test {
     fn day05_2018_original_examples() {
         let input = "dabAcCaCBAcCcaDA";
 
-        assert_eq!(reduce_polymer(&input), "dabCBAcaDA");
+        let v: Vec<u8> = input.into();
 
-        assert_eq!(optimial_polymer_length(&input), 4);
+        assert_eq!(reduce_polymer(v.iter()), 10);
+
+        assert_eq!(optimial_polymer_length(&v), 4);
     }
 }
