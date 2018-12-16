@@ -4,7 +4,7 @@ use std::collections::HashSet;
 pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
     Ok(AoCSolution {
         part_one: reduce_polymer(&input).len().to_string(),
-        part_two: optimial_polymer(&input).to_string(),
+        part_two: optimial_polymer_length(&input).to_string(),
     })
 }
 
@@ -46,7 +46,7 @@ fn reduce_polymer(input: &str) -> String {
     s
 }
 
-fn optimial_polymer(input: &str) -> u32 {
+fn optimial_polymer_length(input: &str) -> u32 {
     let char_set: HashSet<char> = input.chars().map(|c| c.to_ascii_lowercase()).collect();
 
     char_set
@@ -73,6 +73,6 @@ mod test {
 
         assert_eq!(reduce_polymer(&input), "dabCBAcaDA");
 
-        assert_eq!(optimial_polymer(&input), 4);
+        assert_eq!(optimial_polymer_length(&input), 4);
     }
 }
