@@ -2,7 +2,7 @@ use crate::{error, AoCSolution};
 use std::collections::HashSet;
 
 pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
-    let v: Vec<u8> = input.into();
+    let v: Vec<char> = input.chars().collect();
 
     Ok(AoCSolution {
         part_one: reduce_polymer(v.iter()).to_string(),
@@ -10,8 +10,8 @@ pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
     })
 }
 
-fn reduce_polymer<'a>(input: impl Iterator<Item = &'a u8>) -> u32 {
-    let mut v: Vec<u8> = Vec::new();
+fn reduce_polymer<'a>(input: impl Iterator<Item = &'a char>) -> u32 {
+    let mut v: Vec<char> = Vec::new();
 
     for ch1 in input {
         match v.last() {
@@ -29,8 +29,8 @@ fn reduce_polymer<'a>(input: impl Iterator<Item = &'a u8>) -> u32 {
     v.len() as u32
 }
 
-fn optimial_polymer_length(input: &[u8]) -> u32 {
-    let char_set: HashSet<u8> = input.iter().map(|c| c.to_ascii_lowercase()).collect();
+fn optimial_polymer_length(input: &[char]) -> u32 {
+    let char_set: HashSet<char> = input.iter().map(|c| c.to_ascii_lowercase()).collect();
 
     char_set
         .iter()
@@ -51,7 +51,7 @@ mod test {
     fn day05_2018_original_examples() {
         let input = "dabAcCaCBAcCcaDA";
 
-        let v: Vec<u8> = input.into();
+        let v: Vec<char> = input.chars().collect();
 
         assert_eq!(reduce_polymer(v.iter()), 10);
 
