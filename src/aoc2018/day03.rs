@@ -8,8 +8,8 @@ use std::collections::HashMap;
 struct Day03Parser;
 
 #[derive(Debug, Clone)]
-struct Claim {
-    id: u32,
+struct Claim<'a> {
+    id: &'a str,
     left: u32,
     top: u32,
     width: u32,
@@ -52,8 +52,8 @@ fn count_overlapping_claims(cloth: &Cloth) -> u32 {
     cloth.iter().filter(|(_, &v)| v > 1).count() as u32
 }
 
-fn find_single_claim(claims: &[Claim], cloth: &Cloth) -> Option<u32> {
-    let mut claim_id: Option<u32> = None;
+fn find_single_claim<'a>(claims: &'a [Claim], cloth: &Cloth) -> Option<&'a str> {
+    let mut claim_id: Option<&str> = None;
 
     for claim in claims.iter() {
         let mut overlapping = false;
@@ -94,7 +94,7 @@ fn parse(input: &str) -> Vec<Claim> {
                     // if the pest libary is to be believed, it is impossible
                     // for these Results to be Result::Err at this point
                     claims.push(Claim {
-                        id: record_pair.next().unwrap().as_str().parse().unwrap(),
+                        id: record_pair.next().unwrap().as_str(),
                         left: record_pair.next().unwrap().as_str().parse().unwrap(),
                         top: record_pair.next().unwrap().as_str().parse().unwrap(),
                         width: record_pair.next().unwrap().as_str().parse().unwrap(),
@@ -122,25 +122,25 @@ mod test {
         let claims = parse(s);
         let cloth = create_cloth(&claims);
 
-        assert_eq!(claims[0].id, 1);
+        assert_eq!(claims[0].id, "1");
         assert_eq!(claims[0].left, 1);
         assert_eq!(claims[0].top, 3);
         assert_eq!(claims[0].width, 4);
         assert_eq!(claims[0].height, 4);
 
-        assert_eq!(claims[1].id, 2);
+        assert_eq!(claims[1].id, "2");
         assert_eq!(claims[1].left, 3);
         assert_eq!(claims[1].top, 1);
         assert_eq!(claims[1].width, 4);
         assert_eq!(claims[1].height, 4);
 
-        assert_eq!(claims[2].id, 3);
+        assert_eq!(claims[2].id, "3");
         assert_eq!(claims[2].left, 5);
         assert_eq!(claims[2].top, 5);
         assert_eq!(claims[2].width, 2);
         assert_eq!(claims[2].height, 2);
 
         assert_eq!(count_overlapping_claims(&cloth), 4);
-        assert_eq!(find_single_claim(&claims, &cloth), Some(3));
+        assert_eq!(find_single_claim(&claims, &cloth), Some("3"));
     }
 }

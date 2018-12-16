@@ -1,4 +1,24 @@
 WHITESPACE = _{" "}
-timestamp = @{ "[" (ASCII_DIGIT | "-")* "]" }
 
-file = {SOI ~ (record? ~ NEWLINE)* ~ EOI}
+timestamp = @{ (ASCII_DIGIT){4} ~ 
+                "-" ~ 
+                (ASCII_DIGIT){2}  ~ 
+                 "-" ~ 
+                (ASCII_DIGIT){2} ~
+                " " ~
+                (ASCII_DIGIT){2}  ~ 
+                ":" ~
+                (ASCII_DIGIT){2} 
+            }
+
+id = {((ASCII_DIGIT)*)}
+
+begin_shift = { "Guard" ~ "#" ~ id ~ "begins shift" }
+wakes_up = { "wakes up" }
+falls_asleep = { "falls asleep" }
+
+event_description = {
+  (ASCII_ALPHANUMERIC | " " | "#")*
+}
+
+event = {"[" ~ timestamp ~ "]" ~ (begin_shift | wakes_up | falls_asleep) }
