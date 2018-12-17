@@ -1,6 +1,7 @@
 use crate::{error, AoCSolution};
 use failure::{format_err, Error};
 use std::collections::HashSet;
+use std::ops::Range;
 use std::str::FromStr;
 
 pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
@@ -12,13 +13,53 @@ pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
         .max()
         .unwrap() as usize;
 
-    let mut grid = vec![vec![0 as usize; upper_bound]; upper_bound];
-
     let range = 0..upper_bound;
+
+    let grid = compute_partial_grid(&coordinates, &range);
+
+    let coordinates_to_ignore = find_coordinates_to_ignore(&grid, &range);
+
+    let mut regions = vec![0; coordinates.len()];
+    for x in range.clone() {
+        for y in range.clone() {
+            if let Some(coordinates) = grid[x][y] {
+                if !coordinates_to_ignore.contains(&coordinates) {
+                    regions[coordinates] += 1;
+                }
+            }
+        }
+    }
+
+    let largest_area_size = regions.iter().max_by(|a, b| a.cmp(&b)).unwrap();
+
+    let mut optimial_region_size = 0;
+    for x in range.clone() {
+        for y in range.clone() {
+            let sum: i32 = coordinates
+                .iter()
+                .map(|c| c.distince_from((x as i32, y as i32)))
+                .sum();
+
+            if sum < 10000 {
+                optimial_region_size += 1;
+            }
+        }
+    }
+
+    Ok(AoCSolution {
+        part_one: largest_area_size.to_string(),
+        part_two: optimial_region_size.to_string(),
+    })
+}
+
+type Grid = Vec<Vec<Option<usize>>>;
+
+fn compute_partial_grid(c: &[Coordinates], range: &Range<usize>) -> Grid {
+    let mut grid = vec![vec![None; range.end]; range.end];
 
     for x in range.clone() {
         for y in range.clone() {
-            let distances: Vec<(usize, i32)> = coordinates
+            let distances: Vec<(usize, i32)> = c
                 .iter()
                 .enumerate()
                 .map(|(i, c)| (i, c.distince_from((x as i32, y as i32))))
@@ -26,41 +67,37 @@ pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
 
             let shortest = distances.iter().min_by(|a, b| a.1.cmp(&b.1)).unwrap();
 
-            grid[x][y] = shortest.0;
+            let closest: Vec<&(usize, i32)> =
+                distances.iter().filter(|(_, c)| *c == shortest.1).collect();
+
+            match closest.len() {
+                1 => grid[x][y] = Some(shortest.0),
+                _ => grid[x][y] = None,
+            };
         }
     }
 
-    let coordinates_to_ignore: HashSet<(usize, usize)> =
-        range.clone().fold(HashSet::new(), |mut acc, i| {
-            acc.insert((0, i));
-            acc.insert((i, 0));
-            acc.insert((upper_bound - 1, i));
-            acc.insert((i, upper_bound - 1));
+    grid
+}
 
-            acc
-        });
-
-    let mut regions = vec![0; coordinates.len()];
-    for x in range.clone() {
-        for y in range.clone() {
-            let point = grid[x][y];
-
-            if !coordinates_to_ignore.contains(&(x, y)) {
-                regions[point] += 1
-            }
+#[allow(clippy::ptr_arg)]
+fn find_coordinates_to_ignore(grid: &Grid, range: &Range<usize>) -> HashSet<usize> {
+    range.clone().fold(HashSet::new(), |mut acc, i| {
+        if let Some(c) = grid[0][i] {
+            acc.insert(c);
         }
-    }
+        if let Some(c) = grid[i][0] {
+            acc.insert(c);
+        }
+        if let Some(c) = grid[range.end - 1][i] {
+            acc.insert(c);
+        }
+        if let Some(c) = grid[i][range.end - 1] {
+            acc.insert(c);
+        }
 
-    let largest_area = regions
-        .iter()
-        .enumerate()
-        .max_by(|a, b| a.1.cmp(&b.1))
-        .unwrap()
-        .1;
-
-    println!("{}", largest_area);
-
-    unimplemented!()
+        acc
+    })
 }
 
 fn parse(input: &str) -> Vec<Coordinates> {
@@ -77,7 +114,7 @@ struct Coordinates {
 
 impl Coordinates {
     fn distince_from(&self, other: (i32, i32)) -> i32 {
-        (self.x - other.0).abs() + (self.y - other.0).abs()
+        (other.0 - self.x).abs() + (other.1 - self.y).abs()
     }
 }
 
@@ -116,5 +153,9 @@ mod test {
 
         assert_eq!(coordinates[5].x, 8);
         assert_eq!(coordinates[5].y, 9);
+
+        let r = run(&input).unwrap();
+
+        assert_eq!(r.part_one, "17");
     }
 }
