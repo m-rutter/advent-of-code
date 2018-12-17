@@ -1,16 +1,28 @@
 use crate::{error, AoCSolution};
 use failure::{format_err, Error};
 use pest::Parser;
+use std::collections::HashSet;
 use std::str::FromStr;
 
 pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
-    unimplemented!()
+    let conditionals = parse(&input);
+
+    Ok(AoCSolution {
+        part_one: compute_sequence(&conditionals),
+        part_two: String::new(),
+    })
 }
 
 fn parse(s: &str) -> Vec<Conditional> {
     s.lines()
         .filter_map(|line| Conditional::from_str(line.trim()).ok())
         .collect()
+}
+
+fn compute_sequence(conditionals: &[Conditional]) -> String {
+    let mut completed_steps: HashSet<char> = HashSet::new();
+
+    unimplemented!()
 }
 
 mod parser {
@@ -81,5 +93,7 @@ mod test {
         assert_eq!(conditionals[0].consequent, 'A');
         assert_eq!(conditionals[6].antecedent, 'F');
         assert_eq!(conditionals[6].consequent, 'E');
+
+        assert_eq!(compute_sequence(&conditionals), "CABDFE");
     }
 }
