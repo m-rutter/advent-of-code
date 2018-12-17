@@ -1,0 +1,5 @@
+WHITESPACE = _{" "}
+antecedent = @{ (ASCII_ALPHA_UPPER){1} }
+consequent = @{ (ASCII_ALPHA_UPPER){1} }
+
+conditional = {"Step" ~ antecedent ~ "must be finished before step" ~ consequent ~ "can begin."}
