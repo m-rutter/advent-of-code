@@ -85,10 +85,10 @@ impl FromStr for Coordinates {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Coordinates, Error> {
-        let mut v = s.split(",").filter_map(|s| s.trim().parse::<i32>().ok());
+        let mut v = s.split(',').filter_map(|s| s.trim().parse::<i32>().ok());
 
-        let x = v.next().ok_or(format_err!("No x coordinate"))?;
-        let y = v.next().ok_or(format_err!("No y coordinate"))?;
+        let x = v.next().ok_or_else(|| format_err!("No x coordinate"))?;
+        let y = v.next().ok_or_else(|| format_err!("No y coordinate"))?;
 
         Ok(Coordinates { x: x, y: y })
     }
