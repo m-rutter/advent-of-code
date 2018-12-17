@@ -32,12 +32,10 @@ fn parse(input: &str) -> Vec<GuardEvent> {
 type GroupedGuardEvents<'a> = HashMap<u32, Vec<&'a GuardEvent>>;
 
 fn find_sleepy_guard_minute_hash(grouped_guard_events: &GroupedGuardEvents) -> SleepyGuard {
-    let sleepy_guard = get_sleeper_stats(&grouped_guard_events)
+    get_sleeper_stats(&grouped_guard_events)
         .into_iter()
         .max_by(|a, b| a.minutes_alseep.cmp(&b.minutes_alseep))
-        .unwrap();
-
-    sleepy_guard
+        .unwrap()
 }
 
 fn get_sleeper_stats(grouped_guard_events: &GroupedGuardEvents) -> Vec<SleepyGuard> {
@@ -120,17 +118,16 @@ fn find_consistent_sleepy_guard(grouped_guard_events: &GroupedGuardEvents) -> (u
     (best_guard.id, *minute.0)
 }
 
-fn group_event_by_guard<'a>(events: &'a [GuardEvent]) -> GroupedGuardEvents<'a> {
+fn group_event_by_guard(events: &[GuardEvent]) -> GroupedGuardEvents<'_> {
     let mut map = HashMap::new();
     let mut tracker = 0;
 
     for event in events {
-        match event.kind {
-            GuardEventKind::BeginShift { guard_id } => tracker = guard_id,
-            _ => {}
+        if let GuardEventKind::BeginShift { guard_id } = event.kind {
+            tracker = guard_id;
         }
 
-        let v = map.entry(tracker).or_insert(vec![]);
+        let v = map.entry(tracker).or_insert_with(Vec::new);
 
         v.push(event);
     }
@@ -164,7 +161,7 @@ impl FromStr for GuardEvent {
     fn from_str(s: &str) -> Result<GuardEvent, Error> {
         let mut pair = parser::Day04Parser::parse(parser::Rule::event, s)?
             .next()
-            .ok_or(format_err!("No guard events in input"))?
+            .ok_or_else(|| format_err!("No guard events in input"))?
             .into_inner();
 
         let date_string = pair.next().expect("should be impossible").as_str();
@@ -178,7 +175,7 @@ impl FromStr for GuardEvent {
                 guard_id: event_pair
                     .into_inner()
                     .next()
-                    .ok_or(format_err!("No guard events in input"))?
+                    .ok_or_else(|| format_err!("No guard events in input"))?
                     .as_str()
                     .parse()?,
             },
