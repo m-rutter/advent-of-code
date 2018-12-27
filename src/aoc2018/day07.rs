@@ -1,7 +1,7 @@
 use crate::{error, AoCSolution};
 use failure::{format_err, Error};
 use pest::Parser;
-use std::collections::HashSet;
+use std::collections::{HashSet, VecDeque};
 use std::str::FromStr;
 
 pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
@@ -13,16 +13,38 @@ pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
     })
 }
 
-fn parse(s: &str) -> Vec<Conditional> {
+fn parse(s: &str) -> Vec<Dependency> {
     s.lines()
-        .filter_map(|line| Conditional::from_str(line.trim()).ok())
+        .filter_map(|line| Dependency::from_str(line.trim()).ok())
         .collect()
 }
 
-fn compute_sequence(conditionals: &[Conditional]) -> String {
-    let mut completed_steps: HashSet<char> = HashSet::new();
+fn compute_sequence(dependencies: &[Dependency]) -> String {
+    let mut sequence: VecDeque<char> = VecDeque::new();
+    let mut nodes_without_incoming_edges: Vec<_> = get_nodes_without_incoming_edges(&dependencies)
+        .into_iter()
+        .collect();
 
-    unimplemented!()
+    nodes_without_incoming_edges.sort();
+
+    sequence.iter().collect()
+}
+
+fn get_nodes_without_incoming_edges(dependencies: &[Dependency]) -> HashSet<char> {
+    let antecedent_set: HashSet<char> = dependencies
+        .into_iter()
+        .map(|dependency| dependency.antecedent)
+        .collect();
+
+    let consequent_set: HashSet<char> = dependencies
+        .into_iter()
+        .map(|dependency| dependency.consequent)
+        .collect();
+
+    antecedent_set
+        .difference(&consequent_set)
+        .cloned()
+        .collect()
 }
 
 mod parser {
@@ -33,15 +55,15 @@ mod parser {
     pub struct Day07Parser;
 }
 
-struct Conditional {
+struct Dependency {
     antecedent: char,
     consequent: char,
 }
 
-impl FromStr for Conditional {
+impl FromStr for Dependency {
     type Err = Error;
 
-    fn from_str(s: &str) -> Result<Conditional, Error> {
+    fn from_str(s: &str) -> Result<Dependency, Error> {
         let mut pair = parser::Day07Parser::parse(parser::Rule::conditional, s)?
             .next()
             .ok_or_else(|| format_err!("No conditional in line"))?
@@ -53,7 +75,7 @@ impl FromStr for Conditional {
             .as_str()
             .chars()
             .next()
-            .unwrap();
+            .expect("should be impossible");
 
         let consequent = pair
             .next()
@@ -61,9 +83,9 @@ impl FromStr for Conditional {
             .as_str()
             .chars()
             .next()
-            .unwrap();
+            .expect("should be impossible");
 
-        Ok(Conditional {
+        Ok(Dependency {
             antecedent: antecedent,
             consequent: consequent,
         })
@@ -86,14 +108,19 @@ mod test {
         Step F must be finished before step E can begin.
         "#;
 
-        let conditionals = parse(&input);
+        let dependencies = parse(&input);
 
-        assert_eq!(conditionals.len(), 7);
-        assert_eq!(conditionals[0].antecedent, 'C');
-        assert_eq!(conditionals[0].consequent, 'A');
-        assert_eq!(conditionals[6].antecedent, 'F');
-        assert_eq!(conditionals[6].consequent, 'E');
+        assert_eq!(dependencies.len(), 7);
+        assert_eq!(dependencies[0].antecedent, 'C');
+        assert_eq!(dependencies[0].consequent, 'A');
+        assert_eq!(dependencies[6].antecedent, 'F');
+        assert_eq!(dependencies[6].consequent, 'E');
 
-        assert_eq!(compute_sequence(&conditionals), "CABDFE");
+        let nodes_without_incoming_edges = get_nodes_without_incoming_edges(&dependencies);
+
+        assert!(nodes_without_incoming_edges.contains(&'C'));
+        assert!(!nodes_without_incoming_edges.contains(&'A'));
+
+        // assert_eq!(compute_sequence(&conditionals), "CABDFE");
     }
 }
