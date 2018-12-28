@@ -1,8 +1,8 @@
 use crate::error;
-use crate::AoCSolution;
+use crate::Solution;
 
 /// Compute the solution to day 1 of AoC 2017
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let parsed_input = parser(&input);
 
     if parsed_input.len() <= 1 {
@@ -12,7 +12,7 @@ pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
     let part_one = circular_match_and_sum(&parsed_input, 1);
     let part_two = circular_match_and_sum(&parsed_input, parsed_input.len() / 2);
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: part_one.to_string(),
         part_two: part_two.to_string(),
     })

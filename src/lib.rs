@@ -14,7 +14,7 @@ pub struct Config {
 }
 
 /// Solution for a day in AoC
-pub struct AoCSolution {
+pub struct Solution {
     /// Answer to part one of challenge
     pub part_one: String,
     /// Answer to part two of challenge
@@ -29,7 +29,7 @@ impl Config {
     ///
     /// let config = Config::new(2017, 1, String::from("6497139596"));
     /// ```
-    pub fn new(year: u16, day: u8, input: String) -> Config {
+    pub fn new(year: u16, day: u8, input: String) -> Self {
         Config {
             year: year,
             day: day,
@@ -56,7 +56,7 @@ impl Config {
 /// };
 ///
 /// ```
-pub fn solve_day(config: &Config) -> error::AoCResult<AoCSolution> {
+pub fn solve_day(config: &Config) -> error::AoCResult<Solution> {
     match config.year {
         2017 => match config.day {
             1 => aoc2017::day01::run(&config.input),

@@ -1,11 +1,11 @@
 use crate::error;
-use crate::AoCSolution;
+use crate::Solution;
 use std::collections::HashSet;
 
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let modulations = parse(&input);
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: fold_frequency_modulations(&modulations).to_string(),
         part_two: find_repeating_frequency(&modulations).to_string(),
     })

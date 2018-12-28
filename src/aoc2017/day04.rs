@@ -1,15 +1,15 @@
 use std::collections::HashSet;
 
-use crate::{error, AoCSolution};
+use crate::{error, Solution};
 
 /// Compute the solution to day 4 of AoC 2017
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let input = parser(&input);
 
     let valid_passprase_count = get_valid_passprase_count(&input);
     let valid_passprase_count_no_anagrams = get_valid_passprase_anagrams(&input);
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: valid_passprase_count.to_string(),
         part_two: valid_passprase_count_no_anagrams.to_string(),
     })

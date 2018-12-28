@@ -1,14 +1,14 @@
 use std::collections::HashMap;
 
-use crate::{error, AoCSolution};
+use crate::{error, Solution};
 
 /// Compute the solution to day 6 of AoC 2017
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let input = parser(&input);
 
     let (part_one, part_two) = relocate_until_repeat(&input);
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: part_one.to_string(),
         part_two: part_two.to_string(),
     })

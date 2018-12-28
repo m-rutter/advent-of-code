@@ -1,10 +1,10 @@
-use crate::{error, AoCSolution};
+use crate::{error, Solution};
 use std::collections::HashMap;
 
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let ids = parse(&input);
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: compute_checksum(&ids).to_string(),
         part_two: find_common_char(&ids).into_iter().collect(),
     })

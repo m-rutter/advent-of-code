@@ -1,4 +1,4 @@
-use crate::{error, AoCSolution};
+use crate::{error, Solution};
 use pest::{self, Parser};
 use pest_derive::Parser;
 use std::collections::{HashMap, HashSet};
@@ -15,7 +15,7 @@ struct Node {
 }
 
 /// Compute the solution to day 7 of AoC 2017
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let nodes = parser(&input);
 
     let _root = find_root_node(&nodes);

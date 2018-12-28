@@ -1,12 +1,12 @@
-use crate::{error, AoCSolution};
+use crate::{error, Solution};
 use pest::Parser;
 use std::collections::{HashSet, VecDeque};
 use std::str::FromStr;
 
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let conditionals = parse(&input);
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: compute_sequence(&conditionals),
         part_two: String::new(),
     })

@@ -1,16 +1,16 @@
-use crate::{error, AoCSolution};
+use crate::{error, Solution};
 use chrono::{NaiveDateTime, Timelike};
 use pest::Parser;
 use std::collections::HashMap;
 use std::str::FromStr;
 
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let guard_events = parse(input);
     let grouped_guard_events = group_event_by_guard(&guard_events);
     let sleepy = find_sleepy_guard_minute_hash(&grouped_guard_events);
     let consistent_sleeper = find_consistent_sleepy_guard(&grouped_guard_events);
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: (sleepy.id * sleepy.ideal_minute).to_string(),
         part_two: (consistent_sleeper.0 * consistent_sleeper.1).to_string(),
     })

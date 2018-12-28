@@ -1,10 +1,10 @@
-use crate::{error, AoCSolution};
+use crate::{error, Solution};
 use std::collections::HashSet;
 
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let v: Vec<char> = input.chars().collect();
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: reduce_polymer(v.iter()).to_string(),
         part_two: optimial_polymer_length(&v).to_string(),
     })

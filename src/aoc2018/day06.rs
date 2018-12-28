@@ -1,9 +1,9 @@
-use crate::{error, AoCSolution};
+use crate::{error, Solution};
 use std::collections::HashSet;
 use std::ops::Range;
 use std::str::FromStr;
 
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let coordinates = parse(&input);
 
     let upper_bound = 1 + coordinates
@@ -45,7 +45,7 @@ pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
         }
     }
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: largest_area_size.to_string(),
         part_two: optimial_region_size.to_string(),
     })

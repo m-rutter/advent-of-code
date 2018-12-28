@@ -1,4 +1,4 @@
-//! Advent of Code 2017 module
+//! AoC 2017 module
 pub mod day01;
 pub mod day02;
 pub mod day03;

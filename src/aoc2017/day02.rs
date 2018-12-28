@@ -1,15 +1,15 @@
 use itertools::Itertools;
 
-use crate::{error, AoCSolution};
+use crate::{error, Solution};
 
 /// Compute the solution to day 2 of AoC 2017
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let input = parse_input(&input);
 
     let checksum = gen_checksum(&input);
     let sum_of_even_divisons = users_are_odd(&input);
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: checksum.to_string(),
         part_two: sum_of_even_divisons.to_string(),
     })

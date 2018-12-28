@@ -1,4 +1,4 @@
-//! Advent of code error module
+//! AoC error module
 use std::error::Error as StdError;
 use std::fmt;
 
@@ -97,7 +97,7 @@ impl fmt::Display for Error {
         match &self.kind {
             ErrorKind::Msg(message) => write!(f, "{}", message),
             ErrorKind::InputParse => write!(f, "Error parsing input"),
-            ErrorKind::UnsupportedDay { year, day } => write!(
+            ErrorKind::UnsupportedDay { day, year } => write!(
                 f,
                 "Day {} for year {} either does not exist or is unsupported",
                 day, year

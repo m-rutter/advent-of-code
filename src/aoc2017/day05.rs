@@ -1,13 +1,13 @@
-use crate::{error, AoCSolution};
+use crate::{error, Solution};
 
 /// Compute the solution to day 5 of AoC 2017
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let input = parser(&input);
 
     let part_one = steps_to_exit(&input, |_| 1);
     let part_two = steps_to_exit(&input, |item| if item >= 3 { -1 } else { 1 });
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: part_one.to_string(),
         part_two: part_two.to_string(),
     })

@@ -1,4 +1,4 @@
-use crate::{error, AoCSolution};
+use crate::{error, Solution};
 use pest::{self, Parser};
 use pest_derive::Parser;
 use std::collections::HashMap;
@@ -18,12 +18,12 @@ struct Claim<'a> {
 
 type Cloth = HashMap<(u32, u32), u32>;
 
-pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
+pub fn run(input: &str) -> error::AoCResult<Solution> {
     let claims = parse(&input);
 
     let cloth = create_cloth(&claims);
 
-    Ok(AoCSolution {
+    Ok(Solution {
         part_one: count_overlapping_claims(&cloth).to_string(),
         part_two: find_single_claim(&claims, &cloth).unwrap().to_string(),
     })
