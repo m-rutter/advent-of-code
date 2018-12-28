@@ -6,14 +6,14 @@ use std::process;
 use structopt::StructOpt;
 
 #[derive(Debug, StructOpt)]
-#[structopt(about = "Solves Advent of Code problems")]
+#[structopt(name = "Advent of Code Cli", about = "Solves Advent of Code problems")]
 struct Opt {
+    /// Set the day to solve
+    #[structopt(short = "d", long = "day")]
+    day: u8,
     /// Set the year
     #[structopt(short = "y", long = "year")]
     year: u16,
-    /// Set the day
-    #[structopt(short = "d", long = "day")]
-    day: u8,
     /// Set the input file as problem input
     #[structopt(short = "p", long = "path", parse(from_os_str))]
     path: Option<PathBuf>,
