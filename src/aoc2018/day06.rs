@@ -125,10 +125,10 @@ impl FromStr for Coordinates {
 
         let x = v
             .next()
-            .ok_or_else(|| error::Error::msg("No x coordinate"))?;
+            .ok_or_else(|| error::Error::msg(&"No x coordinate"))?;
         let y = v
             .next()
-            .ok_or_else(|| error::Error::msg("No y coordinate"))?;
+            .ok_or_else(|| error::Error::msg(&"No y coordinate"))?;
 
         Ok(Coordinates { x: x, y: y })
     }

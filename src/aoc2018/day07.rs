@@ -19,7 +19,7 @@ fn parse(s: &str) -> Vec<Dependency> {
 }
 
 fn compute_sequence(dependencies: &[Dependency]) -> String {
-    let mut sequence: VecDeque<char> = VecDeque::new();
+    let sequence: VecDeque<char> = VecDeque::new();
     let mut nodes_without_incoming_edges: Vec<_> = get_nodes_without_incoming_edges(&dependencies)
         .into_iter()
         .collect();
@@ -65,7 +65,7 @@ impl FromStr for Dependency {
     fn from_str(s: &str) -> Result<Dependency, error::Error> {
         let mut pair = parser::Day07Parser::parse(parser::Rule::conditional, s)?
             .next()
-            .ok_or_else(|| error::Error::msg("No conditional in line"))?
+            .ok_or_else(|| error::Error::msg(&"No conditional in line"))?
             .into_inner();
 
         let antecedent = pair

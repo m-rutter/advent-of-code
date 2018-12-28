@@ -159,7 +159,7 @@ impl FromStr for GuardEvent {
     fn from_str(s: &str) -> Result<GuardEvent, error::Error> {
         let mut pair = parser::Day04Parser::parse(parser::Rule::event, s)?
             .next()
-            .ok_or_else(|| error::Error::msg("No guard events in input"))?
+            .ok_or_else(|| error::Error::msg(&"No guard events in input"))?
             .into_inner();
 
         let date_string = pair.next().expect("should be impossible").as_str();
@@ -173,13 +173,13 @@ impl FromStr for GuardEvent {
                 guard_id: event_pair
                     .into_inner()
                     .next()
-                    .ok_or_else(|| error::Error::msg("No guard events in input"))?
+                    .ok_or_else(|| error::Error::msg(&"No guard events in input"))?
                     .as_str()
                     .parse()?,
             },
             parser::Rule::wakes_up => GuardEventKind::Waking,
             parser::Rule::falls_asleep => GuardEventKind::FallingAsleep,
-            _ => Err(error::Error::msg("Invalid guard event"))?,
+            _ => Err(error::Error::msg(&"Invalid guard event"))?,
         };
 
         Ok(GuardEvent {

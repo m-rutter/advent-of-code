@@ -15,16 +15,17 @@ pub struct Error {
 
 impl Error {
     /// Creates generic error with a message
-    pub(crate) fn msg(value: impl ToString) -> Self {
+    pub(crate) fn msg(value: &impl ToString) -> Self {
         Self {
             kind: ErrorKind::Msg(value.to_string()),
             source: None,
         }
     }
 
+    #[allow(dead_code)]
     ///Creates generic error with a message and a cause
     pub(crate) fn chain(
-        value: impl ToString,
+        value: &impl ToString,
         cause: impl Into<Box<dyn StdError + Send + Sync + 'static>>,
     ) -> Self {
         Self {
