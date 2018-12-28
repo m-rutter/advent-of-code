@@ -44,14 +44,14 @@ impl Config {
 /// use advent_of_code::{solve_day, Config};
 ///
 /// let mut config = Config::new(2017, 1, String::from("91212129"));
-///  
+///
 /// match solve_day(&config) {
 ///     Ok(solution) => {
-///         println!("Part 1 solution for day 1: {}", solution.part_one);
-///         println!("Part 2 solution for day 1: {}", solution.part_two);
+///         assert_eq!(solution.part_one, "9");
+///         assert_eq!(solution.part_two, "6");
 ///     },
 ///     Err(error) => {
-///         eprintln!("{}", error)
+///         //...
 ///     }
 /// };
 ///
