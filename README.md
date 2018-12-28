@@ -9,21 +9,21 @@ To use and install the cli tool that uses the library with `cargo`, clone the re
 
 aoc-cli:
 ```
-Advent of Code CLI 0.1.0
+Advent of Code Cli 0.1.0
 Michael Rutter <michael.john.rutter@gmail.com>
 Solves Advent of Code problems
 
 USAGE:
-    aoc-cli [OPTIONS] --day <NUMBER> --year <NUMBER>
+    aoc-cli [OPTIONS] --day <day> --year <year>
 
 FLAGS:
     -h, --help       Prints help information
     -V, --version    Prints version information
 
 OPTIONS:
-    -d, --day <NUMBER>         Set the day to solve
-    -p, --path <INPUT PATH>    Set the input file as problem input
-    -y, --year <NUMBER>        Set the year
+    -d, --day <day>      Set the day to solve
+    -p, --path <path>    Set the input file as problem input
+    -y, --year <year>    Set the year
 ```
 
 ### Examples
