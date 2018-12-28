@@ -20,7 +20,7 @@ pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
 
     let _root = find_root_node(&nodes);
 
-    Err(error::AoCError::from(error::AoCErrorKind::InvalidDay))
+    unimplemented!()
 }
 
 fn find_root_node(nodes: &HashMap<String, Node>) -> String {

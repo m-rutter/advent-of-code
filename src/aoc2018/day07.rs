@@ -1,5 +1,4 @@
 use crate::{error, AoCSolution};
-use failure::{format_err, Error};
 use pest::Parser;
 use std::collections::{HashSet, VecDeque};
 use std::str::FromStr;
@@ -61,12 +60,12 @@ struct Dependency {
 }
 
 impl FromStr for Dependency {
-    type Err = Error;
+    type Err = error::Error;
 
-    fn from_str(s: &str) -> Result<Dependency, Error> {
+    fn from_str(s: &str) -> Result<Dependency, error::Error> {
         let mut pair = parser::Day07Parser::parse(parser::Rule::conditional, s)?
             .next()
-            .ok_or_else(|| format_err!("No conditional in line"))?
+            .ok_or_else(|| error::Error::msg("No conditional in line"))?
             .into_inner();
 
         let antecedent = pair

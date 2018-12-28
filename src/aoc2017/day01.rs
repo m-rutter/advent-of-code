@@ -6,27 +6,8 @@ pub fn run(input: &str) -> error::AoCResult<AoCSolution> {
     let parsed_input = parser(&input);
 
     if parsed_input.len() <= 1 {
-        Err(error::AoCErrorKind::InvalidInput {
-            message: "Not enough numeric chars in input",
-        })?;
+        Err(error::ErrorKind::InputParse)?;
     }
-
-    let v = vec![1, 2, 3, 4];
-
-    let v: Vec<i32> = v
-        .iter()
-        .scan(1, |state, &x| {
-            *state += 11;
-
-            if *state % 2 == 0 {
-                Some(x + *state)
-            } else {
-                None
-            }
-        })
-        .collect();
-
-    println!("{:?}", v);
 
     let part_one = circular_match_and_sum(&parsed_input, 1);
     let part_two = circular_match_and_sum(&parsed_input, parsed_input.len() / 2);

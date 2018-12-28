@@ -1,67 +1,106 @@
 //! Advent of code error module
-use failure::{Backtrace, Context, Fail};
+use std::convert::Into;
+use std::error::Error as StdError;
 use std::fmt;
-use std::num::ParseIntError;
 
-pub type AoCResult<T> = std::result::Result<T, AoCError>;
+// Convenience Result type
+pub type AoCResult<T> = std::result::Result<T, Error>;
 
-/// Aoc Error Type
+/// An error type for the Advent of Code crate
 #[derive(Debug)]
-pub struct AoCError {
-    inner: Context<AoCErrorKind>,
+pub struct Error {
+    pub kind: ErrorKind,
+    source: Option<Box<dyn StdError>>,
 }
 
-impl AoCError {
-    pub fn kind(&self) -> AoCErrorKind {
-        *self.inner.get_context()
+impl Error {
+    /// Creates generic error with a message
+    pub(crate) fn msg(value: impl ToString) -> Self {
+        Self {
+            kind: ErrorKind::Msg(value.to_string()),
+            source: None,
+        }
     }
-}
 
-impl From<AoCErrorKind> for AoCError {
-    fn from(kind: AoCErrorKind) -> AoCError {
-        AoCError {
-            inner: Context::new(kind),
+    ///Creates generic error with a message and a cause
+    pub(crate) fn chain(
+        value: impl ToString,
+        cause: impl Into<Box<dyn StdError + Send + Sync + 'static>>,
+    ) -> Self {
+        Self {
+            kind: ErrorKind::Msg(value.to_string()),
+            source: Some(cause.into()),
         }
     }
 }
 
-impl From<Context<AoCErrorKind>> for AoCError {
-    fn from(inner: Context<AoCErrorKind>) -> AoCError {
-        AoCError { inner: inner }
+impl StdError for Error {
+    fn source(&self) -> Option<&(dyn StdError + 'static)> {
+        self.source.as_ref().map(|c| &**c)
     }
 }
 
-impl From<ParseIntError> for AoCError {
-    fn from(_err: ParseIntError) -> AoCError {
-        AoCError::from(AoCErrorKind::InvalidInput {
-            message: "expected unsigned interger",
-        })
+#[derive(Debug)]
+pub enum ErrorKind {
+    Msg(String),
+    InputParse,
+    UnsupportedDay {
+        year: u16,
+        day: u8,
+    },
+    /// Hint to users of the crate that this ErrorKind ought to be matched as
+    /// non-exhaustive in case the enum grows
+    #[doc(hidden)]
+    __Nonexhaustive,
+}
+
+impl From<ErrorKind> for Error {
+    fn from(error: ErrorKind) -> Self {
+        Self {
+            kind: error,
+            source: None,
+        }
     }
 }
 
-impl Fail for AoCError {
-    fn cause(&self) -> Option<&Fail> {
-        self.inner.cause()
-    }
-
-    fn backtrace(&self) -> Option<&Backtrace> {
-        self.inner.backtrace()
+impl From<std::num::ParseIntError> for Error {
+    fn from(error: std::num::ParseIntError) -> Self {
+        Self {
+            kind: ErrorKind::InputParse,
+            source: Some(error.into()),
+        }
     }
 }
 
-impl fmt::Display for AoCError {
+impl From<chrono::format::ParseError> for Error {
+    fn from(error: chrono::format::ParseError) -> Self {
+        Self {
+            kind: ErrorKind::InputParse,
+            source: Some(error.into()),
+        }
+    }
+}
+
+impl<T> From<pest::error::Error<T>> for Error {
+    fn from(_: pest::error::Error<T>) -> Self {
+        Self {
+            kind: ErrorKind::InputParse,
+            source: None,
+        }
+    }
+}
+
+impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        fmt::Display::fmt(&self.inner, f)
+        match &self.kind {
+            ErrorKind::Msg(message) => write!(f, "{}", message),
+            ErrorKind::InputParse => write!(f, "Error parsing input"),
+            ErrorKind::UnsupportedDay { year, day } => write!(
+                f,
+                "Day {} for year {} either does not exist or is unsupported",
+                day, year
+            ),
+            ErrorKind::__Nonexhaustive => write!(f, "Nonexhaustive"),
+        }
     }
-}
-
-/// AoC Error Kind
-#[derive(Copy, Clone, Eq, PartialEq, Debug, Fail)]
-pub enum AoCErrorKind {
-    /// Error when something is wrong with the input data when being parsed
-    #[fail(display = "Invalid input: {}", message)]
-    InvalidInput { message: &'static str },
-    /// Error when the day is not implemented or does not exist
-    #[fail(display = "Day is not yet implemented or does not exist")]
-    InvalidDay,
 }

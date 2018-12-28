@@ -1,5 +1,4 @@
 use crate::{error, AoCSolution};
-use failure::{format_err, Error};
 use std::collections::HashSet;
 use std::ops::Range;
 use std::str::FromStr;
@@ -119,13 +118,17 @@ impl Coordinates {
 }
 
 impl FromStr for Coordinates {
-    type Err = Error;
+    type Err = error::Error;
 
-    fn from_str(s: &str) -> Result<Coordinates, Error> {
+    fn from_str(s: &str) -> Result<Coordinates, error::Error> {
         let mut v = s.split(',').filter_map(|s| s.trim().parse::<i32>().ok());
 
-        let x = v.next().ok_or_else(|| format_err!("No x coordinate"))?;
-        let y = v.next().ok_or_else(|| format_err!("No y coordinate"))?;
+        let x = v
+            .next()
+            .ok_or_else(|| error::Error::msg("No x coordinate"))?;
+        let y = v
+            .next()
+            .ok_or_else(|| error::Error::msg("No y coordinate"))?;
 
         Ok(Coordinates { x: x, y: y })
     }

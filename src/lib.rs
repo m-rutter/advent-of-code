@@ -66,7 +66,10 @@ pub fn solve_day(config: &Config) -> error::AoCResult<AoCSolution> {
             5 => aoc2017::day05::run(&config.input),
             6 => aoc2017::day06::run(&config.input),
             7 => aoc2017::day07::run(&config.input),
-            _ => Err(error::AoCErrorKind::InvalidDay)?,
+            _ => Err(error::ErrorKind::UnsupportedDay {
+                day: config.day,
+                year: config.year,
+            })?,
         },
         2018 => match config.day {
             1 => aoc2018::day01::run(&config.input),
@@ -76,8 +79,14 @@ pub fn solve_day(config: &Config) -> error::AoCResult<AoCSolution> {
             5 => aoc2018::day05::run(&config.input),
             6 => aoc2018::day06::run(&config.input),
             7 => aoc2018::day07::run(&config.input),
-            _ => Err(error::AoCErrorKind::InvalidDay)?,
+            _ => Err(error::ErrorKind::UnsupportedDay {
+                day: config.day,
+                year: config.year,
+            })?,
         },
-        _ => Err(error::AoCErrorKind::InvalidDay)?,
+        _ => Err(error::ErrorKind::UnsupportedDay {
+            day: config.day,
+            year: config.year,
+        })?,
     }
 }

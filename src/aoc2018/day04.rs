@@ -1,7 +1,5 @@
 use crate::{error, AoCSolution};
 use chrono::{NaiveDateTime, Timelike};
-use failure;
-use failure::{format_err, Error};
 use pest::Parser;
 use std::collections::HashMap;
 use std::str::FromStr;
@@ -156,12 +154,12 @@ struct SleepyGuard {
 }
 
 impl FromStr for GuardEvent {
-    type Err = Error;
+    type Err = error::Error;
 
-    fn from_str(s: &str) -> Result<GuardEvent, Error> {
+    fn from_str(s: &str) -> Result<GuardEvent, error::Error> {
         let mut pair = parser::Day04Parser::parse(parser::Rule::event, s)?
             .next()
-            .ok_or_else(|| format_err!("No guard events in input"))?
+            .ok_or_else(|| error::Error::msg("No guard events in input"))?
             .into_inner();
 
         let date_string = pair.next().expect("should be impossible").as_str();
@@ -175,13 +173,13 @@ impl FromStr for GuardEvent {
                 guard_id: event_pair
                     .into_inner()
                     .next()
-                    .ok_or_else(|| format_err!("No guard events in input"))?
+                    .ok_or_else(|| error::Error::msg("No guard events in input"))?
                     .as_str()
                     .parse()?,
             },
             parser::Rule::wakes_up => GuardEventKind::Waking,
             parser::Rule::falls_asleep => GuardEventKind::FallingAsleep,
-            _ => Err(format_err!("Invalid guard event"))?,
+            _ => Err(error::Error::msg("Invalid guard event"))?,
         };
 
         Ok(GuardEvent {
