@@ -6,8 +6,8 @@ use crate::{error, Solution};
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let input = parser(&input);
 
-    let valid_passprase_count = get_valid_passprase_count(&input);
-    let valid_passprase_count_no_anagrams = get_valid_passprase_anagrams(&input);
+    let valid_passprase_count = valid_passprase_count(&input);
+    let valid_passprase_count_no_anagrams = valid_passprase_anagrams(&input);
 
     Ok(Solution {
         part_one: valid_passprase_count.to_string(),
@@ -15,7 +15,7 @@ pub fn run(input: &str) -> error::AoCResult<Solution> {
     })
 }
 
-fn get_valid_passprase_anagrams(v: &[Vec<String>]) -> u32 {
+fn valid_passprase_anagrams(v: &[Vec<String>]) -> u32 {
     v.iter()
         .map(|passprase| {
             let pass_len = passprase.len();
@@ -40,7 +40,7 @@ fn get_valid_passprase_anagrams(v: &[Vec<String>]) -> u32 {
         .sum()
 }
 
-fn get_valid_passprase_count(v: &[Vec<String>]) -> u32 {
+fn valid_passprase_count(v: &[Vec<String>]) -> u32 {
     v.iter()
         .map(|passprase| {
             let mut set = HashSet::new();

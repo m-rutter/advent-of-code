@@ -20,7 +20,7 @@ fn parse(s: &str) -> Vec<Dependency> {
 
 fn compute_sequence(dependencies: &[Dependency]) -> String {
     let sequence: VecDeque<char> = VecDeque::new();
-    let mut nodes_without_incoming_edges: Vec<_> = get_nodes_without_incoming_edges(&dependencies)
+    let mut nodes_without_incoming_edges: Vec<_> = nodes_without_incoming_edges(&dependencies)
         .into_iter()
         .collect();
 
@@ -29,7 +29,7 @@ fn compute_sequence(dependencies: &[Dependency]) -> String {
     sequence.iter().collect()
 }
 
-fn get_nodes_without_incoming_edges(dependencies: &[Dependency]) -> HashSet<char> {
+fn nodes_without_incoming_edges(dependencies: &[Dependency]) -> HashSet<char> {
     let antecedent_set: HashSet<char> = dependencies
         .into_iter()
         .map(|dependency| dependency.antecedent)
@@ -115,7 +115,7 @@ mod test {
         assert_eq!(dependencies[6].antecedent, 'F');
         assert_eq!(dependencies[6].consequent, 'E');
 
-        let nodes_without_incoming_edges = get_nodes_without_incoming_edges(&dependencies);
+        let nodes_without_incoming_edges = nodes_without_incoming_edges(&dependencies);
 
         assert!(nodes_without_incoming_edges.contains(&'C'));
         assert!(!nodes_without_incoming_edges.contains(&'A'));

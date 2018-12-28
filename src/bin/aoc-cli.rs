@@ -48,12 +48,12 @@ fn run(config: &Config) {
 }
 
 fn create_config(opt: &Opt) -> Result<Config, io::Error> {
-    let input = get_input_data(&opt.path)?;
+    let input = read_input_data(&opt.path)?;
 
     Ok(Config::new(opt.year, opt.day, input))
 }
 
-fn get_input_data(input_type: &Option<PathBuf>) -> Result<String, io::Error> {
+fn read_input_data(input_type: &Option<PathBuf>) -> Result<String, io::Error> {
     let mut buff = String::new();
 
     match input_type {

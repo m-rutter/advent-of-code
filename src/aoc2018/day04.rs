@@ -30,13 +30,13 @@ fn parse(input: &str) -> Vec<GuardEvent> {
 type GroupedGuardEvents<'a> = HashMap<u32, Vec<&'a GuardEvent>>;
 
 fn find_sleepy_guard_minute_hash(grouped_guard_events: &GroupedGuardEvents) -> SleepyGuard {
-    get_sleeper_stats(&grouped_guard_events)
+    sleeper_stats(&grouped_guard_events)
         .into_iter()
         .max_by(|a, b| a.minutes_alseep.cmp(&b.minutes_alseep))
         .unwrap()
 }
 
-fn get_sleeper_stats(grouped_guard_events: &GroupedGuardEvents) -> Vec<SleepyGuard> {
+fn sleeper_stats(grouped_guard_events: &GroupedGuardEvents) -> Vec<SleepyGuard> {
     grouped_guard_events
         .iter()
         .map(|(&id, events)| {
@@ -86,7 +86,7 @@ fn get_sleeper_stats(grouped_guard_events: &GroupedGuardEvents) -> Vec<SleepyGua
 }
 
 fn find_consistent_sleepy_guard(grouped_guard_events: &GroupedGuardEvents) -> (u32, u32) {
-    let sleppy_guards = get_sleeper_stats(&grouped_guard_events);
+    let sleppy_guards = sleeper_stats(&grouped_guard_events);
 
     let best_guard = sleppy_guards
         .iter()

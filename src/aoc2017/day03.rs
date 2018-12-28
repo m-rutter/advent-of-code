@@ -27,7 +27,7 @@ impl Cell {
         Cell { x, y }
     }
 
-    fn get_adjacent(c: Cell) -> Vec<Cell> {
+    fn find_adjacent(c: Cell) -> Vec<Cell> {
         vec![
             Cell::new(1, 0),
             Cell::new(1, 1),
@@ -139,7 +139,7 @@ fn memory_walk(limit: u64) -> u64 {
 
         if matrix.contains_key(&look_at) {
             let next_step = direction.move_to(previous);
-            let value = Cell::get_adjacent(next_step)
+            let value = Cell::find_adjacent(next_step)
                 .iter()
                 .filter_map(|c| matrix.get(c))
                 .sum();
@@ -151,7 +151,7 @@ fn memory_walk(limit: u64) -> u64 {
                 break;
             }
         } else {
-            let value = Cell::get_adjacent(look_at)
+            let value = Cell::find_adjacent(look_at)
                 .iter()
                 .filter_map(|c| matrix.get(c))
                 .sum();
