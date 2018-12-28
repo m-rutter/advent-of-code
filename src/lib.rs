@@ -1,6 +1,22 @@
 //! Advent of Code (AoC) solutions library written in Rust.
-//! Personal learning project.
-
+//! Personal learning project. Very much incomplete.
+//! # Example
+//! ```rust
+//! use advent_of_code::{solve_day, Config};
+//!
+//! let config = Config::new(2017, 1, String::from("91212129"));
+//!
+//! match solve_day(&config) {
+//!     Ok(solution) => {
+//!         assert_eq!(solution.part_one, "9");
+//!         assert_eq!(solution.part_two, "6");
+//!     },
+//!     Err(error) => {
+//!         //...
+//!     }
+//! };
+//!
+//! ```
 pub mod aoc2017;
 pub mod aoc2018;
 pub mod error;
@@ -39,7 +55,7 @@ impl Config {
 }
 
 /// Computes the solution to a day in Advent of Code 2017
-/// # Examples
+/// # Example
 /// ```rust
 /// use advent_of_code::{solve_day, Config};
 ///
