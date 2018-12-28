@@ -24,9 +24,9 @@ pub mod error;
 /// AoC config
 #[derive(Debug)]
 pub struct Config {
-    year: u16,
-    day: u8,
-    input: String,
+    pub year: u16,
+    pub day: u8,
+    pub input: String,
 }
 
 /// Solution for a day in AoC

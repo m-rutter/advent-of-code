@@ -1,57 +1,44 @@
 use advent_of_code::{solve_day, Config};
 use std::fs::File;
 use std::io::{self, Read};
+use std::path::PathBuf;
+use std::process;
+use structopt::StructOpt;
 
-use clap::{App, Arg, ArgMatches};
-
-fn main() {
-    let matches = App::new("Advent of Code CLI")
-        .version("0.1.0")
-        .author("Michael Rutter <michael.john.rutter@gmail.com>")
-        .about("Solves Advent of Code problems")
-        .arg(
-            Arg::with_name("year")
-                .short("y")
-                .long("year")
-                .value_name("NUMBER")
-                .help("Set the year")
-                .required(true)
-                .takes_value(true),
-        )
-        .arg(
-            Arg::with_name("day")
-                .short("d")
-                .long("day")
-                .value_name("NUMBER")
-                .help("Set the day to solve")
-                .required(true)
-                .takes_value(true),
-        )
-        .arg(
-            Arg::with_name("path")
-                .short("p")
-                .long("path")
-                .value_name("INPUT PATH")
-                .help("Set the input file as problem input"),
-        )
-        .get_matches();
-
-    run(&matches);
+#[derive(Debug, StructOpt)]
+#[structopt(about = "Solves Advent of Code problems")]
+struct Opt {
+    /// Set the year
+    #[structopt(short = "y", long = "year")]
+    year: u16,
+    /// Set the day
+    #[structopt(short = "d", long = "day")]
+    day: u8,
+    /// Set the input file as problem input
+    #[structopt(short = "p", long = "path", parse(from_os_str))]
+    path: Option<PathBuf>,
 }
 
-fn run(matches: &ArgMatches) {
-    let day = matches.value_of("day").unwrap();
-    let config = create_config(matches);
+fn main() {
+    let opt = Opt::from_args();
+    let config = create_config(&opt).unwrap_or_else(|err| {
+        eprintln!("Error reading input: {}", err);
+        process::exit(1);
+    });
 
+    run(&config);
+}
+
+fn run(config: &Config) {
     match solve_day(&config) {
         Ok(solution) => {
             println!(
                 "Solution to part 1 of day {} is: {}",
-                day, solution.part_one
+                config.day, solution.part_one
             );
             println!(
                 "Solution to part 2 of day {} is: {}",
-                day, solution.part_two
+                config.day, solution.part_two
             );
         }
         Err(s) => {
@@ -60,41 +47,25 @@ fn run(matches: &ArgMatches) {
     }
 }
 
-enum InputType {
-    Stdin,
-    InputPath(String),
+fn create_config(opt: &Opt) -> Result<Config, io::Error> {
+    let input = get_input_data(&opt.path)?;
+
+    Ok(Config::new(opt.year, opt.day, input))
 }
 
-fn create_config(matches: &ArgMatches) -> Config {
-    let day = matches.value_of("day").unwrap();
-    let day: u8 = day.parse().unwrap();
-
-    let year = matches.value_of("year").unwrap();
-    let year: u16 = year.parse().unwrap();
-
-    let input_type = match matches.value_of("path") {
-        Some(path) => InputType::InputPath(path.to_string()),
-        None => InputType::Stdin,
-    };
-
-    let input = get_input_data(input_type);
-
-    Config::new(year, day, input)
-}
-
-fn get_input_data(input_type: InputType) -> String {
+fn get_input_data(input_type: &Option<PathBuf>) -> Result<String, io::Error> {
     let mut buff = String::new();
 
     match input_type {
-        InputType::Stdin => {
-            let mut stdin = io::stdin();
-            stdin.read_to_string(&mut buff).unwrap();
+        Some(path) => {
+            let mut file = File::open(path)?;
+            file.read_to_string(&mut buff)?;
         }
-        InputType::InputPath(path) => {
-            let mut file = File::open(path).unwrap();
-            file.read_to_string(&mut buff).unwrap();
+        None => {
+            let mut stdin = io::stdin();
+            stdin.read_to_string(&mut buff)?;
         }
     }
 
-    buff
+    Ok(buff)
 }

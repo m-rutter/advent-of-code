@@ -12,8 +12,8 @@ path = "src/lib.rs"
 name = "aoc-cli"
 
 [dependencies]
-clap = "2.32.0"
 itertools = "0.8.0"
 pest = "2.1.0"
 pest_derive = "2.1.0"
 chrono = "0.4.6"
+structopt = "0.2.14"
