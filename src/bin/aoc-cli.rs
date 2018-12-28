@@ -26,25 +26,19 @@ fn main() {
         process::exit(1);
     });
 
-    run(&config);
-}
+    let solution = solve_day(&config).unwrap_or_else(|err| {
+        eprintln!("Error when attempting to solve day: {}", err);
+        process::exit(1);
+    });
 
-fn run(config: &Config) {
-    match solve_day(&config) {
-        Ok(solution) => {
-            println!(
-                "Solution to part 1 of day {} is: {}",
-                config.day, solution.part_one
-            );
-            println!(
-                "Solution to part 2 of day {} is: {}",
-                config.day, solution.part_two
-            );
-        }
-        Err(s) => {
-            eprintln!("{}", s);
-        }
-    }
+    println!(
+        "Solution to part 1 of day {} is: \n{}",
+        config.day, solution.part_one
+    );
+    println!(
+        "Solution to part 2 of day {} is: \n{}",
+        config.day, solution.part_two
+    );
 }
 
 fn create_config(opt: &Opt) -> io::Result<Config> {
