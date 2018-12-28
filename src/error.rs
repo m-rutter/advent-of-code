@@ -1,5 +1,4 @@
 //! Advent of code error module
-use std::convert::Into;
 use std::error::Error as StdError;
 use std::fmt;
 
@@ -10,7 +9,7 @@ pub type AoCResult<T> = std::result::Result<T, Error>;
 #[derive(Debug)]
 pub struct Error {
     pub kind: ErrorKind,
-    source: Option<Box<dyn StdError>>,
+    source: Option<Box<dyn StdError + Send + Sync + 'static>>,
 }
 
 impl Error {
@@ -26,7 +25,7 @@ impl Error {
     ///Creates generic error with a message and a cause
     pub(crate) fn chain(
         value: &impl ToString,
-        cause: impl Into<Box<dyn StdError + Send + Sync + 'static>>,
+        cause: impl StdError + Send + Sync + 'static,
     ) -> Self {
         Self {
             kind: ErrorKind::Msg(value.to_string()),
@@ -37,18 +36,20 @@ impl Error {
 
 impl StdError for Error {
     fn source(&self) -> Option<&(dyn StdError + 'static)> {
-        self.source.as_ref().map(|c| &**c)
+        self.source
+            .as_ref()
+            .map(|c| c.as_ref() as &(dyn StdError + 'static))
     }
 }
 
 #[derive(Debug)]
 pub enum ErrorKind {
+    /// Generic error message
     Msg(String),
+    /// Error when parsing provided input
     InputParse,
-    UnsupportedDay {
-        year: u16,
-        day: u8,
-    },
+    /// Error when the day is not supported or does not exist
+    UnsupportedDay { year: u16, day: u8 },
     /// Hint to users of the crate that this ErrorKind ought to be matched as
     /// non-exhaustive in case the enum grows
     #[doc(hidden)]
