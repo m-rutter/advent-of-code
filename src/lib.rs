@@ -30,6 +30,7 @@ pub struct Config {
 }
 
 /// Solution for a day in AoC
+#[derive(Debug)]
 pub struct Solution {
     /// Answer to part one of challenge
     pub part_one: String,
