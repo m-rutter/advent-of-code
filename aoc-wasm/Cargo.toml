@@ -1,0 +1,30 @@
+[package]
+name = "aoc-wasm"
+version = "0.1.0"
+authors = ["Michael Rutter <michael.john.rutter@gmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+advent_of_code = {path = "../../advent-of-code"}
+cfg-if = "0.1.5"
+serde_derive = "1.0.83"
+serde = "1.0.83"
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+  "Document",
+  "Element",
+  "HtmlElement",
+  "Node",
+  "Window",
+]
+
+[dependencies.wasm-bindgen]
+version = "0.2.29"
+features = ["serde-serialize"]
+
+

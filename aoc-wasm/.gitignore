@@ -1,7 +1,2 @@
-dist
-node_modules
-crate/bin
-crate/pkg
-crate/target
-crate/wasm-pack.log
-crate/Cargo.lock
+/target
+/bin
