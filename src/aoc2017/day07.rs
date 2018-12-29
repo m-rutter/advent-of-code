@@ -21,6 +21,10 @@ struct Node {
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let nodes = parser(&input)?;
 
+    if nodes.is_empty() {
+        Err(error::ErrorKind::InputParse)?
+    }
+
     let _root = find_root_node(&nodes);
 
     unimplemented!()
@@ -37,7 +41,11 @@ fn find_root_node(nodes: &HashMap<String, Node>) -> String {
         }
     }
 
-    names.into_iter().nth(0).unwrap().to_string()
+    names
+        .into_iter()
+        .nth(0)
+        .expect("There should be at least one node")
+        .to_string()
 }
 
 fn parser(input: &str) -> error::AoCResult<HashMap<String, Node>> {
