@@ -1,6 +1,5 @@
 use advent_of_code;
 use serde_derive::Serialize;
-use web_sys;
 use wasm_bindgen::prelude::*;
 
 #[derive(Serialize)]

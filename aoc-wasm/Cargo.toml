@@ -9,19 +9,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 advent_of_code = {path = "../../advent-of-code"}
-cfg-if = "0.1.5"
 serde_derive = "1.0.83"
 serde = "1.0.83"
-
-[dependencies.web-sys]
-version = "0.3"
-features = [
-  "Document",
-  "Element",
-  "HtmlElement",
-  "Node",
-  "Window",
-]
 
 [dependencies.wasm-bindgen]
 version = "0.2.29"
