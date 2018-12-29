@@ -1,7 +1,5 @@
 /* tslint:disable */
-var wasm;
-
-const TextEncoder = require("util").TextEncoder;
+import * as wasm from "./aoc_wasm_bg";
 
 let cachedTextEncoder = new TextEncoder("utf-8");
 
@@ -55,11 +53,11 @@ function takeObject(idx) {
  * @param {string} arg2
  * @returns {any}
  */
-module.exports.solve_day = function(arg0, arg1, arg2) {
+export function solve_day(arg0, arg1, arg2) {
   const ptr2 = passStringToWasm(arg2);
   const len2 = WASM_VECTOR_LEN;
   return takeObject(wasm.solve_day(arg0, arg1, ptr2, len2));
-};
+}
 
 function addHeapObject(obj) {
   if (heap_next === heap.length) heap.push(heap.length + 1);
@@ -70,28 +68,24 @@ function addHeapObject(obj) {
   return idx;
 }
 
-const TextDecoder = require("util").TextDecoder;
-
 let cachedTextDecoder = new TextDecoder("utf-8");
 
 function getStringFromWasm(ptr, len) {
   return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
 }
 
-module.exports.__wbindgen_string_new = function(p, l) {
+export function __wbindgen_string_new(p, l) {
   return addHeapObject(getStringFromWasm(p, l));
-};
+}
 
-module.exports.__wbindgen_json_parse = function(ptr, len) {
+export function __wbindgen_json_parse(ptr, len) {
   return addHeapObject(JSON.parse(getStringFromWasm(ptr, len)));
-};
+}
 
-module.exports.__wbindgen_rethrow = function(idx) {
+export function __wbindgen_rethrow(idx) {
   throw takeObject(idx);
-};
+}
 
-module.exports.__wbindgen_throw = function(ptr, len) {
+export function __wbindgen_throw(ptr, len) {
   throw new Error(getStringFromWasm(ptr, len));
-};
-
-wasm = require("./aoc_wasm_bg");
+}

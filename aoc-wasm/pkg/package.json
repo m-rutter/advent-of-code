@@ -6,10 +6,10 @@
   "version": "0.1.0",
   "files": [
     "aoc_wasm_bg.wasm",
-    "aoc_wasm.js",
+    "aoc_wasm_bg.js",
     "aoc_wasm.d.ts"
   ],
-  "module": "aoc_wasm.js",
-  "types": "aoc_wasm.d.ts",
-  "sideEffects": "false"
+  "main": "aoc_wasm.js",
+  "browser": "aoc_wasm_browser.js",
+  "types": "aoc_wasm.d.ts"
 }
