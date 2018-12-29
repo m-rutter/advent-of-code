@@ -171,9 +171,7 @@ fn memory_walk(limit: u64) -> u64 {
 }
 
 fn parser(input: &str) -> error::AoCResult<u64> {
-    let num = input.trim().parse()?;
-
-    Ok(num)
+    Ok(input.trim().parse()?)
 }
 
 #[cfg(test)]

@@ -36,7 +36,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn matches_offical_result() {
+    fn day_01_2017_matches_offical_result() {
         let input = include_str!("./input/day01");
 
         let result = run(&input).unwrap();

@@ -4,6 +4,12 @@ use std::collections::HashSet;
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let v: Vec<char> = input.chars().collect();
 
+    if v.len() <= 1 {
+        Err(error::Error::msg(
+            &"Insufficent polymer sequence length provided in input",
+        ))?
+    }
+
     Ok(Solution {
         part_one: reduce_polymer(v.iter()).to_string(),
         part_two: optimial_polymer_length(&v).to_string(),
@@ -40,7 +46,7 @@ fn optimial_polymer_length(input: &[char]) -> u32 {
             reduce_polymer(v)
         })
         .min()
-        .unwrap() as u32
+        .expect("The length of the input slice ought to be greater than 1")
 }
 
 #[cfg(test)]

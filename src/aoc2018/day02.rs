@@ -10,7 +10,7 @@ pub fn run(input: &str) -> error::AoCResult<Solution> {
     })
 }
 
-fn find_common_char(ids: &[String]) -> Vec<char> {
+fn find_common_char(ids: &[&str]) -> Vec<char> {
     let mut common_chars = vec![];
 
     for (index, id) in ids.iter().enumerate() {
@@ -40,7 +40,7 @@ fn find_common_char(ids: &[String]) -> Vec<char> {
     common_chars
 }
 
-fn compute_checksum(ids: &[String]) -> u32 {
+fn compute_checksum(ids: &[&str]) -> u32 {
     let twice_thrice = ids
         .iter()
         .map(|id| {
@@ -68,6 +68,6 @@ fn compute_checksum(ids: &[String]) -> u32 {
     twice_thrice.0 * twice_thrice.1
 }
 
-fn parse(input: &str) -> Vec<String> {
-    input.lines().map(|line| line.trim().to_string()).collect()
+fn parse(input: &str) -> Vec<&str> {
+    input.lines().map(|line| line.trim()).collect()
 }

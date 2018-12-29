@@ -1,11 +1,14 @@
 use crate::{error, Solution};
 use pest::{self, Parser};
-use pest_derive::Parser;
 use std::collections::{HashMap, HashSet};
 
-#[derive(Parser)]
-#[grammar = "aoc2017/day07.pest"]
-struct Day07Parser;
+mod parser {
+    use pest_derive::Parser;
+
+    #[derive(Parser)]
+    #[grammar = "aoc2017/day07.pest"]
+    pub struct Day07Parser;
+}
 
 #[derive(Debug)]
 struct Node {
@@ -16,7 +19,7 @@ struct Node {
 
 /// Compute the solution to day 7 of AoC 2017
 pub fn run(input: &str) -> error::AoCResult<Solution> {
-    let nodes = parser(&input);
+    let nodes = parser(&input)?;
 
     let _root = find_root_node(&nodes);
 
@@ -37,28 +40,27 @@ fn find_root_node(nodes: &HashMap<String, Node>) -> String {
     names.into_iter().nth(0).unwrap().to_string()
 }
 
-fn parser(input: &str) -> HashMap<String, Node> {
+fn parser(input: &str) -> error::AoCResult<HashMap<String, Node>> {
     let mut nodes = HashMap::new();
 
-    let file = Day07Parser::parse(Rule::file, input)
-        .unwrap()
+    let file = parser::Day07Parser::parse(parser::Rule::file, input)?
         .next()
-        .unwrap();
+        .ok_or_else(|| error::Error::msg(&"Unable to parse any records"))?;
 
     for record in file.into_inner() {
-        if let Rule::node = record.as_rule() {
+        if let parser::Rule::node = record.as_rule() {
             let mut id = "".to_string();
             let mut weight = 0;
             let mut children = None;
             for value in record.into_inner() {
                 match value.as_rule() {
-                    Rule::id => {
+                    parser::Rule::id => {
                         id = value.as_str().to_string();
                     }
-                    Rule::weight => {
-                        weight = value.as_str().parse().unwrap();
+                    parser::Rule::weight => {
+                        weight = value.as_str().parse()?;
                     }
-                    Rule::children => {
+                    parser::Rule::children => {
                         children = Some(
                             value
                                 .into_inner()
@@ -80,7 +82,7 @@ fn parser(input: &str) -> HashMap<String, Node> {
         }
     }
 
-    nodes
+    Ok(nodes)
 }
 
 #[cfg(test)]

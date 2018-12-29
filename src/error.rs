@@ -8,11 +8,16 @@ pub type AoCResult<T> = std::result::Result<T, Error>;
 /// An error type for the Advent of Code crate
 #[derive(Debug)]
 pub struct Error {
-    pub kind: ErrorKind,
+    kind: ErrorKind,
     source: Option<Box<dyn StdError + Send + Sync + 'static>>,
 }
 
 impl Error {
+    /// Returns the error kind
+    pub fn kind(&self) -> &ErrorKind {
+        &self.kind
+    }
+
     /// Creates generic error with a message
     pub(crate) fn msg(value: &impl ToString) -> Self {
         Self {
@@ -35,6 +40,10 @@ impl Error {
 }
 
 impl StdError for Error {
+    fn cause(&self) -> Option<&(dyn StdError)> {
+        self.source().as_ref().map(|c| &**c)
+    }
+
     fn source(&self) -> Option<&(dyn StdError + 'static)> {
         self.source
             .as_ref()

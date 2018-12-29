@@ -6,11 +6,18 @@ use std::str::FromStr;
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let coordinates = parse(&input);
 
+    if coordinates.is_empty() {
+        Err(error::Error::msg(
+            &"Insufficent coordinates parsed from input",
+        ))?
+    }
+
     let upper_bound = 1 + coordinates
         .iter()
         .map(|c| if c.x > c.y { c.x } else { c.y })
         .max()
-        .unwrap() as usize;
+        .expect("The length of coordinates ought to be greater than 0")
+        as usize;
 
     let range = 0..upper_bound;
 
@@ -29,7 +36,10 @@ pub fn run(input: &str) -> error::AoCResult<Solution> {
         }
     }
 
-    let largest_area_size = regions.iter().max_by(|a, b| a.cmp(&b)).unwrap();
+    let largest_area_size = regions
+        .iter()
+        .max_by(|a, b| a.cmp(&b))
+        .expect("There should be at least one region by this point");
 
     let mut optimial_region_size = 0;
     for x in range.clone() {
@@ -120,7 +130,7 @@ impl Coordinates {
 impl FromStr for Coordinates {
     type Err = error::Error;
 
-    fn from_str(s: &str) -> Result<Coordinates, error::Error> {
+    fn from_str(s: &str) -> error::AoCResult<Coordinates> {
         let mut v = s.split(',').filter_map(|s| s.trim().parse::<i32>().ok());
 
         let x = v

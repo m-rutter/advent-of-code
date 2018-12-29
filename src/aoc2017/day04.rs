@@ -15,7 +15,7 @@ pub fn run(input: &str) -> error::AoCResult<Solution> {
     })
 }
 
-fn valid_passprase_anagrams(v: &[Vec<String>]) -> u32 {
+fn valid_passprase_anagrams(v: &[Vec<&str>]) -> u32 {
     v.iter()
         .map(|passprase| {
             let pass_len = passprase.len();
@@ -40,7 +40,7 @@ fn valid_passprase_anagrams(v: &[Vec<String>]) -> u32 {
         .sum()
 }
 
-fn valid_passprase_count(v: &[Vec<String>]) -> u32 {
+fn valid_passprase_count(v: &[Vec<&str>]) -> u32 {
     v.iter()
         .map(|passprase| {
             let mut set = HashSet::new();
@@ -60,14 +60,10 @@ fn valid_passprase_count(v: &[Vec<String>]) -> u32 {
         .sum()
 }
 
-fn parser(input: &str) -> Vec<Vec<String>> {
+fn parser(input: &str) -> Vec<Vec<&str>> {
     input
         .lines()
-        .map(|line| {
-            line.split_whitespace()
-                .map(|word| word.to_string())
-                .collect()
-        })
+        .map(|line| line.split_whitespace().collect())
         .collect()
 }
 

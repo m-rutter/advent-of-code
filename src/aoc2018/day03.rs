@@ -19,7 +19,7 @@ struct Claim<'a> {
 type Cloth = HashMap<(u32, u32), u32>;
 
 pub fn run(input: &str) -> error::AoCResult<Solution> {
-    let claims = parse(&input);
+    let claims = parse(&input)?;
 
     let cloth = create_cloth(&claims);
 
@@ -82,30 +82,30 @@ fn find_single_claim<'a>(claims: &'a [Claim], cloth: &Cloth) -> Option<&'a str> 
     claim_id
 }
 
-fn parse(input: &str) -> Vec<Claim> {
+fn parse(input: &str) -> error::AoCResult<Vec<Claim>> {
     let mut claims = vec![];
 
-    if let Ok(files) = Day03Parser::parse(Rule::file, input) {
-        for file in files {
-            for record in file.into_inner() {
-                if let Rule::record = record.as_rule() {
-                    let mut record_pair = record.into_inner();
+    let files = Day03Parser::parse(Rule::file, input)?;
 
-                    // if the pest libary is to be believed, it is impossible
-                    // for these Results to be Result::Err at this point
-                    claims.push(Claim {
-                        id: record_pair.next().unwrap().as_str(),
-                        left: record_pair.next().unwrap().as_str().parse().unwrap(),
-                        top: record_pair.next().unwrap().as_str().parse().unwrap(),
-                        width: record_pair.next().unwrap().as_str().parse().unwrap(),
-                        height: record_pair.next().unwrap().as_str().parse().unwrap(),
-                    });
-                }
+    for file in files {
+        for record in file.into_inner() {
+            if let Rule::record = record.as_rule() {
+                let mut record_pair = record.into_inner();
+
+                // if the pest libary is to be believed, it is impossible
+                // for these Results to be Result::Err at this point
+                claims.push(Claim {
+                    id: record_pair.next().unwrap().as_str(),
+                    left: record_pair.next().unwrap().as_str().parse()?,
+                    top: record_pair.next().unwrap().as_str().parse()?,
+                    width: record_pair.next().unwrap().as_str().parse()?,
+                    height: record_pair.next().unwrap().as_str().parse()?,
+                });
             }
         }
     }
 
-    claims
+    Ok(claims)
 }
 
 #[cfg(test)]
@@ -119,8 +119,7 @@ mod test {
         #3 @ 5,5: 2x2
         "#;
 
-        let claims = parse(s);
-        let cloth = create_cloth(&claims);
+        let claims = parse(s).unwrap();
 
         assert_eq!(claims[0].id, "1");
         assert_eq!(claims[0].left, 1);
@@ -139,6 +138,8 @@ mod test {
         assert_eq!(claims[2].top, 5);
         assert_eq!(claims[2].width, 2);
         assert_eq!(claims[2].height, 2);
+
+        let cloth = create_cloth(&claims);
 
         assert_eq!(count_overlapping_claims(&cloth), 4);
         assert_eq!(find_single_claim(&claims, &cloth), Some("3"));
