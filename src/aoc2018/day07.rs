@@ -6,6 +6,10 @@ use std::str::FromStr;
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let conditionals = parse(&input);
 
+    if conditionals.is_empty() {
+        Err(error::Error::msg(&"No conditionals parsed from input"))?
+    }
+
     Ok(Solution {
         part_one: compute_sequence(&conditionals),
         part_two: String::new(),

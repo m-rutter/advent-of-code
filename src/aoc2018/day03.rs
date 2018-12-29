@@ -21,6 +21,10 @@ type Cloth = HashMap<(u32, u32), u32>;
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let claims = parse(&input)?;
 
+    if claims.is_empty() {
+        Err(error::Error::msg(&"No claims parsed from input"))?
+    }
+
     let cloth = create_cloth(&claims);
 
     Ok(Solution {

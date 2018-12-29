@@ -6,6 +6,10 @@ use crate::{error, Solution};
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let input = parse_input(&input);
 
+    if input.is_empty() {
+        Err(error::ErrorKind::InputParse)?;
+    }
+
     let checksum = gen_checksum(&input);
     let sum_of_even_divisons = users_are_odd(&input);
 
@@ -56,10 +60,17 @@ fn users_are_odd(v: &[Vec<u32>]) -> u32 {
 fn parse_input(input: &str) -> Vec<Vec<u32>> {
     input
         .lines()
-        .map(|line| {
-            line.split_whitespace()
+        .filter_map(|line| {
+            let record: Vec<u32> = line
+                .split_whitespace()
                 .filter_map(|elem| elem.parse().ok())
-                .collect()
+                .collect();
+
+            if record.is_empty() {
+                None
+            } else {
+                Some(record)
+            }
         })
         .collect()
 }

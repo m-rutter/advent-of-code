@@ -4,6 +4,10 @@ use crate::{error, Solution};
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let input = parser(&input);
 
+    if input.is_empty() {
+        Err(error::ErrorKind::InputParse)?;
+    }
+
     let part_one = steps_to_exit(&input, |_| 1);
     let part_two = steps_to_exit(&input, |item| if item >= 3 { -1 } else { 1 });
 

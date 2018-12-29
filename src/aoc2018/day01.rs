@@ -5,6 +5,12 @@ use std::collections::HashSet;
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let modulations = parse(&input);
 
+    if modulations.is_empty() {
+        Err(error::Error::msg(
+            &"No frequency modulations parsed from input",
+        ))?
+    }
+
     Ok(Solution {
         part_one: fold_frequency_modulations(&modulations).to_string(),
         part_two: find_repeating_frequency(&modulations).to_string(),

@@ -6,6 +6,10 @@ use crate::{error, Solution};
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let input = parser(&input);
 
+    if input.is_empty() {
+        Err(error::ErrorKind::InputParse)?;
+    }
+
     let valid_passprase_count = valid_passprase_count(&input);
     let valid_passprase_count_no_anagrams = valid_passprase_anagrams(&input);
 
@@ -63,7 +67,15 @@ fn valid_passprase_count(v: &[Vec<&str>]) -> u32 {
 fn parser(input: &str) -> Vec<Vec<&str>> {
     input
         .lines()
-        .map(|line| line.split_whitespace().collect())
+        .filter_map(|line| {
+            let record: Vec<&str> = line.split_whitespace().collect();
+
+            if record.is_empty() {
+                None
+            } else {
+                Some(record)
+            }
+        })
         .collect()
 }
 

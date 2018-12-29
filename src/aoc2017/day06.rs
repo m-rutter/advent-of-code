@@ -6,6 +6,10 @@ use crate::{error, Solution};
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let input = parser(&input);
 
+    if input.is_empty() {
+        Err(error::ErrorKind::InputParse)?;
+    }
+
     let (part_one, part_two) = relocate_until_repeat(&input);
 
     Ok(Solution {

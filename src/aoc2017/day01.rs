@@ -5,7 +5,7 @@ use crate::Solution;
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let parsed_input = parser(&input);
 
-    if parsed_input.len() <= 1 {
+    if parsed_input.is_empty() {
         Err(error::ErrorKind::InputParse)?;
     }
 

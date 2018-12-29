@@ -6,6 +6,11 @@ use std::str::FromStr;
 
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let guard_events = parse(input);
+
+    if guard_events.is_empty() {
+        Err(error::Error::msg(&"No guard events parsed from input"))?
+    }
+
     let grouped_guard_events = group_event_by_guard(&guard_events);
     let sleepy = find_sleepy_guard_minute_hash(&grouped_guard_events);
     let consistent_sleeper = find_consistent_sleepy_guard(&grouped_guard_events);

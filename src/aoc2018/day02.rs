@@ -4,6 +4,10 @@ use std::collections::HashMap;
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let ids = parse(&input);
 
+    if ids.is_empty() {
+        Err(error::Error::msg(&"No inventory ids parsed from input"))?
+    }
+
     Ok(Solution {
         part_one: compute_checksum(&ids).to_string(),
         part_two: find_common_char(&ids).into_iter().collect(),

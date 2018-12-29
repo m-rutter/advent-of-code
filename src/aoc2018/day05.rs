@@ -4,7 +4,7 @@ use std::collections::HashSet;
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let v: Vec<char> = input.chars().collect();
 
-    if v.len() <= 1 {
+    if v.is_empty() {
         Err(error::Error::msg(
             &"Insufficent polymer sequence length provided in input",
         ))?
