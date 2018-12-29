@@ -1,5 +1,5 @@
 # advent-of-code
-[Advent of Code](https://adventofcode.com) solutions library crate and a simple cli tool that uses it. All written in Rust as a learning project. Does not have full coverage of all days.
+[Advent of Code](https://adventofcode.com) solutions library crate. All written in Rust as a learning project. Does not have full coverage of all days. There is also a simple cli tool that uses it called `aoc-cli`, and there is a wasm version for use in node or browsers has been created with [wasm-bindgen](https://github.com/rustwasm/wasm-bindgen) called `aoc-wasm` that can be directly imported as an npm module from `aoc-wasm/pkg`.
 
 ## Install CLI
 
