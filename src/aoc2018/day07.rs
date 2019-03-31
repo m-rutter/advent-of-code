@@ -35,12 +35,12 @@ fn compute_sequence(dependencies: &[Dependency]) -> String {
 
 fn nodes_without_incoming_edges(dependencies: &[Dependency]) -> HashSet<char> {
     let antecedent_set: HashSet<char> = dependencies
-        .into_iter()
+        .iter()
         .map(|dependency| dependency.antecedent)
         .collect();
 
     let consequent_set: HashSet<char> = dependencies
-        .into_iter()
+        .iter()
         .map(|dependency| dependency.consequent)
         .collect();
 
