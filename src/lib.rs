@@ -56,7 +56,7 @@ impl Config {
     }
 }
 
-/// Computes the solution to a day in Advent of Code 2017
+/// Computes the solution to a day in Advent of Code 2017/2018/2019
 /// # Example
 /// ```rust
 /// use advent_of_code::{solve_day, Config};
