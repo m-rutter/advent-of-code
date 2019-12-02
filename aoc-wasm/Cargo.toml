@@ -9,11 +9,11 @@ crate-type = ["cdylib"]
 
 [dependencies]
 advent_of_code = {path = "../../advent-of-code"}
-serde_derive = "1.0.83"
-serde = "1.0.83"
+serde_derive = "1.0.103"
+serde = "1.0.103"
 
 [dependencies.wasm-bindgen]
-version = "0.2.29"
+version = "0.2.55"
 features = ["serde-serialize"]
 
 
