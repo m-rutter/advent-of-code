@@ -203,5 +203,6 @@ mod tests {
         let result = run(&input).unwrap();
 
         assert_eq!(result.part_one, "3716250");
+        assert_eq!(result.part_two, "6472");
     }
 }
