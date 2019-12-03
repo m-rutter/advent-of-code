@@ -3,18 +3,18 @@ use crate::Solution;
 use std::convert::TryFrom;
 
 pub fn run(input: &str) -> error::AoCResult<Solution> {
-    let mut ops = parse(input);
+    let mut program = parse(input);
 
-    if ops.len() < 2 {
+    if program.len() < 2 {
         Err(error::Error::msg(&format!(
             "Unsufficient intcode input: {:?}",
-            ops
+            program
         )))?;
     }
-    ops[1] = 12;
-    ops[2] = 2;
+    program[1] = 12;
+    program[2] = 2;
 
-    let part_one = IntCodeExecutor::new(&ops).execute()?;
+    let part_one = IntCodeExecutor::new(&program).execute()?;
 
     Ok(Solution {
         part_one: part_one.to_string(),
@@ -30,30 +30,30 @@ fn parse(input: &str) -> Vec<usize> {
 }
 
 struct IntCodeExecutor {
-    registers: Vec<usize>,
+    memory: Vec<usize>,
 }
 
 impl IntCodeExecutor {
-    fn new(registers: &[usize]) -> Self {
+    fn new(program: &[usize]) -> Self {
         IntCodeExecutor {
-            registers: Vec::from(registers),
+            memory: Vec::from(program),
         }
     }
 
     fn execute(mut self) -> error::AoCResult<usize> {
-        let mut cursor: usize = 0;
+        let mut address: usize = 0;
 
         loop {
-            if cursor > self.registers.len() - 1 {
+            if address > self.memory.len() - 1 {
                 Err(error::Error::msg(&"No opcode provided"))?;
             }
 
-            let op = Op::try_from(&self.registers[cursor..])?;
+            let op = Instruction::try_from(&self.memory[address..])?;
 
             match op {
-                Op::Add(param1, param2, output) => {
+                Instruction::Add(param1, param2, param3) => {
                     let value = if let (Some(x), Some(y)) =
-                        (self.registers.get(param1), self.registers.get(param2))
+                        (self.memory.get(param1), self.memory.get(param2))
                     {
                         x + y
                     } else {
@@ -63,18 +63,18 @@ impl IntCodeExecutor {
                         )))?
                     };
 
-                    if let Some(elem) = self.registers.get_mut(output) {
+                    if let Some(elem) = self.memory.get_mut(param3) {
                         *elem = value
                     } else {
                         Err(error::Error::msg(&format!(
                             "Invalid index in op code for output (out of bounds): {}",
-                            output
+                            param3
                         )))?
                     };
                 }
-                Op::Multiply(param1, param2, output) => {
+                Instruction::Multiply(param1, param2, param3) => {
                     let value = if let (Some(x), Some(y)) =
-                        (self.registers.get(param1), self.registers.get(param2))
+                        (self.memory.get(param1), self.memory.get(param2))
                     {
                         x * y
                     } else {
@@ -84,46 +84,46 @@ impl IntCodeExecutor {
                         )))?
                     };
 
-                    if let Some(elem) = self.registers.get_mut(output) {
+                    if let Some(elem) = self.memory.get_mut(param3) {
                         *elem = value
                     } else {
                         Err(error::Error::msg(&format!(
                             "Invalid index in op code for output (out of bounds): {}",
-                            output
+                            param3
                         )))?
                     };
                 }
-                Op::Terminal => break Ok(self.registers[0]),
+                Instruction::Terminal => break Ok(self.memory[0]),
             }
 
-            cursor += 4;
+            address += 4;
         }
     }
 }
 
-enum Op {
+enum Instruction {
     Add(usize, usize, usize),
     Multiply(usize, usize, usize),
     Terminal,
 }
 
-impl TryFrom<&[usize]> for Op {
+impl TryFrom<&[usize]> for Instruction {
     type Error = error::Error;
-    fn try_from(op: &[usize]) -> Result<Self, Self::Error> {
-        if op.len() == 0 {
+    fn try_from(ops: &[usize]) -> Result<Self, Self::Error> {
+        if ops.len() == 0 {
             Err(error::Error::msg(&"No opcode provided"))?
         }
 
-        Ok(match op[0..1] {
-            [1] | [2] => match op[0..=3] {
-                [1, param1, param2, output] => Op::Add(param1, param2, output),
-                [2, param1, param2, output] => Op::Multiply(param1, param2, output),
+        Ok(match ops[0..1] {
+            [1] | [2] => match ops[0..=3] {
+                [1, param1, param2, param3] => Instruction::Add(param1, param2, param3),
+                [2, param1, param2, param3] => Instruction::Multiply(param1, param2, param3),
                 _ => Err(error::Error::msg(&format!(
                     "Unsufficient arugments for opcode \"{}\": {:?}",
-                    op[0], op
+                    ops[0], ops
                 )))?,
             },
-            [99] => Op::Terminal,
+            [99] => Instruction::Terminal,
             [code] => Err(error::Error::msg(&format!(
                 "Unrecognised op code: {}",
                 code
