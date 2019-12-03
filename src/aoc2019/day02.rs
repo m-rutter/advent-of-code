@@ -167,7 +167,6 @@ impl TryFrom<&[usize]> for Instruction {
                 "Unrecognised op code: {}",
                 code
             )))?,
-            _ => Err(error::Error::msg(&"No opcode provided"))?,
         })
     }
 }
