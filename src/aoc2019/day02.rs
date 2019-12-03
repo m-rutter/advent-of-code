@@ -1,9 +1,16 @@
 use crate::error;
 use crate::Solution;
+use std::convert::TryFrom;
 
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let mut ops = parse(input);
 
+    if ops.len() < 2 {
+        Err(error::Error::msg(&format!(
+            "Unsufficient intcode input: {:?}",
+            ops
+        )))?;
+    }
     ops[1] = 12;
     ops[2] = 2;
 
@@ -23,26 +30,61 @@ fn parse(input: &str) -> Vec<usize> {
 }
 
 fn execute_intcode(ops: &[usize]) -> error::AoCResult<usize> {
-    let mut ops = Vec::from(ops);
+    let mut registers = Vec::from(ops);
     let mut cursor: usize = 0;
 
     loop {
-        match ops[cursor] {
-            1 => {
-                let value = ops[ops[cursor + 1]] + ops[ops[cursor + 2]];
-                let reg = ops[ops[cursor + 3]];
-                ops[reg] = value;
+        if cursor > registers.len() - 1 {
+            Err(error::Error::msg(&"No opcode provided"))?;
+        }
+
+        let op = Op::try_from(&registers[cursor..])?;
+
+        match op {
+            Op::Add(param1, param2, output) => {
+                let value = registers[param1] + registers[param2];
+                registers[output] = value;
             }
-            2 => {
-                let value = ops[ops[cursor + 1]] * ops[ops[cursor + 2]];
-                let reg = ops[ops[cursor + 3]];
-                ops[reg] = value;
+            Op::Multiply(param1, param2, output) => {
+                let value = registers[param1] * registers[param2];
+                registers[output] = value;
             }
-            99 => return Ok(ops[0]),
-            _ => Err(error::ErrorKind::InputParse)?,
+            Op::Terminal => break Ok(registers[0]),
         }
 
         cursor += 4;
+    }
+}
+
+enum Op {
+    Add(usize, usize, usize),
+    Multiply(usize, usize, usize),
+    Terminal,
+}
+
+impl TryFrom<&[usize]> for Op {
+    type Error = error::Error;
+    fn try_from(op: &[usize]) -> Result<Self, Self::Error> {
+        if op.len() == 0 {
+            Err(error::Error::msg(&"No opcode provided"))?
+        }
+
+        Ok(match op[0..1] {
+            [1] | [2] => match op[0..=3] {
+                [1, param1, param2, output] => Op::Add(param1, param2, output),
+                [2, param1, param2, output] => Op::Multiply(param1, param2, output),
+                _ => Err(error::Error::msg(&format!(
+                    "Unsufficient arugments for opcode \"{}\": {:?}",
+                    op[0], op
+                )))?,
+            },
+            [99] => Op::Terminal,
+            [code] => Err(error::Error::msg(&format!(
+                "Unrecognised op code: {}",
+                code
+            )))?,
+            _ => Err(error::Error::msg(&"No opcode provided"))?,
+        })
     }
 }
 
