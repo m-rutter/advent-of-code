@@ -152,8 +152,7 @@ impl TryFrom<&[usize]> for Instruction {
                 if ops.len() < 4 {
                     Err(error::Error::msg(&format!(
                         "Unsufficient arugments for opcode \"{}\": {:?}",
-                        ops[0],
-                        ops[1..]
+                        ops[0], ops
                     )))?
                 }
 
