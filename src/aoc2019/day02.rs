@@ -1,25 +1,43 @@
-use crate::error;
-use crate::Solution;
 use std::convert::TryFrom;
 
+use crate::error;
+use crate::Solution;
+
 pub fn run(input: &str) -> error::AoCResult<Solution> {
-    let mut program = parse(input);
-
-    if program.len() < 2 {
-        Err(error::Error::msg(&format!(
-            "Unsufficient intcode input: {:?}",
-            program
-        )))?;
-    }
-    program[1] = 12;
-    program[2] = 2;
-
-    let part_one = IntCodeExecutor::new(&program).execute()?;
+    let program = parse(input);
 
     Ok(Solution {
-        part_one: part_one.to_string(),
-        part_two: String::new(),
+        part_one: part_one(&program)?.to_string(),
+        part_two: part_two(&program)?.to_string(),
     })
+}
+
+fn part_one(program: &[usize]) -> error::AoCResult<usize> {
+    let mut executor = IntCodeExecutor::new(&program);
+    executor.modify_with_address(1, 12)?;
+    executor.modify_with_address(2, 2)?;
+
+    executor.execute()
+}
+
+fn part_two(program: &[usize]) -> error::AoCResult<usize> {
+    for noun in 0..99 {
+        for verb in 0..99 {
+            let mut executor = IntCodeExecutor::new(program);
+            executor.modify_with_address(1, noun)?;
+            executor.modify_with_address(2, verb)?;
+
+            let output = executor.execute()?;
+
+            if output == 19690720 {
+                return Ok(100 * noun + verb);
+            }
+        }
+    }
+
+    Err(error::Error::msg(
+        &"Could not find a correct noun and verb combination",
+    ))
 }
 
 fn parse(input: &str) -> Vec<usize> {
@@ -38,6 +56,19 @@ impl IntCodeExecutor {
         IntCodeExecutor {
             memory: Vec::from(program),
         }
+    }
+
+    fn modify_with_address(&mut self, address: usize, value: usize) -> error::AoCResult<()> {
+        if let Some(elem) = self.memory.get_mut(address) {
+            *elem = value;
+        } else {
+            Err(error::Error::msg(&format!(
+                "Error attempting to modify intcode memory at address (out of bounds): {}",
+                address
+            )))?
+        }
+
+        Ok(())
     }
 
     fn execute(mut self) -> error::AoCResult<usize> {
@@ -71,6 +102,8 @@ impl IntCodeExecutor {
                             param3
                         )))?
                     };
+
+                    address += 4;
                 }
                 Instruction::Multiply(param1, param2, param3) => {
                     let value = if let (Some(x), Some(y)) =
@@ -92,11 +125,11 @@ impl IntCodeExecutor {
                             param3
                         )))?
                     };
+
+                    address += 4;
                 }
                 Instruction::Terminal => break Ok(self.memory[0]),
             }
-
-            address += 4;
         }
     }
 }
