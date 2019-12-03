@@ -71,20 +71,20 @@ impl IntCodeExecutor {
         Ok(())
     }
 
-    fn execute(mut self) -> error::AoCResult<usize> {
+    fn execute(self) -> error::AoCResult<usize> {
+        let mut memory = self.memory;
         let mut address: usize = 0;
 
         loop {
-            if address > self.memory.len() - 1 {
+            if address > memory.len() - 1 {
                 Err(error::Error::msg(&"No opcode provided"))?;
             }
 
-            let op = Instruction::try_from(&self.memory[address..])?;
+            let op = Instruction::try_from(&memory[address..])?;
 
             match op {
                 Instruction::Add(param1, param2, param3) => {
-                    let value = if let (Some(x), Some(y)) =
-                        (self.memory.get(param1), self.memory.get(param2))
+                    let value = if let (Some(x), Some(y)) = (memory.get(param1), memory.get(param2))
                     {
                         x + y
                     } else {
@@ -94,7 +94,7 @@ impl IntCodeExecutor {
                         )))?
                     };
 
-                    if let Some(elem) = self.memory.get_mut(param3) {
+                    if let Some(elem) = memory.get_mut(param3) {
                         *elem = value
                     } else {
                         Err(error::Error::msg(&format!(
@@ -106,8 +106,7 @@ impl IntCodeExecutor {
                     address += 4;
                 }
                 Instruction::Multiply(param1, param2, param3) => {
-                    let value = if let (Some(x), Some(y)) =
-                        (self.memory.get(param1), self.memory.get(param2))
+                    let value = if let (Some(x), Some(y)) = (memory.get(param1), memory.get(param2))
                     {
                         x * y
                     } else {
@@ -117,7 +116,7 @@ impl IntCodeExecutor {
                         )))?
                     };
 
-                    if let Some(elem) = self.memory.get_mut(param3) {
+                    if let Some(elem) = memory.get_mut(param3) {
                         *elem = value
                     } else {
                         Err(error::Error::msg(&format!(
@@ -128,7 +127,7 @@ impl IntCodeExecutor {
 
                     address += 4;
                 }
-                Instruction::Terminal => break Ok(self.memory[0]),
+                Instruction::Terminal => break Ok(memory[0]),
             }
         }
     }
