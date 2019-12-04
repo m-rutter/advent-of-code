@@ -1,4 +1,8 @@
-use std::{collections::HashMap, convert::TryFrom};
+use std::{
+    collections::HashMap,
+    convert::TryFrom,
+    ops::{Add, Range},
+};
 
 use once_cell::sync::Lazy;
 use regex::Regex;
@@ -9,46 +13,16 @@ use crate::Solution;
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let movements = parse(input);
 
-    let mut grid: HashMap<(i32, i32), i32> = HashMap::new();
+    let mut grid: HashMap<Position, i32> = HashMap::new();
 
     for wire in movements.iter() {
-        let mut current_pos = (0, 0);
+        let mut current_pos = Position { x: 0, y: 0 };
         for movement in wire.iter() {
-            let next_pos: (i32, i32);
+            let next_pos: Position;
 
-            match movement {
-                Movement::Left(distance) => {
-                    next_pos = (current_pos.0 - distance, current_pos.1);
-
-                    for x in next_pos.0..current_pos.0 {
-                        *grid.entry((x, current_pos.1)).or_insert(0) += 1;
-                    }
-                }
-                Movement::Up(distance) => {
-                    next_pos = (current_pos.0, current_pos.1 + distance);
-                    for y in next_pos.1..current_pos.1 {
-                        *grid.entry((y, current_pos.1)).or_insert(0) += 1;
-                    }
-                }
-                Movement::Right(distance) => {
-                    next_pos = (current_pos.0 + distance, current_pos.1);
-                    for x in next_pos.0..current_pos.0 {
-                        *grid.entry((x, current_pos.1)).or_insert(0) += 1;
-                    }
-                }
-                Movement::Down(distance) => {
-                    next_pos = (current_pos.0, current_pos.1 - distance);
-                    for y in next_pos.1..current_pos.1 {
-                        *grid.entry((y, current_pos.1)).or_insert(0) += 1;
-                    }
-                }
-            }
-
-            current_pos = next_pos;
+            let next_pos = current_pos + *movement;
         }
     }
-
-    println!("{:?}", grid);
 
     unimplemented!()
 }
@@ -64,12 +38,43 @@ fn parse(input: &str) -> Vec<Vec<Movement>> {
         .collect()
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 enum Movement {
     Left(i32),
     Up(i32),
     Right(i32),
     Down(i32),
+}
+
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+struct Position {
+    x: i32,
+    y: i32,
+}
+
+impl Add<Movement> for Position {
+    type Output = Position;
+
+    fn add(self, movement: Movement) -> Self::Output {
+        match movement {
+            Movement::Right(x) => Position {
+                x: self.x + x,
+                y: self.y,
+            },
+            Movement::Left(x) => Position {
+                x: self.x - x,
+                y: self.y,
+            },
+            Movement::Up(y) => Position {
+                x: self.x,
+                y: self.y + y,
+            },
+            Movement::Down(y) => Position {
+                x: self.x,
+                y: self.y - y,
+            },
+        }
+    }
 }
 
 static MOVEMENT_RE: Lazy<Regex> = Lazy::new(|| {
