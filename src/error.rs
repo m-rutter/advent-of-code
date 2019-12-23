@@ -52,6 +52,7 @@ impl StdError for Error {
 }
 
 #[derive(Debug)]
+#[non_exhaustive]
 pub enum ErrorKind {
     /// Generic error message
     Msg(String),
@@ -59,10 +60,6 @@ pub enum ErrorKind {
     InputParse,
     /// Error when the day is not supported or does not exist
     UnsupportedDay { year: u16, day: u8 },
-    /// Hint to users of the crate that this ErrorKind ought to be matched as
-    /// non-exhaustive in case the enum grows
-    #[doc(hidden)]
-    __Nonexhaustive,
 }
 
 impl From<ErrorKind> for Error {
@@ -111,7 +108,6 @@ impl fmt::Display for Error {
                 "Day {} for year {} either does not exist or is unsupported",
                 day, year
             ),
-            ErrorKind::__Nonexhaustive => write!(f, "Nonexhaustive"),
         }
     }
 }
