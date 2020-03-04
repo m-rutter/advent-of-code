@@ -19,7 +19,6 @@ impl From<advent_of_code::Solution> for ExportedSolution {
 
 #[wasm_bindgen]
 pub fn solve_day(year: u16, day: u8, input: String) -> Result<JsValue, JsValue> {
-
     let config = advent_of_code::Config::new(year, day, input);
 
     let solution =

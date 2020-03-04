@@ -24,7 +24,7 @@ pub fn run(input: &str) -> error::AoCResult<Solution> {
         }
     }
 
-    unimplemented!()
+    todo!()
 }
 
 fn parse(input: &str) -> Vec<Vec<Movement>> {

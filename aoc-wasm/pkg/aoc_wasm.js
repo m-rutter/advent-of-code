@@ -1,97 +1,132 @@
-/* tslint:disable */
-var wasm;
+import * as wasm from './aoc_wasm_bg.wasm';
 
-const TextEncoder = require("util").TextEncoder;
+const lTextDecoder = typeof TextDecoder === 'undefined' ? require('util').TextDecoder : TextDecoder;
 
-let cachedTextEncoder = new TextEncoder("utf-8");
+let cachedTextDecoder = new lTextDecoder('utf-8', { ignoreBOM: true, fatal: true });
 
-let cachegetUint8Memory = null;
-function getUint8Memory() {
-  if (
-    cachegetUint8Memory === null ||
-    cachegetUint8Memory.buffer !== wasm.memory.buffer
-  ) {
-    cachegetUint8Memory = new Uint8Array(wasm.memory.buffer);
-  }
-  return cachegetUint8Memory;
+cachedTextDecoder.decode();
+
+let cachegetUint8Memory0 = null;
+function getUint8Memory0() {
+    if (cachegetUint8Memory0 === null || cachegetUint8Memory0.buffer !== wasm.memory.buffer) {
+        cachegetUint8Memory0 = new Uint8Array(wasm.memory.buffer);
+    }
+    return cachegetUint8Memory0;
+}
+
+function getStringFromWasm0(ptr, len) {
+    return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
+}
+
+const heap = new Array(32).fill(undefined);
+
+heap.push(undefined, null, true, false);
+
+let heap_next = heap.length;
+
+function addHeapObject(obj) {
+    if (heap_next === heap.length) heap.push(heap.length + 1);
+    const idx = heap_next;
+    heap_next = heap[idx];
+
+    heap[idx] = obj;
+    return idx;
+}
+
+function getObject(idx) { return heap[idx]; }
+
+function dropObject(idx) {
+    if (idx < 36) return;
+    heap[idx] = heap_next;
+    heap_next = idx;
+}
+
+function takeObject(idx) {
+    const ret = getObject(idx);
+    dropObject(idx);
+    return ret;
 }
 
 let WASM_VECTOR_LEN = 0;
 
-function passStringToWasm(arg) {
-  const buf = cachedTextEncoder.encode(arg);
-  const ptr = wasm.__wbindgen_malloc(buf.length);
-  getUint8Memory().set(buf, ptr);
-  WASM_VECTOR_LEN = buf.length;
-  return ptr;
+const lTextEncoder = typeof TextEncoder === 'undefined' ? require('util').TextEncoder : TextEncoder;
+
+let cachedTextEncoder = new lTextEncoder('utf-8');
+
+const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
+    ? function (arg, view) {
+    return cachedTextEncoder.encodeInto(arg, view);
 }
+    : function (arg, view) {
+    const buf = cachedTextEncoder.encode(arg);
+    view.set(buf);
+    return {
+        read: arg.length,
+        written: buf.length
+    };
+});
 
-const heap = new Array(32);
+function passStringToWasm0(arg, malloc, realloc) {
 
-heap.fill(undefined);
+    if (realloc === undefined) {
+        const buf = cachedTextEncoder.encode(arg);
+        const ptr = malloc(buf.length);
+        getUint8Memory0().subarray(ptr, ptr + buf.length).set(buf);
+        WASM_VECTOR_LEN = buf.length;
+        return ptr;
+    }
 
-heap.push(undefined, null, true, false);
+    let len = arg.length;
+    let ptr = malloc(len);
 
-function getObject(idx) {
-  return heap[idx];
-}
+    const mem = getUint8Memory0();
 
-let heap_next = heap.length;
+    let offset = 0;
 
-function dropObject(idx) {
-  if (idx < 36) return;
-  heap[idx] = heap_next;
-  heap_next = idx;
-}
+    for (; offset < len; offset++) {
+        const code = arg.charCodeAt(offset);
+        if (code > 0x7F) break;
+        mem[ptr + offset] = code;
+    }
 
-function takeObject(idx) {
-  const ret = getObject(idx);
-  dropObject(idx);
-  return ret;
+    if (offset !== len) {
+        if (offset !== 0) {
+            arg = arg.slice(offset);
+        }
+        ptr = realloc(ptr, len, len = offset + arg.length * 3);
+        const view = getUint8Memory0().subarray(ptr + offset, ptr + len);
+        const ret = encodeString(arg, view);
+
+        offset += ret.written;
+    }
+
+    WASM_VECTOR_LEN = offset;
+    return ptr;
 }
 /**
- * @param {number} arg0
- * @param {number} arg1
- * @param {string} arg2
- * @returns {any}
- */
-module.exports.solve_day = function(arg0, arg1, arg2) {
-  const ptr2 = passStringToWasm(arg2);
-  const len2 = WASM_VECTOR_LEN;
-  return takeObject(wasm.solve_day(arg0, arg1, ptr2, len2));
-};
-
-function addHeapObject(obj) {
-  if (heap_next === heap.length) heap.push(heap.length + 1);
-  const idx = heap_next;
-  heap_next = heap[idx];
-
-  heap[idx] = obj;
-  return idx;
+* @param {number} year
+* @param {number} day
+* @param {string} input
+* @returns {any}
+*/
+export function solve_day(year, day, input) {
+    var ptr0 = passStringToWasm0(input, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len0 = WASM_VECTOR_LEN;
+    var ret = wasm.solve_day(year, day, ptr0, len0);
+    return takeObject(ret);
 }
 
-const TextDecoder = require("util").TextDecoder;
-
-let cachedTextDecoder = new TextDecoder("utf-8");
-
-function getStringFromWasm(ptr, len) {
-  return cachedTextDecoder.decode(getUint8Memory().subarray(ptr, ptr + len));
-}
-
-module.exports.__wbindgen_string_new = function(p, l) {
-  return addHeapObject(getStringFromWasm(p, l));
+export const __wbindgen_string_new = function(arg0, arg1) {
+    var ret = getStringFromWasm0(arg0, arg1);
+    return addHeapObject(ret);
 };
 
-module.exports.__wbindgen_json_parse = function(ptr, len) {
-  return addHeapObject(JSON.parse(getStringFromWasm(ptr, len)));
+export const __wbindgen_json_parse = function(arg0, arg1) {
+    var ret = JSON.parse(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
 };
 
-module.exports.__wbindgen_rethrow = function(idx) {
-  throw takeObject(idx);
+export const __wbindgen_rethrow = function(arg0) {
+    throw takeObject(arg0);
 };
 
-module.exports.__wbindgen_throw = function(ptr, len) {
-  throw new Error(getStringFromWasm(ptr, len));
-};
-
-wasm = require("./aoc_wasm_bg");

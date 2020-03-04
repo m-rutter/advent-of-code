@@ -101,9 +101,7 @@ pub enum Instruction {
 impl TryFrom<&[usize]> for Instruction {
     type Error = error::Error;
     fn try_from(ops: &[usize]) -> Result<Self, Self::Error> {
-        dbg!(ops);
         Ok(match ops {
-            [] => Err(error::Error::msg(&"No opcode provided"))?,
             [1, param1, param2, param3, ..] => Instruction::Add(*param1, *param2, *param3),
             [2, param1, param2, param3, ..] => Instruction::Multiply(*param1, *param2, *param3),
             [99, ..] => Instruction::Terminal,
@@ -115,6 +113,7 @@ impl TryFrom<&[usize]> for Instruction {
                 "Unrecognised op code: {}",
                 code
             )))?,
+            [] => Err(error::Error::msg(&"No opcode provided"))?,
         })
     }
 }
