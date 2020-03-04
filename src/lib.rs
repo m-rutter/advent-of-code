@@ -1,3 +1,4 @@
+#![feature(or_patterns)]
 //! Advent of Code (AoC) solutions library written in Rust.
 //! Personal learning project. Very much incomplete.
 //! # Example

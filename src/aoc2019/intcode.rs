@@ -101,27 +101,17 @@ pub enum Instruction {
 impl TryFrom<&[usize]> for Instruction {
     type Error = error::Error;
     fn try_from(ops: &[usize]) -> Result<Self, Self::Error> {
-        if ops.len() == 0 {
-            Err(error::Error::msg(&"No opcode provided"))?
-        }
-
-        Ok(match ops[0] {
-            1 | 2 => {
-                if ops.len() < 4 {
-                    Err(error::Error::msg(&format!(
-                        "Unsufficient arugments for opcode \"{}\": {:?}",
-                        ops[0], ops
-                    )))?
-                }
-
-                match ops[0..4] {
-                    [1, param1, param2, param3] => Instruction::Add(param1, param2, param3),
-                    [2, param1, param2, param3] => Instruction::Multiply(param1, param2, param3),
-                    _ => unreachable!(),
-                }
-            }
-            99 => Instruction::Terminal,
-            code => Err(error::Error::msg(&format!(
+        dbg!(ops);
+        Ok(match ops {
+            [] => Err(error::Error::msg(&"No opcode provided"))?,
+            [1, param1, param2, param3, ..] => Instruction::Add(*param1, *param2, *param3),
+            [2, param1, param2, param3, ..] => Instruction::Multiply(*param1, *param2, *param3),
+            [99, ..] => Instruction::Terminal,
+            [1 | 2, ..] => Err(error::Error::msg(&format!(
+                "Unsufficient arugments for opcode \"{}\": {:?}",
+                ops[0], ops
+            )))?,
+            [code, ..] => Err(error::Error::msg(&format!(
                 "Unrecognised op code: {}",
                 code
             )))?,
