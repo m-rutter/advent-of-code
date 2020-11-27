@@ -1,8 +1,4 @@
-use std::{
-    collections::HashMap,
-    convert::TryFrom,
-    ops::{Add, Range},
-};
+use std::{collections::HashMap, convert::TryFrom, ops::Add};
 
 use once_cell::sync::Lazy;
 use regex::Regex;
@@ -13,14 +9,14 @@ use crate::Solution;
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let movements = parse(input);
 
-    let mut grid: HashMap<Position, i32> = HashMap::new();
+    let mut _grid: HashMap<Position, i32> = HashMap::new();
 
     for wire in movements.iter() {
-        let mut current_pos = Position { x: 0, y: 0 };
+        let mut _current_pos = Position { x: 0, y: 0 };
         for movement in wire.iter() {
-            let next_pos: Position;
+            let _next_pos: Position;
 
-            let next_pos = current_pos + *movement;
+            let _next_pos = _current_pos + *movement;
         }
     }
 
@@ -107,13 +103,6 @@ impl TryFrom<&str> for Movement {
 #[cfg(test)]
 mod test {
     use super::*;
-
-    #[test]
-    fn original_examples() {
-        let input = "R8,U5,L5,D3\nU7,R6,D4,L4";
-
-        run(input);
-    }
 
     #[test]
     fn test_regex() {

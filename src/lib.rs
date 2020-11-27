@@ -1,4 +1,3 @@
-#![feature(or_patterns)]
 //! Advent of Code (AoC) solutions library written in Rust.
 //! Personal learning project. Very much incomplete.
 //! # Example
@@ -21,6 +20,7 @@
 pub mod aoc2017;
 pub mod aoc2018;
 pub mod aoc2019;
+pub mod aoc2020;
 pub mod error;
 
 /// AoC config
@@ -107,6 +107,12 @@ pub fn solve_day(config: &Config) -> error::AoCResult<Solution> {
             1 => aoc2019::day01::run(&config.input),
             2 => aoc2019::day02::run(&config.input),
             3 => aoc2019::day03::run(&config.input),
+            _ => Err(error::ErrorKind::UnsupportedDay {
+                day: config.day,
+                year: config.year,
+            })?,
+        },
+        2020 => match config.day {
             _ => Err(error::ErrorKind::UnsupportedDay {
                 day: config.day,
                 year: config.year,

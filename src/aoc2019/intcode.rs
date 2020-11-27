@@ -105,7 +105,11 @@ impl TryFrom<&[usize]> for Instruction {
             [1, param1, param2, param3, ..] => Instruction::Add(*param1, *param2, *param3),
             [2, param1, param2, param3, ..] => Instruction::Multiply(*param1, *param2, *param3),
             [99, ..] => Instruction::Terminal,
-            [1 | 2, ..] => Err(error::Error::msg(&format!(
+            [1, ..] => Err(error::Error::msg(&format!(
+                "Unsufficient arugments for opcode \"{}\": {:?}",
+                ops[0], ops
+            )))?,
+            [2, ..] => Err(error::Error::msg(&format!(
                 "Unsufficient arugments for opcode \"{}\": {:?}",
                 ops[0], ops
             )))?,
