@@ -113,6 +113,7 @@ pub fn solve_day(config: &Config) -> error::AoCResult<Solution> {
             })?,
         },
         2020 => match config.day {
+            1 => aoc2020::day01::run(&config.input),
             _ => Err(error::ErrorKind::UnsupportedDay {
                 day: config.day,
                 year: config.year,
