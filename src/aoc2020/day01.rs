@@ -54,6 +54,17 @@ mod tests {
 
         let result = run(&input).unwrap();
 
-        assert_eq!(result.part_one, "514579")
+        assert_eq!(result.part_one, "514579");
+        assert_eq!(result.part_two, "241861950");
+    }
+
+    #[test]
+    fn matches_offical_result() {
+        let input = include_str!("./input/day01");
+
+        let result = run(&input).unwrap();
+
+        assert_eq!(result.part_one, "1010884");
+        assert_eq!(result.part_two, "253928438");
     }
 }
