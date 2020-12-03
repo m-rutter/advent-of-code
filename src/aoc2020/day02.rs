@@ -47,8 +47,6 @@ impl PasswordWithPolicy {
             .nth(self.policy.param2 - 1)
             .map_or_else(|| false, |char| char == self.policy.char);
 
-        dbg!(self, char1_match, char2_match);
-
         char1_match ^ char2_match
     }
 }
@@ -103,9 +101,12 @@ mod test {
 
     #[test]
     fn original_example() {
-        let input = r#"1-3 a: abcde
-            1-3 b: cdefg
-            2-9 c: ccccccccc"#;
+        let input = r"
+        1-3 a: abcde
+        1-3 b: cdefg
+        2-9 c: ccccccccc
+        "
+        .trim();
 
         let result = run(&input).unwrap();
 

@@ -45,12 +45,15 @@ mod tests {
 
     #[test]
     fn original_example() {
-        let input = r#"1721
+        let input = r"
+        1721
         979
         366
         299
         675
-        1456"#;
+        1456
+        "
+        .trim();
 
         let result = run(&input).unwrap();
 
