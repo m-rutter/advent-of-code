@@ -1,13 +1,9 @@
 # advent-of-code
 
-[Advent of Code](https://adventofcode.com) (AoC) solutions library with
-solutions for 2017, 2018, and 2019. All written in Rust as a learning project.
-Does not have full coverage for all days as I find they end up becoming too time
-consuming eventually. There is also a simple cli tool that uses it called
-`aoc-cli` and a wasm version of the lib for use in node or browsers created with
-[wasm-bindgen](https://github.com/rustwasm/wasm-bindgen) and
-[wasm-pack](https://github.com/rustwasm/wasm-pack) called `aoc-wasm` that can be
-directly imported as an npm module from `aoc-wasm/pkg`.
+[Advent of Code](https://adventofcode.com) (AoC) solutions for 2017, 2018, 2019,
+2020, and a partial intcode implementation. All written in Rust as a learning
+project. Does not have full coverage for all days as I find they end up becoming
+too time consuming eventually.
 
 ## Install CLI
 
@@ -22,7 +18,6 @@ aoc-cli:
 
 ```
 Advent of Code Cli 0.1.0
-Michael Rutter <michael.john.rutter@gmail.com>
 Solves Advent of Code problems
 
 USAGE:
@@ -51,3 +46,33 @@ aoc-cli --day 1 --year 2017 --path ./input
 ```sh
 cat ./input | aoc-cli --day 1 --year 2017
 ```
+
+## Solution Coverage
+
+| Day | 2017 | 2018 | 2019 | 2020 | 2021 |
+| --- | ---- | ---- | ---- | ---- | ---- |
+| 1   | [x]  | [x]  | [x]  | [x]  | [ ]  |
+| 2   | [x]  | [x]  | [x]  | [x]  | [ ]  |
+| 3   | [x]  | [x]  | [x]  | [ ]  | [ ]  |
+| 4   | [x]  | [x]  | [x]  | [ ]  | [ ]  |
+| 5   | [x]  | [x]  | [x]  | [ ]  | [ ]  |
+| 6   | [x]  | [x]  | [ ]  | [ ]  | [ ]  |
+| 7   | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 8   | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 9   | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 10  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 11  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 12  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 13  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 14  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 15  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 16  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 17  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 18  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 19  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 20  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 21  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 22  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 23  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 24  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
+| 25  | [ ]  | [ ]  | [ ]  | [ ]  | [ ]  |
