@@ -1,4 +1,5 @@
 //! AoC error module
+use intcode::error::IntCodeError;
 use std::error::Error as StdError;
 use std::fmt;
 
@@ -94,6 +95,15 @@ impl<T> From<pest::error::Error<T>> for Error {
         Self {
             kind: ErrorKind::InputParse,
             source: None,
+        }
+    }
+}
+
+impl From<IntCodeError> for Error {
+    fn from(error: IntCodeError) -> Self {
+        Self {
+            kind: ErrorKind::Msg(format!("IntCode Execution Error")),
+            source: Some(error.into()),
         }
     }
 }

@@ -1,6 +1,6 @@
 use std::convert::TryFrom;
 
-use crate::error;
+use crate::error::{IntCodeError, IntCodeResult};
 
 /// Intcode executor. Will exceute intcode programs
 pub struct IntCodeExecutor {
@@ -16,27 +16,24 @@ impl IntCodeExecutor {
     }
 
     /// Modify Intcode program in place within an executor
-    pub fn modify_with_address(&mut self, address: usize, value: usize) -> error::AoCResult<()> {
+    pub fn modify_with_address(&mut self, address: usize, value: usize) -> IntCodeResult<()> {
         if let Some(elem) = self.memory.get_mut(address) {
             *elem = value;
         } else {
-            Err(error::Error::msg(&format!(
-                "Error attempting to modify intcode memory at address (out of bounds): {}",
-                address
-            )))?
+            Err(IntCodeError::OutOfBoundsWrite(address))?
         }
 
         Ok(())
     }
 
     /// Consume Intcode executor to get the result
-    pub fn execute(self) -> error::AoCResult<usize> {
+    pub fn execute(self) -> IntCodeResult<usize> {
         let mut memory = self.memory;
         let mut address: usize = 0;
 
         loop {
             if address > memory.len() - 1 {
-                Err(error::Error::msg(&"No opcode provided"))?;
+                Err(IntCodeError::OutOfBoundsOpCodeRead(address))?;
             }
 
             let op = Instruction::try_from(&memory[address..])?;
@@ -47,19 +44,13 @@ impl IntCodeExecutor {
                     {
                         x + y
                     } else {
-                        Err(error::Error::msg(&format!(
-                            "Invalid indexes in op code for parameters (out of bounds): {}, {}",
-                            param1, param2,
-                        )))?
+                        Err(IntCodeError::OutOfBoundsOpParamsRead(op.clone()))?
                     };
 
                     if let Some(elem) = memory.get_mut(param3) {
                         *elem = value
                     } else {
-                        Err(error::Error::msg(&format!(
-                            "Invalid index in op code for output (out of bounds): {}",
-                            param3
-                        )))?
+                        Err(IntCodeError::OutOfBoundsOpParamsWrite(op.clone()))?
                     };
 
                     address += 4;
@@ -69,19 +60,13 @@ impl IntCodeExecutor {
                     {
                         x * y
                     } else {
-                        Err(error::Error::msg(&format!(
-                            "Invalid indexes in op code for parameters (out of bounds): {}, {}",
-                            param1, param2,
-                        )))?
+                        Err(IntCodeError::OutOfBoundsOpParamsRead(op.clone()))?
                     };
 
                     if let Some(elem) = memory.get_mut(param3) {
                         *elem = value
                     } else {
-                        Err(error::Error::msg(&format!(
-                            "Invalid index in op code for output (out of bounds): {}",
-                            param3
-                        )))?
+                        Err(IntCodeError::OutOfBoundsOpParamsWrite(op.clone()))?
                     };
 
                     address += 4;
@@ -92,6 +77,7 @@ impl IntCodeExecutor {
     }
 }
 
+#[derive(Debug, Clone)]
 pub enum Instruction {
     Add(usize, usize, usize),
     Multiply(usize, usize, usize),
@@ -99,25 +85,15 @@ pub enum Instruction {
 }
 
 impl TryFrom<&[usize]> for Instruction {
-    type Error = error::Error;
-    fn try_from(ops: &[usize]) -> Result<Self, Self::Error> {
+    type Error = IntCodeError;
+    fn try_from(ops: &[usize]) -> IntCodeResult<Self> {
         Ok(match ops {
             [1, param1, param2, param3, ..] => Instruction::Add(*param1, *param2, *param3),
             [2, param1, param2, param3, ..] => Instruction::Multiply(*param1, *param2, *param3),
             [99, ..] => Instruction::Terminal,
-            [1, ..] => Err(error::Error::msg(&format!(
-                "Unsufficient arugments for opcode \"{}\": {:?}",
-                ops[0], ops
-            )))?,
-            [2, ..] => Err(error::Error::msg(&format!(
-                "Unsufficient arugments for opcode \"{}\": {:?}",
-                ops[0], ops
-            )))?,
-            [code, ..] => Err(error::Error::msg(&format!(
-                "Unrecognised op code: {}",
-                code
-            )))?,
-            [] => Err(error::Error::msg(&"No opcode provided"))?,
+            [1, ..] | [2, ..] => Err(IntCodeError::ParseErrorOutOfBoundsArguments(ops[0]))?,
+            [code, ..] => Err(IntCodeError::ParseErrorUnsupportOpCode(*code))?,
+            [] => Err(IntCodeError::ParseErrorNoOpCodeProvided)?,
         })
     }
 }

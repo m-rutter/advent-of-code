@@ -1,6 +1,6 @@
-use crate::aoc2019::intcode::IntCodeExecutor;
 use crate::error;
 use crate::Solution;
+use intcode::intcode::IntCodeExecutor;
 
 pub fn run(input: &str) -> error::AoCResult<Solution> {
     let program = parse(input);
@@ -16,7 +16,10 @@ fn part_one(program: &[usize]) -> error::AoCResult<usize> {
     executor.modify_with_address(1, 12)?;
     executor.modify_with_address(2, 2)?;
 
-    executor.execute()
+    Ok(match executor.execute() {
+        Ok(res) => res,
+        Err(e) => Err(e)?,
+    })
 }
 
 fn part_two(program: &[usize]) -> error::AoCResult<usize> {
