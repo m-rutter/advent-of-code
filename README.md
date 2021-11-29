@@ -1,4 +1,4 @@
-# advent-of-code
+# advent-of-code 🎄
 
 [Advent of Code](https://adventofcode.com) (AoC) solutions for 2017, 2018, 2019,
 2020, and a partial intcode implementation. All written in Rust as a learning
