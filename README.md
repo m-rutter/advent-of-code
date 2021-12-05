@@ -5,13 +5,6 @@
 project. Does not have full coverage for all days as I find they end up becoming
 too time consuming eventually.
 
-## Install CLI
-
-To use and install the cli tool that uses the library with `cargo`, clone the
-repo and run `cargo install --path .` in the project directory. If cargo was
-installed using `rustup` the resulting binary ought to be in your PATH as
-`aoc-cli`. Uninstall with `cargo uninstall aoc-cli`.
-
 ## CLI Usage
 
 aoc-cli:
