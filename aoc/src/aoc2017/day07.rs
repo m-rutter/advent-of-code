@@ -12,7 +12,9 @@ mod parser {
 
 #[derive(Debug)]
 struct Node {
+    #[allow(unused)]
     id: String,
+    #[allow(unused)]
     weight: u32,
     children: Option<Vec<String>>,
 }
@@ -109,5 +111,4 @@ mod tests {
 
     //     let _result = run(&config.input).unwrap();
     // }
-
 }
