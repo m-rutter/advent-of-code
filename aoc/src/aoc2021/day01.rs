@@ -5,7 +5,7 @@ pub fn run(input: &str) -> AoCResult<Solution> {
     let measurements = parse(input)?;
 
     let window_sums: Vec<u32> = measurements
-        .chunks(3)
+        .windows(3)
         .map(|window| window.iter().sum())
         .collect();
 
