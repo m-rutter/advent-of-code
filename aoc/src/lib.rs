@@ -51,9 +51,9 @@ impl Config {
     /// ```
     pub fn new(year: u16, day: u8, input: String) -> Self {
         Config {
-            year: year,
-            day: day,
-            input: input,
+            year,
+            day,
+            input,
         }
     }
 }

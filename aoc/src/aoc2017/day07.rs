@@ -84,9 +84,9 @@ fn parser(input: &str) -> error::AoCResult<HashMap<String, Node>> {
             nodes.insert(
                 id.clone(),
                 Node {
-                    id: id,
-                    weight: weight,
-                    children: children,
+                    id,
+                    weight,
+                    children,
                 },
             );
         }
