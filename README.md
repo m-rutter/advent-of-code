@@ -1,7 +1,7 @@
 # advent-of-code 🎄
 
 [Advent of Code](https://adventofcode.com) (AoC) solutions for 2017, 2018, 2019,
-2020, and a partial intcode implementation. All written in Rust as a learning
+2020, 2021 and a partial intcode implementation. All written in Rust as a learning
 project. Does not have full coverage for all days as I find they end up becoming
 too time consuming eventually.
 
