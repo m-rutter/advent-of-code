@@ -5,8 +5,8 @@
 project. Does not have full coverage for all days as I find they end up becoming
 too time consuming eventually. 
 
-Made plenty of novice mistakes like implementing `Add`
-for types or with assoicated types that definately should not impl `Add`.
+Made plenty of novice mistakes like implementing `Add` for types or with assoicated 
+types that definately should not impl `Add`. Error handling is sloppy in places.
 
 ## CLI Usage
 
