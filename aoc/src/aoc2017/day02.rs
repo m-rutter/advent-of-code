@@ -3,7 +3,7 @@ use itertools::Itertools;
 use crate::{error, Solution};
 
 /// Compute the solution to day 2 of AoC 2017
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let input = parse_input(&input);
 
     if input.is_empty() {

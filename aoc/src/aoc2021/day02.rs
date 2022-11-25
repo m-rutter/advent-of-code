@@ -3,7 +3,7 @@ use regex::Regex;
 use std::str::FromStr;
 
 use crate::{
-    error::{self, AoCResult},
+    error::{self, Result},
     Solution,
 };
 
@@ -21,7 +21,7 @@ enum Movement {
 impl FromStr for Movement {
     type Err = error::Error;
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
+    fn from_str(s: &str) -> Result<Self> {
         let captures = MOVEMENT_RE
             .captures(s)
             .ok_or_else(|| error::ErrorKind::InputParse)?;
@@ -38,7 +38,7 @@ impl FromStr for Movement {
     }
 }
 
-pub fn run(input: &str) -> AoCResult<Solution> {
+pub fn run(input: &str) -> Result<Solution> {
     let movements = parse(input)?;
 
     let (depth, distance) = movements
@@ -68,7 +68,7 @@ pub fn run(input: &str) -> AoCResult<Solution> {
     })
 }
 
-fn parse(input: &str) -> AoCResult<Vec<Movement>> {
+fn parse(input: &str) -> Result<Vec<Movement>> {
     input
         .trim()
         .lines()

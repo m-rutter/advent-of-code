@@ -20,7 +20,7 @@ struct Node {
 }
 
 /// Compute the solution to day 7 of AoC 2017
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let nodes = parser(&input)?;
 
     if nodes.is_empty() {
@@ -50,7 +50,7 @@ fn find_root_node(nodes: &HashMap<String, Node>) -> String {
         .to_string()
 }
 
-fn parser(input: &str) -> error::AoCResult<HashMap<String, Node>> {
+fn parser(input: &str) -> error::Result<HashMap<String, Node>> {
     let mut nodes = HashMap::new();
 
     let file = parser::Day07Parser::parse(parser::Rule::file, input)?

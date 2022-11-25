@@ -4,7 +4,7 @@ use std::ops::Add;
 use crate::{error, Solution};
 
 /// Compute the solution to day 3 of AoC 2017
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let input = parser(&input)?;
 
     let part_one = distance(input);
@@ -170,7 +170,7 @@ fn memory_walk(limit: u64) -> u64 {
     matrix[&previous]
 }
 
-fn parser(input: &str) -> error::AoCResult<u64> {
+fn parser(input: &str) -> error::Result<u64> {
     Ok(input.trim().parse()?)
 }
 

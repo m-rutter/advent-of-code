@@ -18,7 +18,7 @@ struct Claim<'a> {
 
 type Cloth = HashMap<(u32, u32), u32>;
 
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let claims = parse(&input)?;
 
     if claims.is_empty() {
@@ -86,7 +86,7 @@ fn find_single_claim<'a>(claims: &'a [Claim], cloth: &Cloth) -> Option<&'a str> 
     claim_id
 }
 
-fn parse(input: &str) -> error::AoCResult<Vec<Claim>> {
+fn parse(input: &str) -> error::Result<Vec<Claim>> {
     let mut claims = vec![];
 
     let files = Day03Parser::parse(Rule::file, input)?;

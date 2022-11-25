@@ -1,7 +1,7 @@
 use crate::{error, Solution};
 use std::collections::HashSet;
 
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let v: Vec<char> = input.chars().collect();
 
     if v.is_empty() {

@@ -1,7 +1,7 @@
-use crate::error::AoCResult;
+use crate::error::Result;
 use crate::Solution;
 
-pub fn run(input: &str) -> AoCResult<Solution> {
+pub fn run(input: &str) -> Result<Solution> {
     let measurements = parse(input)?;
 
     let window_sums: Vec<u32> = measurements
@@ -23,7 +23,7 @@ fn calc_rate_of_increase(measurements: &[u32]) -> u32 {
         .count() as u32
 }
 
-fn parse(input: &str) -> AoCResult<Vec<u32>> {
+fn parse(input: &str) -> Result<Vec<u32>> {
     input
         .trim()
         .lines()

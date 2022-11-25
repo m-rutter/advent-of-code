@@ -2,7 +2,7 @@ use crate::error;
 use crate::Solution;
 use std::collections::HashSet;
 
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let modulations = parse(&input);
 
     if modulations.is_empty() {
@@ -60,5 +60,4 @@ mod test {
         assert_eq!(result.part_one, "505");
         assert_eq!(result.part_two, "72330");
     }
-
 }

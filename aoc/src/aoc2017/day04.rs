@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use crate::{error, Solution};
 
 /// Compute the solution to day 4 of AoC 2017
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let input = parser(&input);
 
     if input.is_empty() {
@@ -91,5 +91,4 @@ mod tests {
         assert_eq!(result.part_one, "325");
         assert_eq!(result.part_two, "119");
     }
-
 }

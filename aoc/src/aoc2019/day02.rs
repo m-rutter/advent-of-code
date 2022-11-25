@@ -2,7 +2,7 @@ use crate::error;
 use crate::Solution;
 use intcode::intcode::IntCodeExecutor;
 
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let program = parse(input);
 
     Ok(Solution {
@@ -11,7 +11,7 @@ pub fn run(input: &str) -> error::AoCResult<Solution> {
     })
 }
 
-fn part_one(program: &[usize]) -> error::AoCResult<usize> {
+fn part_one(program: &[usize]) -> error::Result<usize> {
     let mut executor = IntCodeExecutor::new(&program);
     executor.modify_with_address(1, 12)?;
     executor.modify_with_address(2, 2)?;
@@ -22,7 +22,7 @@ fn part_one(program: &[usize]) -> error::AoCResult<usize> {
     })
 }
 
-fn part_two(program: &[usize]) -> error::AoCResult<usize> {
+fn part_two(program: &[usize]) -> error::Result<usize> {
     for noun in 0..99 {
         for verb in 0..99 {
             let mut executor = IntCodeExecutor::new(program);

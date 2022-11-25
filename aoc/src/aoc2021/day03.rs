@@ -1,9 +1,9 @@
 use crate::{
-    error::{AoCResult, ErrorKind},
+    error::{ErrorKind, Result},
     Solution,
 };
 
-pub fn run(input: &str) -> AoCResult<Solution> {
+pub fn run(input: &str) -> Result<Solution> {
     let lines = input.trim().lines().map(|line| line.trim());
     let line_len = lines.clone().next().map_or_else(|| 0, |line| line.len());
 

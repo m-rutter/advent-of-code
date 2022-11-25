@@ -1,10 +1,10 @@
 //! AoC error module
-use intcode::error::IntCodeError;
+use intcode::error::Error as IntCodeError;
 use std::error::Error as StdError;
 use std::fmt;
 
 // Convenience Result type
-pub type AoCResult<T> = std::result::Result<T, Error>;
+pub type Result<T> = std::result::Result<T, Error>;
 
 /// An error type for the Advent of Code crate
 #[derive(Debug)]

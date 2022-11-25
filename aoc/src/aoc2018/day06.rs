@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use std::ops::Range;
 use std::str::FromStr;
 
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let coordinates = parse(&input);
 
     if coordinates.is_empty() {
@@ -130,7 +130,7 @@ impl Coordinates {
 impl FromStr for Coordinates {
     type Err = error::Error;
 
-    fn from_str(s: &str) -> error::AoCResult<Coordinates> {
+    fn from_str(s: &str) -> error::Result<Coordinates> {
         let mut v = s.split(',').filter_map(|s| s.trim().parse::<i32>().ok());
 
         let x = v

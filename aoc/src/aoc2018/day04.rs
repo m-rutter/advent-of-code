@@ -4,7 +4,7 @@ use pest::Parser;
 use std::collections::HashMap;
 use std::str::FromStr;
 
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let guard_events = parse(input);
 
     if guard_events.is_empty() {

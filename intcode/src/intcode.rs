@@ -1,6 +1,6 @@
 use std::convert::TryFrom;
 
-use crate::error::{IntCodeError, IntCodeResult};
+use crate::error::{Error, IntCodeResult};
 
 /// Intcode executor. Will exceute intcode programs
 pub struct IntCodeExecutor {
@@ -20,7 +20,7 @@ impl IntCodeExecutor {
         if let Some(elem) = self.memory.get_mut(address) {
             *elem = value;
         } else {
-            Err(IntCodeError::OutOfBoundsWrite(address))?
+            Err(Error::OutOfBoundsWrite(address))?
         }
 
         Ok(())
@@ -33,7 +33,7 @@ impl IntCodeExecutor {
 
         loop {
             if address > memory.len() - 1 {
-                Err(IntCodeError::OutOfBoundsOpCodeRead(address))?;
+                Err(Error::OutOfBoundsOpCodeRead(address))?;
             }
 
             let op = Instruction::try_from(&memory[address..])?;
@@ -44,13 +44,13 @@ impl IntCodeExecutor {
                     {
                         x + y
                     } else {
-                        Err(IntCodeError::OutOfBoundsOpParamsRead(op.clone()))?
+                        Err(Error::OutOfBoundsOpParamsRead(op.clone()))?
                     };
 
                     if let Some(elem) = memory.get_mut(param3) {
                         *elem = value
                     } else {
-                        Err(IntCodeError::OutOfBoundsOpParamsWrite(op.clone()))?
+                        Err(Error::OutOfBoundsOpParamsWrite(op.clone()))?
                     };
 
                     address += 4;
@@ -60,13 +60,13 @@ impl IntCodeExecutor {
                     {
                         x * y
                     } else {
-                        Err(IntCodeError::OutOfBoundsOpParamsRead(op.clone()))?
+                        Err(Error::OutOfBoundsOpParamsRead(op.clone()))?
                     };
 
                     if let Some(elem) = memory.get_mut(param3) {
                         *elem = value
                     } else {
-                        Err(IntCodeError::OutOfBoundsOpParamsWrite(op.clone()))?
+                        Err(Error::OutOfBoundsOpParamsWrite(op.clone()))?
                     };
 
                     address += 4;
@@ -85,15 +85,15 @@ pub enum Instruction {
 }
 
 impl TryFrom<&[usize]> for Instruction {
-    type Error = IntCodeError;
+    type Error = Error;
     fn try_from(ops: &[usize]) -> IntCodeResult<Self> {
         Ok(match ops {
             [1, param1, param2, param3, ..] => Instruction::Add(*param1, *param2, *param3),
             [2, param1, param2, param3, ..] => Instruction::Multiply(*param1, *param2, *param3),
             [99, ..] => Instruction::Terminal,
-            [1, ..] | [2, ..] => Err(IntCodeError::ParseErrorOutOfBoundsArguments(ops[0]))?,
-            [code, ..] => Err(IntCodeError::ParseErrorUnsupportOpCode(*code))?,
-            [] => Err(IntCodeError::ParseErrorNoOpCodeProvided)?,
+            [1, ..] | [2, ..] => Err(Error::ParseErrorOutOfBoundsArguments(ops[0]))?,
+            [code, ..] => Err(Error::ParseErrorUnsupportOpCode(*code))?,
+            [] => Err(Error::ParseErrorNoOpCodeProvided)?,
         })
     }
 }

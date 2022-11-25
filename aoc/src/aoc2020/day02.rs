@@ -54,7 +54,7 @@ impl PasswordWithPolicy {
 impl TryFrom<&str> for PasswordWithPolicy {
     type Error = error::Error;
 
-    fn try_from(s: &str) -> error::AoCResult<PasswordWithPolicy> {
+    fn try_from(s: &str) -> error::Result<PasswordWithPolicy> {
         let captures = RE.captures(s).unwrap();
 
         let password = &captures["password"];
@@ -73,7 +73,7 @@ impl TryFrom<&str> for PasswordWithPolicy {
     }
 }
 
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let passwords_with_policy: Vec<_> = input
         .lines()
         .filter_map(|line| PasswordWithPolicy::try_from(line).ok())

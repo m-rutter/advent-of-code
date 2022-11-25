@@ -6,7 +6,7 @@ type Address = usize;
 
 #[derive(Error, Debug)]
 
-pub enum IntCodeError {
+pub enum Error {
     #[error("Out of bounds read of op code at address: {0}")]
     OutOfBoundsOpCodeRead(Address),
 
@@ -29,4 +29,4 @@ pub enum IntCodeError {
     ParseErrorNoOpCodeProvided,
 }
 
-pub type IntCodeResult<T> = std::result::Result<T, IntCodeError>;
+pub type IntCodeResult<T> = std::result::Result<T, Error>;

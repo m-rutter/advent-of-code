@@ -1,7 +1,7 @@
 use crate::error;
 use crate::Solution;
 
-pub fn run(input: &str) -> error::AoCResult<Solution> {
+pub fn run(input: &str) -> error::Result<Solution> {
     let parsed_input = parse(input);
 
     Ok(Solution {
