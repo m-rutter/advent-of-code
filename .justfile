@@ -10,3 +10,6 @@ test-watch:
 
 check-watch:
     cargo watch -x check 
+
+watch year day: 
+    cargo watch -x 'run -- -y {{year}} -d {{day}} -p ./aoc/src/aoc{{year}}/input/day{{day}}'
