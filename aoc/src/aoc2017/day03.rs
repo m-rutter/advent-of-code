@@ -1,5 +1,4 @@
 use std::collections::{HashMap, HashSet};
-use std::ops::Add;
 
 use crate::{error, Solution};
 
@@ -22,32 +21,27 @@ struct Cell {
     y: i64,
 }
 
+const ADJACENT_CELLS: [Cell; 8] = [
+    Cell { x: 1, y: 1 },
+    Cell { x: 1, y: 1 },
+    Cell { x: 0, y: 1 },
+    Cell { x: -1, y: 1 },
+    Cell { x: -1, y: 0 },
+    Cell { x: -1, y: -1 },
+    Cell { x: 0, y: -1 },
+    Cell { x: 1, y: -1 },
+];
+
 impl Cell {
     fn new(x: i64, y: i64) -> Cell {
         Cell { x, y }
     }
 
     fn find_adjacent(c: Cell) -> Vec<Cell> {
-        vec![
-            Cell::new(1, 0),
-            Cell::new(1, 1),
-            Cell::new(0, 1),
-            Cell::new(-1, 1),
-            Cell::new(-1, 0),
-            Cell::new(-1, -1),
-            Cell::new(0, -1),
-            Cell::new(1, -1),
-        ]
-        .iter()
-        .map(|&a| a + c)
-        .collect()
+        ADJACENT_CELLS.iter().map(|&a| a.shift_by(c)).collect()
     }
-}
 
-impl Add for Cell {
-    type Output = Cell;
-
-    fn add(self, other: Self) -> Cell {
+    fn shift_by(self, other: Self) -> Cell {
         Cell {
             x: self.x + other.x,
             y: self.y + other.y,
@@ -65,19 +59,19 @@ enum Orientation {
 impl Orientation {
     fn look_left(&self, position: Cell) -> Cell {
         match self {
-            Orientation::East => Cell::new(0, 1) + position,
-            Orientation::North => Cell::new(-1, 0) + position,
-            Orientation::West => Cell::new(0, -1) + position,
-            Orientation::South => Cell::new(1, 0) + position,
+            Orientation::East => Cell::new(0, 1).shift_by(position),
+            Orientation::North => Cell::new(-1, 0).shift_by(position),
+            Orientation::West => Cell::new(0, -1).shift_by(position),
+            Orientation::South => Cell::new(1, 0).shift_by(position),
         }
     }
 
     fn move_to(&self, position: Cell) -> Cell {
         match self {
-            Orientation::East => Cell::new(1, 0) + position,
-            Orientation::North => Cell::new(0, 1) + position,
-            Orientation::West => Cell::new(-1, 0) + position,
-            Orientation::South => Cell::new(0, -1) + position,
+            Orientation::East => Cell::new(1, 0).shift_by(position),
+            Orientation::North => Cell::new(0, 1).shift_by(position),
+            Orientation::West => Cell::new(-1, 0).shift_by(position),
+            Orientation::South => Cell::new(0, -1).shift_by(position),
         }
     }
 
