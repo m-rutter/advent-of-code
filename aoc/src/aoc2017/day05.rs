@@ -5,7 +5,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let input = parser(&input);
 
     if input.is_empty() {
-        Err(error::ErrorKind::InputParse)?;
+        Err(error::ParsingError::ParseError)?;
     }
 
     let part_one = steps_to_exit(&input, |_| 1);

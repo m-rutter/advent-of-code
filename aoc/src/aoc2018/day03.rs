@@ -22,7 +22,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let claims = parse(&input)?;
 
     if claims.is_empty() {
-        Err(error::Error::msg(&"No claims parsed from input"))?
+        Err(anyhow::anyhow!(&"No claims parsed from input"))?
     }
 
     let cloth = create_cloth(&claims);
@@ -89,7 +89,7 @@ fn find_single_claim<'a>(claims: &'a [Claim], cloth: &Cloth) -> Option<&'a str> 
 fn parse(input: &str) -> error::Result<Vec<Claim>> {
     let mut claims = vec![];
 
-    let files = Day03Parser::parse(Rule::file, input)?;
+    let files = Day03Parser::parse(Rule::file, input).map_err(|err| anyhow::anyhow!(err))?;
 
     for file in files {
         for record in file.into_inner() {

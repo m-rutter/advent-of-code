@@ -7,7 +7,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let input = parser(&input);
 
     if input.is_empty() {
-        Err(error::ErrorKind::InputParse)?;
+        Err(error::ParsingError::ParseError)?;
     }
 
     let valid_passprase_count = valid_passprase_count(&input);

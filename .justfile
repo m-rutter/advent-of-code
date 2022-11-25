@@ -7,3 +7,6 @@ install-tools:
 
 test-watch:
     cargo watch -x 'nextest run'
+
+check-watch:
+    cargo watch -x check 

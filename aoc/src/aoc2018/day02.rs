@@ -5,7 +5,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let ids = parse(&input);
 
     if ids.is_empty() {
-        Err(error::Error::msg(&"No inventory ids parsed from input"))?
+        Err(anyhow::anyhow!(&"No inventory ids parsed from input"))?
     }
 
     Ok(Solution {

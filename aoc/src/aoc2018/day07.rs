@@ -7,7 +7,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let conditionals = parse(&input);
 
     if conditionals.is_empty() {
-        Err(error::Error::msg(&"No conditionals parsed from input"))?
+        Err(anyhow::anyhow!("No conditionals parsed from input"))?
     }
 
     Ok(Solution {
@@ -64,12 +64,13 @@ struct Dependency {
 }
 
 impl FromStr for Dependency {
-    type Err = error::Error;
+    type Err = error::AoCError;
 
-    fn from_str(s: &str) -> Result<Dependency, error::Error> {
-        let mut pair = parser::Day07Parser::parse(parser::Rule::conditional, s)?
+    fn from_str(s: &str) -> Result<Dependency, error::AoCError> {
+        let mut pair = parser::Day07Parser::parse(parser::Rule::conditional, s)
+            .map_err(|err| anyhow::anyhow!(err))?
             .next()
-            .ok_or_else(|| error::Error::msg(&"No conditional in line"))?
+            .ok_or_else(|| anyhow::anyhow!("No conditional in line"))?
             .into_inner();
 
         let antecedent = pair

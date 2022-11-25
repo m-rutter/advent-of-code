@@ -8,7 +8,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let guard_events = parse(input);
 
     if guard_events.is_empty() {
-        Err(error::Error::msg(&"No guard events parsed from input"))?
+        Err(anyhow::anyhow!(&"No guard events parsed from input"))?
     }
 
     let grouped_guard_events = group_event_by_guard(&guard_events);
@@ -159,12 +159,13 @@ struct SleepyGuard {
 }
 
 impl FromStr for GuardEvent {
-    type Err = error::Error;
+    type Err = error::AoCError;
 
-    fn from_str(s: &str) -> Result<GuardEvent, error::Error> {
-        let mut pair = parser::Day04Parser::parse(parser::Rule::event, s)?
+    fn from_str(s: &str) -> Result<GuardEvent, error::AoCError> {
+        let mut pair = parser::Day04Parser::parse(parser::Rule::event, s)
+            .map_err(|err| anyhow::anyhow!(err))?
             .next()
-            .ok_or_else(|| error::Error::msg(&"No guard events in input"))?
+            .ok_or_else(|| anyhow::anyhow!("No guard events in input"))?
             .into_inner();
 
         let date_string = pair.next().expect("should be impossible").as_str();
@@ -178,13 +179,13 @@ impl FromStr for GuardEvent {
                 guard_id: event_pair
                     .into_inner()
                     .next()
-                    .ok_or_else(|| error::Error::msg(&"No guard events in input"))?
+                    .ok_or_else(|| anyhow::anyhow!(&"No guard events in input"))?
                     .as_str()
                     .parse()?,
             },
             parser::Rule::wakes_up => GuardEventKind::Waking,
             parser::Rule::falls_asleep => GuardEventKind::FallingAsleep,
-            _ => Err(error::Error::msg(&"Invalid guard event"))?,
+            _ => Err(anyhow::anyhow!(&"Invalid guard event"))?,
         };
 
         Ok(GuardEvent {

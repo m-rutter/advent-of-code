@@ -1,5 +1,5 @@
 use crate::{
-    error::{ErrorKind, Result},
+    error::{self, Result},
     Solution,
 };
 
@@ -14,7 +14,7 @@ pub fn run(input: &str) -> Result<Solution> {
             match char {
                 '0' => counts[index].0 += 1,
                 '1' => counts[index].1 += 1,
-                _ => Err(ErrorKind::InputParse)?,
+                _ => Err(error::ParsingError::ParseError)?,
             };
         }
     }

@@ -37,9 +37,7 @@ fn part_two(program: &[usize]) -> error::Result<usize> {
         }
     }
 
-    Err(error::Error::msg(
-        &"Could not find a correct noun and verb combination",
-    ))
+    Err(anyhow::anyhow!("Could not find a correct noun and verb combination",).into())
 }
 
 fn parse(input: &str) -> Vec<usize> {

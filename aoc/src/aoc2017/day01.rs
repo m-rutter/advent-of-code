@@ -6,7 +6,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let parsed_input = parser(&input);
 
     if parsed_input.is_empty() {
-        Err(error::ErrorKind::InputParse)?;
+        Err(error::ParsingError::ParseError)?;
     }
 
     let part_one = circular_match_and_sum(&parsed_input, 1);

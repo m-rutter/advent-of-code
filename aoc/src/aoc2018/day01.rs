@@ -6,7 +6,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let modulations = parse(&input);
 
     if modulations.is_empty() {
-        Err(error::Error::msg(
+        Err(anyhow::anyhow!(
             &"No frequency modulations parsed from input",
         ))?
     }

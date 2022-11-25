@@ -5,7 +5,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let v: Vec<char> = input.chars().collect();
 
     if v.is_empty() {
-        Err(error::Error::msg(
+        Err(anyhow::anyhow!(
             &"Insufficent polymer sequence length provided in input",
         ))?
     }

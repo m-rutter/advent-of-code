@@ -7,9 +7,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let coordinates = parse(&input);
 
     if coordinates.is_empty() {
-        Err(error::Error::msg(
-            &"Insufficent coordinates parsed from input",
-        ))?
+        Err(anyhow::anyhow!("Insufficent coordinates parsed from input",))?
     }
 
     let upper_bound = 1 + coordinates
@@ -128,17 +126,17 @@ impl Coordinates {
 }
 
 impl FromStr for Coordinates {
-    type Err = error::Error;
+    type Err = error::AoCError;
 
     fn from_str(s: &str) -> error::Result<Coordinates> {
         let mut v = s.split(',').filter_map(|s| s.trim().parse::<i32>().ok());
 
         let x = v
             .next()
-            .ok_or_else(|| error::Error::msg(&"No x coordinate"))?;
+            .ok_or_else(|| anyhow::anyhow!(&"No x coordinate"))?;
         let y = v
             .next()
-            .ok_or_else(|| error::Error::msg(&"No y coordinate"))?;
+            .ok_or_else(|| anyhow::anyhow!(&"No y coordinate"))?;
 
         Ok(Coordinates { x: x, y: y })
     }

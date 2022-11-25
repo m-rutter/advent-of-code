@@ -52,7 +52,7 @@ impl PasswordWithPolicy {
 }
 
 impl TryFrom<&str> for PasswordWithPolicy {
-    type Error = error::Error;
+    type Error = error::AoCError;
 
     fn try_from(s: &str) -> error::Result<PasswordWithPolicy> {
         let captures = RE.captures(s).unwrap();

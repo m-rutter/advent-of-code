@@ -82,7 +82,7 @@ pub fn solve_day(config: &Config) -> error::Result<Solution> {
             5 => aoc2017::day05::run(&config.input),
             6 => aoc2017::day06::run(&config.input),
             7 => aoc2017::day07::run(&config.input),
-            _ => Err(error::ErrorKind::UnsupportedDay {
+            _ => Err(error::AoCError::UnsupportedDay {
                 day: config.day,
                 year: config.year,
             })?,
@@ -95,7 +95,7 @@ pub fn solve_day(config: &Config) -> error::Result<Solution> {
             5 => aoc2018::day05::run(&config.input),
             6 => aoc2018::day06::run(&config.input),
             7 => aoc2018::day07::run(&config.input),
-            _ => Err(error::ErrorKind::UnsupportedDay {
+            _ => Err(error::AoCError::UnsupportedDay {
                 day: config.day,
                 year: config.year,
             })?,
@@ -103,7 +103,7 @@ pub fn solve_day(config: &Config) -> error::Result<Solution> {
         2019 => match config.day {
             1 => aoc2019::day01::run(&config.input),
             2 => aoc2019::day02::run(&config.input),
-            _ => Err(error::ErrorKind::UnsupportedDay {
+            _ => Err(error::AoCError::UnsupportedDay {
                 day: config.day,
                 year: config.year,
             })?,
@@ -111,7 +111,7 @@ pub fn solve_day(config: &Config) -> error::Result<Solution> {
         2020 => match config.day {
             1 => aoc2020::day01::run(&config.input),
             2 => aoc2020::day02::run(&config.input),
-            _ => Err(error::ErrorKind::UnsupportedDay {
+            _ => Err(error::AoCError::UnsupportedDay {
                 day: config.day,
                 year: config.year,
             })?,
@@ -120,12 +120,12 @@ pub fn solve_day(config: &Config) -> error::Result<Solution> {
             1 => aoc2021::day01::run(&config.input),
             2 => aoc2021::day02::run(&config.input),
             3 => aoc2021::day03::run(&config.input),
-            _ => Err(error::ErrorKind::UnsupportedDay {
+            _ => Err(error::AoCError::UnsupportedDay {
                 day: config.day,
                 year: config.year,
             })?,
         },
-        _ => Err(error::ErrorKind::UnsupportedDay {
+        _ => Err(error::AoCError::UnsupportedDay {
             day: config.day,
             year: config.year,
         })?,

@@ -24,7 +24,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let nodes = parser(&input)?;
 
     if nodes.is_empty() {
-        Err(error::ErrorKind::InputParse)?
+        Err(error::ParsingError::ParseError)?
     }
 
     let _root = find_root_node(&nodes);
@@ -53,9 +53,10 @@ fn find_root_node(nodes: &HashMap<String, Node>) -> String {
 fn parser(input: &str) -> error::Result<HashMap<String, Node>> {
     let mut nodes = HashMap::new();
 
-    let file = parser::Day07Parser::parse(parser::Rule::file, input)?
+    let file = parser::Day07Parser::parse(parser::Rule::file, input)
+        .map_err(|err| anyhow::anyhow!(err))?
         .next()
-        .ok_or_else(|| error::Error::msg(&"Unable to parse any records"))?;
+        .ok_or_else(|| anyhow::anyhow!(&"Unable to parse any records"))?;
 
     for record in file.into_inner() {
         if let parser::Rule::node = record.as_rule() {

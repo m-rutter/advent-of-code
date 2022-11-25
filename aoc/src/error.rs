@@ -1,123 +1,49 @@
 //! AoC error module
+
 use intcode::error::Error as IntCodeError;
-use std::error::Error as StdError;
-use std::fmt;
+
+use thiserror::Error;
 
 // Convenience Result type
-pub type Result<T> = std::result::Result<T, Error>;
+pub type Result<T> = std::result::Result<T, AoCError>;
 
-/// An error type for the Advent of Code crate
-#[derive(Debug)]
-pub struct Error {
-    kind: ErrorKind,
-    source: Option<Box<dyn StdError + Send + Sync + 'static>>,
-}
-
-impl Error {
-    /// Returns the error kind
-    pub fn kind(&self) -> &ErrorKind {
-        &self.kind
-    }
-
-    /// Creates generic error with a message
-    pub(crate) fn msg(value: &impl ToString) -> Self {
-        Self {
-            kind: ErrorKind::Msg(value.to_string()),
-            source: None,
-        }
-    }
-
-    #[allow(dead_code)]
-    ///Creates generic error with a message and a cause
-    pub(crate) fn chain(
-        value: &impl ToString,
-        cause: impl StdError + Send + Sync + 'static,
-    ) -> Self {
-        Self {
-            kind: ErrorKind::Msg(value.to_string()),
-            source: Some(cause.into()),
-        }
-    }
-}
-
-impl StdError for Error {
-    fn cause(&self) -> Option<&(dyn StdError)> {
-        self.source().as_ref().map(|c| &**c)
-    }
-
-    fn source(&self) -> Option<&(dyn StdError + 'static)> {
-        self.source
-            .as_ref()
-            .map(|c| c.as_ref() as &(dyn StdError + 'static))
-    }
-}
-
-#[derive(Debug)]
-#[non_exhaustive]
-pub enum ErrorKind {
-    /// Generic error message
-    Msg(String),
+#[derive(Error, Debug)]
+pub enum AoCError {
+    /// Generic error
+    #[error(transparent)]
+    Anyhow(#[from] anyhow::Error),
     /// Error when parsing provided input
-    InputParse,
+    #[error("test input parsing error")]
+    ParseError(#[from] ParsingError),
     /// Error when the day is not supported or does not exist
+    #[error("unsupported year (expected {year:?} and/or day {day:?})")]
     UnsupportedDay { year: u16, day: u8 },
+    /// An error coming from intcode execution
+    #[error("an IntCode Execution Error")]
+    IntCodeError(#[from] IntCodeError),
 }
 
-impl From<ErrorKind> for Error {
-    fn from(error: ErrorKind) -> Self {
-        Self {
-            kind: error,
-            source: None,
-        }
-    }
+#[derive(Error, Debug)]
+pub enum ParsingError {
+    #[error(transparent)]
+    ChronoParseError(#[from] chrono::format::ParseError),
+
+    #[error(transparent)]
+    IntParseError(#[from] std::num::ParseIntError),
+
+    #[error("test input parsing error")]
+    ParseError,
 }
 
-impl From<std::num::ParseIntError> for Error {
-    fn from(error: std::num::ParseIntError) -> Self {
-        Self {
-            kind: ErrorKind::InputParse,
-            source: Some(error.into()),
+macro_rules! impl_into_aoc_error {
+    ($ty: ty) => {
+        impl From<$ty> for AoCError {
+            fn from(error: $ty) -> Self {
+                error.into()
+            }
         }
-    }
+    };
 }
 
-impl From<chrono::format::ParseError> for Error {
-    fn from(error: chrono::format::ParseError) -> Self {
-        Self {
-            kind: ErrorKind::InputParse,
-            source: Some(error.into()),
-        }
-    }
-}
-
-impl<T> From<pest::error::Error<T>> for Error {
-    fn from(_: pest::error::Error<T>) -> Self {
-        Self {
-            kind: ErrorKind::InputParse,
-            source: None,
-        }
-    }
-}
-
-impl From<IntCodeError> for Error {
-    fn from(error: IntCodeError) -> Self {
-        Self {
-            kind: ErrorKind::Msg(format!("IntCode Execution Error")),
-            source: Some(error.into()),
-        }
-    }
-}
-
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match &self.kind {
-            ErrorKind::Msg(message) => write!(f, "{}", message),
-            ErrorKind::InputParse => write!(f, "Error parsing input"),
-            ErrorKind::UnsupportedDay { day, year } => write!(
-                f,
-                "Day {} for year {} either does not exist or is unsupported",
-                day, year
-            ),
-        }
-    }
-}
+impl_into_aoc_error!(chrono::format::ParseError);
+impl_into_aoc_error!(std::num::ParseIntError);

@@ -7,7 +7,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let input = parse_input(&input);
 
     if input.is_empty() {
-        Err(error::ErrorKind::InputParse)?;
+        Err(error::ParsingError::ParseError)?;
     }
 
     let checksum = gen_checksum(&input);

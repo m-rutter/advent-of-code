@@ -19,12 +19,12 @@ enum Movement {
 }
 
 impl FromStr for Movement {
-    type Err = error::Error;
+    type Err = error::AoCError;
 
     fn from_str(s: &str) -> Result<Self> {
         let captures = MOVEMENT_RE
             .captures(s)
-            .ok_or_else(|| error::ErrorKind::InputParse)?;
+            .ok_or_else(|| error::ParsingError::ParseError)?;
 
         let dir = &captures["dir"];
         let dist: u32 = captures["dist"].parse()?;
@@ -33,7 +33,7 @@ impl FromStr for Movement {
             "forward" => Movement::Forward(dist),
             "up" => Movement::Up(dist),
             "down" => Movement::Down(dist),
-            _ => Err(error::ErrorKind::InputParse)?,
+            _ => Err(error::ParsingError::ParseError)?,
         })
     }
 }

@@ -7,7 +7,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let input = parser(&input);
 
     if input.is_empty() {
-        Err(error::ErrorKind::InputParse)?;
+        Err(error::ParsingError::ParseError)?;
     }
 
     let (part_one, part_two) = relocate_until_repeat(&input);
