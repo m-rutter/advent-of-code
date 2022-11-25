@@ -21,15 +21,14 @@ struct Cell {
     y: i64,
 }
 
+// | -1  1 | 0  1 | 1  1 |
+// | -1  0 |      | 1  0 |
+// | -1 -1 | 0 -1 | 1 -1 |
+#[rustfmt::skip]
 const ADJACENT_CELLS: [Cell; 8] = [
-    Cell { x: 1, y: 1 },
-    Cell { x: 1, y: 1 },
-    Cell { x: 0, y: 1 },
-    Cell { x: -1, y: 1 },
-    Cell { x: -1, y: 0 },
-    Cell { x: -1, y: -1 },
-    Cell { x: 0, y: -1 },
-    Cell { x: 1, y: -1 },
+    Cell { x: -1, y: 1 },  Cell { x: 0, y: 1 },  Cell { x: 1, y: 1 },
+    Cell { x: -1, y: 0 },                        Cell { x: 1, y: 0 },
+    Cell { x: -1, y: -1 }, Cell { x: 0, y: -1 }, Cell { x: 1, y: -1 },
 ];
 
 impl Cell {
