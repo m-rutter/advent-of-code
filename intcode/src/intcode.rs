@@ -3,8 +3,10 @@ use std::convert::TryFrom;
 use crate::error::{Error, IntCodeResult};
 
 /// Intcode executor. Will exceute intcode programs
+#[derive(Debug, Default)]
 pub struct IntCodeExecutor {
     memory: Vec<usize>,
+    address: usize,
 }
 
 impl IntCodeExecutor {
@@ -12,6 +14,7 @@ impl IntCodeExecutor {
     pub fn new(program: &[usize]) -> Self {
         IntCodeExecutor {
             memory: Vec::from(program),
+            ..Default::default()
         }
     }
 
@@ -27,52 +30,61 @@ impl IntCodeExecutor {
     }
 
     /// Consume Intcode executor to get the result
-    pub fn execute(self) -> IntCodeResult<usize> {
-        let mut memory = self.memory;
-        let mut address: usize = 0;
-
+    pub fn execute(mut self) -> IntCodeResult<usize> {
         loop {
-            if address > memory.len() - 1 {
-                Err(Error::OutOfBoundsOpCodeRead(address))?;
+            if self.address > self.memory.len() - 1 {
+                Err(Error::OutOfBoundsOpCodeRead(self.address))?;
             }
 
-            let op = Instruction::try_from(&memory[address..])?;
+            let slice = &self.memory[self.address..];
 
-            match op {
-                Instruction::Add(param1, param2, param3) => {
-                    let value = if let (Some(x), Some(y)) = (memory.get(param1), memory.get(param2))
-                    {
-                        x + y
-                    } else {
-                        Err(Error::OutOfBoundsOpParamsRead(op.clone()))?
-                    };
+            let op = Instruction::try_from(slice)?;
 
-                    if let Some(elem) = memory.get_mut(param3) {
-                        *elem = value
-                    } else {
-                        Err(Error::OutOfBoundsOpParamsWrite(op.clone()))?
-                    };
-
-                    address += 4;
-                }
-                Instruction::Multiply(param1, param2, param3) => {
-                    let value = if let (Some(x), Some(y)) = (memory.get(param1), memory.get(param2))
-                    {
-                        x * y
-                    } else {
-                        Err(Error::OutOfBoundsOpParamsRead(op.clone()))?
-                    };
-
-                    if let Some(elem) = memory.get_mut(param3) {
-                        *elem = value
-                    } else {
-                        Err(Error::OutOfBoundsOpParamsWrite(op.clone()))?
-                    };
-
-                    address += 4;
-                }
-                Instruction::Terminal => break Ok(memory[0]),
+            if let Some(res) = self.execute_op(op)? {
+                return Ok(res);
             }
+        }
+    }
+
+    fn execute_op(&mut self, op: Instruction) -> IntCodeResult<Option<usize>> {
+        match op {
+            Instruction::Add(param1, param2, param3) => {
+                let value = if let (Some(x), Some(y)) =
+                    (self.memory.get(param1), self.memory.get(param2))
+                {
+                    x + y
+                } else {
+                    Err(Error::OutOfBoundsOpParamsRead(op.clone()))?
+                };
+
+                if let Some(elem) = self.memory.get_mut(param3) {
+                    *elem = value
+                } else {
+                    Err(Error::OutOfBoundsOpParamsWrite(op.clone()))?
+                };
+
+                self.address += 4;
+                Ok(None)
+            }
+            Instruction::Multiply(param1, param2, param3) => {
+                let value = if let (Some(x), Some(y)) =
+                    (self.memory.get(param1), self.memory.get(param2))
+                {
+                    x * y
+                } else {
+                    Err(Error::OutOfBoundsOpParamsRead(op.clone()))?
+                };
+
+                if let Some(elem) = self.memory.get_mut(param3) {
+                    *elem = value
+                } else {
+                    Err(Error::OutOfBoundsOpParamsWrite(op.clone()))?
+                };
+
+                self.address += 4;
+                Ok(None)
+            }
+            Instruction::Terminal => Ok(Some(self.memory[0])),
         }
     }
 }
