@@ -1,26 +1,26 @@
 use advent_of_code::{solve_day, Config};
+use clap::Parser;
 use std::fs::File;
 use std::io::{self, Read};
 use std::path::PathBuf;
 use std::process;
-use structopt::StructOpt;
 
-#[derive(Debug, StructOpt)]
-#[structopt(name = "Advent of Code Cli", about = "Solves Advent of Code problems")]
+#[derive(Debug, Parser)]
+#[command(name = "Advent of Code Cli", about = "Solves Advent of Code problems")]
 struct Opt {
     /// Set the day to solve
-    #[structopt(short = "d", long = "day")]
+    #[arg(short = 'd', long = "day")]
     day: u8,
     /// Set the year
-    #[structopt(short = "y", long = "year")]
+    #[arg(short = 'y', long = "year")]
     year: u16,
     /// Set the input file as problem input
-    #[structopt(short = "p", long = "path", parse(from_os_str))]
+    #[arg(short = 'p', long = "path")]
     path: Option<PathBuf>,
 }
 
 fn main() {
-    let opt = Opt::from_args();
+    let opt = Opt::parse();
     let config = create_config(&opt).unwrap_or_else(|err| {
         eprintln!("Error reading input: {}", err);
         process::exit(1);
