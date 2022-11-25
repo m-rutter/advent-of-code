@@ -22,6 +22,7 @@ pub mod aoc2018;
 pub mod aoc2019;
 pub mod aoc2020;
 pub mod aoc2021;
+pub mod aoc2022;
 pub mod error;
 
 /// AoC config
@@ -120,6 +121,12 @@ pub fn solve_day(config: &Config) -> error::Result<Solution> {
             1 => aoc2021::day01::run(&config.input),
             2 => aoc2021::day02::run(&config.input),
             3 => aoc2021::day03::run(&config.input),
+            _ => Err(error::AoCError::UnsupportedDay {
+                day: config.day,
+                year: config.year,
+            })?,
+        },
+        2022 => match config.day {
             _ => Err(error::AoCError::UnsupportedDay {
                 day: config.day,
                 year: config.year,
