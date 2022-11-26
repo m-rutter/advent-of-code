@@ -1,17 +1,15 @@
 use thiserror::Error;
 
-use crate::intcode::Instruction;
-
-type Address = usize;
+use crate::intcode::{Cursor, Instruction, Value};
 
 #[derive(Error, Debug)]
 
 pub enum Error {
     #[error("Out of bounds read of op code at address: {0}")]
-    OutOfBoundsOpCodeRead(Address),
+    OutOfBoundsOpCodeRead(Cursor),
 
     #[error("Out of bounds write at address: {0}")]
-    OutOfBoundsWrite(Address),
+    OutOfBoundsWrite(Cursor),
 
     #[error("Out of bounds reads for op: {0:?}")]
     OutOfBoundsOpParamsRead(Instruction),
@@ -20,10 +18,10 @@ pub enum Error {
     OutOfBoundsOpParamsWrite(Instruction),
 
     #[error("Unsufficient arugments for opcode: {0}")]
-    ParseErrorOutOfBoundsArguments(usize),
+    ParseErrorOutOfBoundsArguments(Value),
 
     #[error("Unrecognised op code: {0}")]
-    ParseErrorUnsupportOpCode(usize),
+    ParseErrorUnsupportOpCode(Value),
 
     #[error("No op code provided, memory might not be initialised")]
     ParseErrorNoOpCodeProvided,
