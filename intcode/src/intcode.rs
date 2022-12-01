@@ -1,5 +1,3 @@
-use std::convert::TryFrom;
-
 use crate::error::{Error, IntCodeResult};
 
 pub type Cursor = usize;
@@ -41,7 +39,7 @@ impl IntCodeExecutor {
 
             let slice = &self.memory[self.cursor..];
 
-            let op = Instruction::try_from(slice)?;
+            let op = slice.try_into()?;
 
             if let Some(res) = self.execute_op(op)? {
                 return Ok(res);
