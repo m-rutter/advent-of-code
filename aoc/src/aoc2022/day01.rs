@@ -10,7 +10,10 @@ pub fn run(input: &str) -> Result<Solution> {
         .map(|group| group.iter().sum::<u32>())
         .collect();
 
-    let largest_sum = sums.iter().max().unwrap();
+    let largest_sum = sums
+        .iter()
+        .max()
+        .ok_or_else(|| anyhow::anyhow!("expecting at least one calorie group"))?;
 
     let sum_of_top_three: u32 = sums.iter().sorted().rev().take(3).sum();
 
