@@ -1,7 +1,6 @@
 use crate::error;
 use crate::Solution;
-use intcode::intcode::IntCodeExecutor;
-use intcode::intcode::Value;
+use intcode::intcode::{IntCodeExecutor, Value};
 
 pub fn run(input: &str) -> error::Result<Solution> {
     let program = parse(input);
