@@ -10,12 +10,7 @@ pub fn run(input: &str) -> Result<Solution> {
         .map(|line| line.parse())
         .collect::<Result<_>>()?;
 
-    let stratagems: Vec<Stratagem> = input
-        .trim()
-        .lines()
-        .map(|line| line.trim())
-        .map(|line| line.parse())
-        .collect::<Result<_>>()?;
+    let stratagems: Vec<Stratagem> = rounds.iter().map(|line| line.into()).collect();
 
     let total_score = rounds.iter().map(|round| round.score()).sum::<u32>();
     let total_score_by_stratagems = stratagems
@@ -29,7 +24,7 @@ pub fn run(input: &str) -> Result<Solution> {
     })
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone)]
 enum Move {
     Rock,
     Paper,
@@ -104,33 +99,18 @@ impl Stratagem {
     }
 }
 
-impl FromStr for Stratagem {
-    type Err = AoCError;
-
-    fn from_str(s: &str) -> Result<Self> {
-        let pair: Vec<&str> = s.split_whitespace().collect();
-        if pair.len() != 2 {
-            return Err(crate::error::ParsingError::ParseError.into());
-        }
-
-        let opener = match pair[0] {
-            "A" => Move::Rock,
-            "B" => Move::Paper,
-            "C" => Move::Scissors,
-            _ => return Err(crate::error::ParsingError::ParseError.into()),
+impl From<&Round> for Stratagem {
+    fn from(round: &Round) -> Self {
+        let outcome = match round.response {
+            Move::Rock => Outcome::Lose,
+            Move::Paper => Outcome::Draw,
+            Move::Scissors => Outcome::Win,
         };
 
-        let outcome = match pair[1] {
-            "X" => Outcome::Lose,
-            "Y" => Outcome::Draw,
-            "Z" => Outcome::Win,
-            _ => return Err(crate::error::ParsingError::ParseError.into()),
-        };
-
-        Ok(Stratagem {
-            opener: opener,
+        Self {
+            opener: round.opener.clone(),
             outcome: outcome,
-        })
+        }
     }
 }
 
