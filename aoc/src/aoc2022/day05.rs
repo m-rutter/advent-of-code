@@ -22,28 +22,39 @@ pub fn run(input: &str) -> Result<Solution> {
         .map(|line| line.trim().parse())
         .collect::<Result<Vec<Procedure>>>()?;
 
-    for procedure in procedures {
+    for procedure in procedures.iter() {
         for _ in 0..procedure.amount {
             let item = slots[procedure.from].pop().unwrap();
             slots[procedure.to].push(item);
         }
     }
 
-    // for procedure in procedures {
-    //     for _ in 0..procedure.amount {
-    //         let item = slots[procedure.from].pop().unwrap();
-    //         slots[procedure.to].push(item);
-    //     }
-    // }
+    for procedure in procedures.iter() {
+        let mut items = Vec::with_capacity(procedure.amount);
+        for _ in 0..procedure.amount {
+            items.push(slots2[procedure.from].pop().unwrap());
+        }
+
+        items.reverse();
+
+        for index in 0..items.len() {
+            slots2[procedure.to].push(items[index])
+        }
+    }
 
     let part_one = slots
         .iter()
         .map(|col| col.last().unwrap())
         .collect::<String>();
 
+    let part_two = slots2
+        .iter()
+        .map(|col| col.last().unwrap())
+        .collect::<String>();
+
     Ok(Solution {
         part_one: part_one,
-        part_two: "".to_string(),
+        part_two: part_two,
     })
 }
 
@@ -127,6 +138,6 @@ move 1 from 1 to 2";
         let solution = run(input).unwrap();
 
         assert_eq!(solution.part_one, "MQTPGLLDN");
-        assert_eq!(solution.part_two, "");
+        assert_eq!(solution.part_two, "LVZPSTTCZ");
     }
 }
