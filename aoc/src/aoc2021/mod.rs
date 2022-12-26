@@ -1,3 +1,4 @@
+//! AoC 2021 module
 pub mod day01;
 pub mod day02;
 pub mod day03;
