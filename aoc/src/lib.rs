@@ -34,7 +34,7 @@ pub struct Config {
 }
 
 /// Solution for a day in AoC
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Solution {
     /// Answer to part one of challenge
     pub part_one: String,
@@ -132,6 +132,7 @@ pub fn solve_day(config: &Config) -> error::Result<Solution> {
             3 => aoc2022::day03::run(&config.input),
             4 => aoc2022::day04::run(&config.input),
             5 => aoc2022::day05::run(&config.input),
+            6 => aoc2022::day06::run(&config.input),
             _ => Err(error::AoCError::UnsupportedDay {
                 day: config.day,
                 year: config.year,
