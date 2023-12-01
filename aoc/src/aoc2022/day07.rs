@@ -1,3 +1,5 @@
+#![allow(dead_code, unused_variables)]
+
 use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
 use crate::{
@@ -30,7 +32,9 @@ enum Command {
 impl FromStr for Command {
     type Err = AoCError;
 
-    fn from_str(s: &str) -> Result<Self> {}
+    fn from_str(s: &str) -> Result<Command> {
+        todo!()
+    }
 }
 
 #[derive(Debug)]
