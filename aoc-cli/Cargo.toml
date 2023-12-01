@@ -7,5 +7,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "4.0.27", features = ["derive"] }
-advent_of_code = { path  = "../aoc"}
+clap = { version = "4.4.10", features = ["derive"] }
+advent_of_code = { path = "../aoc" }
