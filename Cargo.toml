@@ -1,7 +1,6 @@
 [workspace]
 
-members = [
-	"aoc",
-	"aoc-cli",
-	"intcode"
-]
+resolver = "2"
+
+members = ["aoc", "aoc-cli", "intcode"]
+
