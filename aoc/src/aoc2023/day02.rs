@@ -71,29 +71,13 @@ struct Contraint {
 
 impl Game {
     fn within_contraint(&self, contraint: &Contraint) -> bool {
-        for round in &self.rounds {
-            for color in &round.colors {
-                match color.color {
-                    ColorType::Red => {
-                        if color.count > contraint.red {
-                            return false;
-                        }
-                    }
-                    ColorType::Green => {
-                        if color.count > contraint.green {
-                            return false;
-                        }
-                    }
-                    ColorType::Blue => {
-                        if color.count > contraint.blue {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-
-        true
+        self.rounds.iter().all(|round| {
+            round.colors.iter().all(|color| match color.color {
+                ColorType::Red => color.count <= contraint.red,
+                ColorType::Green => color.count <= contraint.green,
+                ColorType::Blue => color.count <= contraint.blue,
+            })
+        })
     }
 
     fn smallest_contraint(&self) -> Contraint {
