@@ -16,7 +16,7 @@ pub fn run(input: &str) -> Result<Solution> {
     let part_one: usize = games
         .iter()
         .filter(|game| {
-            game.within_contraint(&Contraint {
+            game.within_constraint(&Constraint {
                 red: 12,
                 green: 13,
                 blue: 14,
@@ -27,8 +27,8 @@ pub fn run(input: &str) -> Result<Solution> {
 
     let part_two: usize = games
         .iter()
-        .map(|game| game.smallest_contraint())
-        .map(|contraint| contraint.red * contraint.green * contraint.blue)
+        .map(|game| game.smallest_constraint())
+        .map(|constraint| constraint.red * constraint.green * constraint.blue)
         .sum();
 
     Ok(Solution {
@@ -63,25 +63,25 @@ enum ColorType {
 }
 
 #[derive(Debug)]
-struct Contraint {
+struct Constraint {
     red: usize,
     green: usize,
     blue: usize,
 }
 
 impl Game {
-    fn within_contraint(&self, contraint: &Contraint) -> bool {
+    fn within_constraint(&self, constraint: &Constraint) -> bool {
         self.rounds.iter().all(|round| {
             round.colors.iter().all(|color| match color.color {
-                ColorType::Red => color.count <= contraint.red,
-                ColorType::Green => color.count <= contraint.green,
-                ColorType::Blue => color.count <= contraint.blue,
+                ColorType::Red => color.count <= constraint.red,
+                ColorType::Green => color.count <= constraint.green,
+                ColorType::Blue => color.count <= constraint.blue,
             })
         })
     }
 
-    fn smallest_contraint(&self) -> Contraint {
-        let mut contraint = Contraint {
+    fn smallest_constraint(&self) -> Constraint {
+        let mut constraint = Constraint {
             red: 0,
             green: 0,
             blue: 0,
@@ -91,25 +91,25 @@ impl Game {
             for color in &round.colors {
                 match color.color {
                     ColorType::Red => {
-                        if color.count > contraint.red {
-                            contraint.red = color.count;
+                        if color.count > constraint.red {
+                            constraint.red = color.count;
                         }
                     }
                     ColorType::Green => {
-                        if color.count > contraint.green {
-                            contraint.green = color.count;
+                        if color.count > constraint.green {
+                            constraint.green = color.count;
                         }
                     }
                     ColorType::Blue => {
-                        if color.count > contraint.blue {
-                            contraint.blue = color.count;
+                        if color.count > constraint.blue {
+                            constraint.blue = color.count;
                         }
                     }
                 }
             }
         }
 
-        contraint
+        constraint
     }
 }
 
