@@ -45,13 +45,9 @@ struct Game {
 
 #[derive(Debug)]
 struct Round {
-    colors: Vec<Color>,
-}
-
-#[derive(Debug)]
-struct Color {
-    count: usize,
-    color: ColorType,
+    red: usize,
+    green: usize,
+    blue: usize,
 }
 
 #[derive(Debug, strum::EnumString, PartialEq, Eq)]
@@ -72,44 +68,20 @@ struct Constraint {
 impl Game {
     fn within_constraint(&self, constraint: &Constraint) -> bool {
         self.rounds.iter().all(|round| {
-            round.colors.iter().all(|color| match color.color {
-                ColorType::Red => color.count <= constraint.red,
-                ColorType::Green => color.count <= constraint.green,
-                ColorType::Blue => color.count <= constraint.blue,
-            })
+            round.red <= constraint.red
+                && round.green <= constraint.green
+                && round.blue <= constraint.blue
         })
     }
 
     fn smallest_constraint(&self) -> Constraint {
-        let mut constraint = Constraint {
-            red: 0,
-            green: 0,
-            blue: 0,
-        };
+        let iter = self.rounds.iter();
 
-        for round in &self.rounds {
-            for color in &round.colors {
-                match color.color {
-                    ColorType::Red => {
-                        if color.count > constraint.red {
-                            constraint.red = color.count;
-                        }
-                    }
-                    ColorType::Green => {
-                        if color.count > constraint.green {
-                            constraint.green = color.count;
-                        }
-                    }
-                    ColorType::Blue => {
-                        if color.count > constraint.blue {
-                            constraint.blue = color.count;
-                        }
-                    }
-                }
-            }
-        }
+        let red = iter.clone().map(|round| round.red).max().unwrap_or(0);
+        let green = iter.clone().map(|round| round.green).max().unwrap_or(0);
+        let blue = iter.clone().map(|round| round.blue).max().unwrap_or(0);
 
-        constraint
+        Constraint { red, green, blue }
     }
 }
 
@@ -134,23 +106,30 @@ impl FromStr for Game {
         let mut rounds = vec![];
 
         for section in s.split(";") {
-            let mut colors = vec![];
+            let mut red = 0;
+            let mut green = 0;
+            let mut blue = 0;
 
             for capture in ROUNDS_RE.captures_iter(section) {
                 let count = capture.name("count").unwrap().as_str().parse()?;
 
-                let color = capture.name("color").unwrap().as_str();
+                let color = ColorType::from_str(capture.name("color").unwrap().as_str())
+                    .map_err(|_| anyhow!("Failed to parse color for seciton: {section}"))?;
 
-                let color_type = ColorType::from_str(color)
-                    .map_err(|_| anyhow!("Failed to parse color: {}", color))?;
-
-                colors.push(Color {
-                    count,
-                    color: color_type,
-                });
+                match color {
+                    ColorType::Red => {
+                        red = count;
+                    }
+                    ColorType::Green => {
+                        green = count;
+                    }
+                    ColorType::Blue => {
+                        blue = count;
+                    }
+                }
             }
 
-            rounds.push(Round { colors });
+            rounds.push(Round { red, green, blue });
         }
 
         Ok(Game { id, rounds })
@@ -171,15 +150,13 @@ mod tests {
 
         assert_eq!(game.rounds.len(), 6);
 
-        assert_eq!(game.rounds[0].colors.len(), 3);
+        assert_eq!(game.rounds[0].red, 9);
+        assert_eq!(game.rounds[0].green, 14);
+        assert_eq!(game.rounds[0].blue, 8);
 
-        assert_eq!(game.rounds[0].colors[0].count, 14);
-        assert_eq!(game.rounds[0].colors[0].color, ColorType::Green);
-
-        assert_eq!(game.rounds[1].colors.len(), 3);
-
-        assert_eq!(game.rounds[1].colors[2].count, 2);
-        assert_eq!(game.rounds[1].colors[2].color, ColorType::Red);
+        assert_eq!(game.rounds[1].red, 2);
+        assert_eq!(game.rounds[1].green, 4);
+        assert_eq!(game.rounds[1].blue, 5);
     }
 
     #[test]
