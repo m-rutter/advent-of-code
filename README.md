@@ -45,7 +45,7 @@ cat ./input | aoc-cli --day 1 --year 2017
 | Day | 2017          | 2018          | 2019          | 2020          | 2021          | 2022          | 2023          |
 | --- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
 | 1   | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: |
-| 2   | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: |               |
+| 2   | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: |
 | 3   | :star: :star: | :star: :star: |               |               | :star:        | :star: :star: |               |
 | 4   | :star: :star: | :star: :star: |               |               |               | :star: :star: |               |
 | 5   | :star: :star: | :star: :star: |               |               |               | :star: :star: |               |
