@@ -4,9 +4,10 @@ use intcode::error::Error as IntCodeError;
 
 use thiserror::Error;
 
-// Convenience Result type
+/// Convenience Result type
 pub type Result<T> = std::result::Result<T, AoCError>;
 
+/// AoC Error type
 #[derive(Error, Debug)]
 pub enum AoCError {
     /// Generic error
@@ -30,6 +31,9 @@ pub enum ParsingError {
 
     #[error(transparent)]
     IntParseError(#[from] std::num::ParseIntError),
+
+    #[error(transparent)]
+    RegexParseError(#[from] regex::Error),
 
     #[error("test input parsing error")]
     ParseError,
