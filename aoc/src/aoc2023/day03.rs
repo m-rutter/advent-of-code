@@ -7,7 +7,7 @@ pub fn run(input: &str) -> Result<Solution> {
         .trim()
         .lines()
         .map(|line| line.trim().chars())
-        .map(|chars| chars.map(|c| ScemanticItem::from(c)))
+        .map(|chars| chars.map(|c| SchematicItem::from(c)))
         .map(|row| row.collect())
         .collect();
 
@@ -28,11 +28,11 @@ fn solve_part_one(grid: &Grid) -> Result<usize> {
         let mut start_col: Option<isize> = None;
 
         for (col_num, col) in row.iter().enumerate() {
-            if let ScemanticItem::Symbol(_) = col {
+            if let SchematicItem::Symbol(_) = col {
                 symbol_positions.insert((row_num as isize, col_num as isize));
             }
 
-            if let ScemanticItem::Num(c) = col {
+            if let SchematicItem::Num(c) = col {
                 if start_col.is_none() {
                     start_col = Some(col_num as isize);
                 }
@@ -90,20 +90,20 @@ fn solve_part_one(grid: &Grid) -> Result<usize> {
     Ok(parts.map(|part| part.1).sum())
 }
 
-type Grid = Vec<Vec<ScemanticItem>>;
+type Grid = Vec<Vec<SchematicItem>>;
 
-enum ScemanticItem {
+enum SchematicItem {
     FullStop,
     Num(char),
     Symbol(char),
 }
 
-impl From<char> for ScemanticItem {
+impl From<char> for SchematicItem {
     fn from(value: char) -> Self {
         match value {
-            '.' => ScemanticItem::FullStop,
-            c if c.is_digit(10) => ScemanticItem::Num(c),
-            _ => ScemanticItem::Symbol(value),
+            '.' => SchematicItem::FullStop,
+            c if c.is_digit(10) => SchematicItem::Num(c),
+            _ => SchematicItem::Symbol(value),
         }
     }
 }
