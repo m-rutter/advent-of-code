@@ -1,3 +1,5 @@
+use std::{collections::HashSet, usize};
+
 use crate::{error::Result, Solution};
 
 pub fn run(input: &str) -> Result<Solution> {
@@ -10,16 +12,65 @@ pub fn run(input: &str) -> Result<Solution> {
         .collect();
 
     let part_one = solve_part_one(&grid)?;
+    let part_two = solve_part_two(&grid)?;
 
     Ok(Solution {
         part_one: part_one.to_string(),
-        part_two: "".to_string(),
+        part_two: part_two.to_string(),
     })
 }
 
-fn solve_part_one(grid: &Grid) -> Result<usize> {
-    let mut parts_numbers = vec![];
+#[derive(Debug)]
+struct Part {
+    number: usize,
+    positions: HashSet<(usize, usize)>,
+}
 
+fn solve_part_one(grid: &Grid) -> Result<usize> {
+    let parts = get_parts(grid)?;
+
+    Ok(parts.iter().map(|part| part.number).sum())
+}
+
+fn solve_part_two(grid: &Grid) -> Result<usize> {
+    let parts = get_parts(grid)?;
+    let mut gear_raitos = vec![];
+
+    for (row_index, row) in grid.iter().enumerate() {
+        for (col_index, col) in row.iter().enumerate() {
+            if let SchematicItem::Symbol('*') = col {
+                let adjacent_cells = (
+                    row_index.saturating_sub(1)..row_index + 2,
+                    col_index.saturating_sub(1)..col_index + 2,
+                );
+
+                let parts: Vec<_> = parts
+                    .iter()
+                    .filter(|part| {
+                        for ri in adjacent_cells.0.clone() {
+                            for ci in adjacent_cells.1.clone() {
+                                if part.positions.contains(&(ri, ci)) {
+                                    return true;
+                                }
+                            }
+                        }
+
+                        false
+                    })
+                    .collect();
+
+                if parts.len() == 2 {
+                    gear_raitos.push(parts[0].number * parts[1].number);
+                }
+            }
+        }
+    }
+
+    Ok(gear_raitos.iter().sum())
+}
+
+fn get_parts(grid: &Vec<Vec<SchematicItem>>) -> Result<Vec<Part>> {
+    let mut parts = vec![];
     for (row_index, row) in grid.iter().enumerate() {
         let mut num_chars = vec![];
         let mut start: Option<usize> = None;
@@ -31,13 +82,19 @@ fn solve_part_one(grid: &Grid) -> Result<usize> {
                 }
                 num_chars.push(c);
             } else if let Some(start_col) = start {
-                let mut found = check_adjacent_cells(grid, row_index, start_col, col_index);
+                let found = check_adjacent_cells(grid, row_index, start_col, col_index);
 
                 if found {
                     let s: String = num_chars.clone().into_iter().collect();
                     let n: usize = s.parse()?;
 
-                    parts_numbers.push(n);
+                    let positions: HashSet<_> =
+                        (start_col..col_index).map(|c| (row_index, c)).collect();
+
+                    parts.push(Part {
+                        number: n,
+                        positions,
+                    });
                 }
 
                 start = None;
@@ -46,17 +103,23 @@ fn solve_part_one(grid: &Grid) -> Result<usize> {
         }
 
         if let Some(start_col) = start {
-            let mut found = check_adjacent_cells(grid, row_index, start_col, row.len() - 1);
+            let found = check_adjacent_cells(grid, row_index, start_col, row.len() - 1);
 
             if found {
                 let s: String = num_chars.clone().into_iter().collect();
                 let n: usize = s.parse()?;
-                parts_numbers.push(n);
+
+                let positions: HashSet<_> =
+                    (start_col..row.len() - 1).map(|c| (row_index, c)).collect();
+
+                parts.push(Part {
+                    number: n,
+                    positions,
+                });
             }
         }
     }
-
-    Ok(parts_numbers.iter().sum())
+    Ok(parts)
 }
 
 fn check_adjacent_cells(grid: &Grid, row_index: usize, start_col: usize, end_col: usize) -> bool {
@@ -116,6 +179,7 @@ mod tests {
         let solution = run(input).unwrap();
 
         assert_eq!(solution.part_one, "4361");
+        assert_eq!(solution.part_two, "467835");
     }
 
     #[test]
@@ -125,5 +189,6 @@ mod tests {
         let solution = run(input).unwrap();
 
         assert_eq!(solution.part_one, "550934");
+        assert_eq!(solution.part_two, "81997870");
     }
 }
