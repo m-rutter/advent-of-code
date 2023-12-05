@@ -1,5 +1,3 @@
-use std::collections::{HashMap, HashSet};
-
 use crate::{error::Result, Solution};
 
 pub fn run(input: &str) -> Result<Solution> {
@@ -20,74 +18,64 @@ pub fn run(input: &str) -> Result<Solution> {
 }
 
 fn solve_part_one(grid: &Grid) -> Result<usize> {
-    let mut symbol_positions: HashSet<(isize, isize)> = HashSet::new();
-    let mut number_spans: HashMap<(isize, (isize, isize)), usize> = HashMap::new();
+    let mut parts_numbers = vec![];
 
-    for (row_num, row) in grid.iter().enumerate() {
+    for (row_index, row) in grid.iter().enumerate() {
         let mut num_chars = vec![];
-        let mut start_col: Option<isize> = None;
+        let mut start: Option<usize> = None;
 
-        for (col_num, col) in row.iter().enumerate() {
-            if let SchematicItem::Symbol(_) = col {
-                symbol_positions.insert((row_num as isize, col_num as isize));
-            }
-
+        for (col_index, col) in row.iter().enumerate() {
             if let SchematicItem::Num(c) = col {
-                if start_col.is_none() {
-                    start_col = Some(col_num as isize);
+                if start.is_none() {
+                    start = Some(col_index);
                 }
-
                 num_chars.push(c);
-            } else {
-                if let Some(start_col) = start_col {
+            } else if let Some(start_col) = start {
+                let mut found = check_adjacent_cells(grid, row_index, start_col, col_index);
+
+                if found {
                     let s: String = num_chars.clone().into_iter().collect();
+                    let n: usize = s.parse()?;
 
-                    let n = s.parse()?;
-
-                    number_spans.insert((row_num as isize, (start_col, col_num as isize)), n);
+                    parts_numbers.push(n);
                 }
 
-                start_col = None;
+                start = None;
                 num_chars = vec![];
             }
         }
 
-        if let Some(col) = start_col {
-            let s: String = num_chars.clone().into_iter().collect();
+        if let Some(start_col) = start {
+            let mut found = check_adjacent_cells(grid, row_index, start_col, row.len() - 1);
 
-            let n = s.parse()?;
-
-            number_spans.insert((row_num as isize, (col, row.len() as isize - 1)), n);
+            if found {
+                let s: String = num_chars.clone().into_iter().collect();
+                let n: usize = s.parse()?;
+                parts_numbers.push(n);
+            }
         }
     }
 
-    let parts = number_spans.iter().filter(|span| {
-        let (row, (start, end)) = span.0;
+    Ok(parts_numbers.iter().sum())
+}
 
-        for col in *start..*end {
-            let row = *row;
-            let adjacent_cells = [
-                (row - 1, col),
-                (row - 1, col + 1),
-                (row - 1, col - 1),
-                (row + 1, col),
-                (row + 1, col + 1),
-                (row + 1, col - 1),
-                (row, col + 1),
-                (row, col - 1),
-            ];
+fn check_adjacent_cells(grid: &Grid, row_index: usize, start_col: usize, end_col: usize) -> bool {
+    let adjacent_cells = (
+        row_index.saturating_sub(1)..row_index + 2,
+        start_col.saturating_sub(1)..end_col + 1,
+    );
 
-            for (col, row) in adjacent_cells {
-                if symbol_positions.contains(&(col, row)) {
-                    return true;
-                }
+    let mut found = false;
+    for r in adjacent_cells.0 {
+        for c in adjacent_cells.1.clone() {
+            if let Some(SchematicItem::Symbol(_)) = grid.get(r).and_then(|row| row.get(c)) {
+                found = true;
+                break;
             }
         }
+    }
 
-        false
-    });
-
-    Ok(parts.map(|part| part.1).sum())
+    found
 }
 
 type Grid = Vec<Vec<SchematicItem>>;
