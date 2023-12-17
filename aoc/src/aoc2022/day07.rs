@@ -49,7 +49,7 @@ mod tests {
 
     use super::*;
 
-    #[ignore]
+    #[ignore = "todo"]
     #[test]
     fn matches_examples() {
         let example = r"$ cd /
@@ -82,7 +82,7 @@ $ ls
         assert_eq!(solution.part_two, "");
     }
 
-    #[ignore]
+    #[ignore = "todo"]
     #[test]
     fn matches_offical_results() {
         let input = include_str!("./input/day07");

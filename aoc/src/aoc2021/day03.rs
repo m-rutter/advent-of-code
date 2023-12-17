@@ -45,8 +45,8 @@ pub fn run(input: &str) -> Result<Solution> {
 mod tests {
     use super::*;
 
+    #[ignore = "todo"]
     #[test]
-    #[ignore]
     fn original_examples() {
         let input = r"
 	00100
@@ -69,8 +69,8 @@ mod tests {
         assert_eq!(res.part_two, "230");
     }
 
+    #[ignore = "todo"]
     #[test]
-    #[ignore]
     fn matches_offical_result() {
         let input = include_str!("./input/day03");
 
