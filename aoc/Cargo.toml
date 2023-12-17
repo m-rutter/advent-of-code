@@ -17,3 +17,4 @@ intcode = { path = "../intcode" }
 anyhow = "1.0.75"
 strum = { version = "0.25.0", features = ["strum_macros", "derive"] }
 rayon = "1.8.0"
+rand = "0.8.5"
