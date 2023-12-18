@@ -147,6 +147,7 @@ pub fn solve_day(config: &Config) -> error::Result<Solution> {
             5 => aoc2023::day05::run(&config.input),
             6 => aoc2023::day06::run(&config.input),
             7 => aoc2023::day07::run(&config.input),
+            8 => aoc2023::day08::run(&config.input),
             _ => Err(error::AoCError::UnsupportedDay {
                 day: config.day,
                 year: config.year,
