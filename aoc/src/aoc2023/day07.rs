@@ -1,6 +1,7 @@
 use std::{cmp::Ordering, collections::HashMap, str::FromStr};
 
 use anyhow::anyhow;
+use itertools::Itertools;
 
 use crate::{
     error::{AoCError, Result},
@@ -8,39 +9,71 @@ use crate::{
 };
 
 pub fn run(input: &str) -> Result<Solution> {
-    let mut hands: Vec<HandsWithBet> = input
+    let iter = input
         .trim()
         .lines()
-        .map(|line| line.trim().parse())
+        .map(|line| line.trim().parse::<CardWithBet>());
+
+    let mut hands_without_joker: Vec<HandWithBet> = iter
+        .clone()
+        .map_ok(|cards| HandWithBet::new(cards, false))
         .collect::<Result<_>>()?;
 
-    hands.sort();
+    hands_without_joker.sort();
 
-    let part_one = hands
+    let part_one = hands_without_joker
         .iter()
         .enumerate()
         .map(|(rank, hand)| hand.bet * (rank as u64 + 1))
         .sum::<u64>()
         .to_string();
 
-    Ok(Solution {
-        part_one,
-        part_two: "".to_string(),
-    })
+    let mut hands_with_joker: Vec<HandWithBet> = iter
+        .clone()
+        .map_ok(|cards| HandWithBet::new(cards, true))
+        .collect::<Result<_>>()?;
+
+    hands_with_joker.sort();
+
+    let part_two = hands_with_joker
+        .iter()
+        .enumerate()
+        .map(|(rank, hand)| hand.bet * (rank as u64 + 1))
+        .sum::<u64>()
+        .to_string();
+
+    Ok(Solution { part_one, part_two })
 }
 
-#[derive(Debug, PartialEq, Eq, Ord)]
-struct HandsWithBet {
+#[derive(Debug)]
+struct CardWithBet {
     cards: [Card; 5],
-    hand: Hand,
     bet: u64,
 }
 
-impl PartialOrd for HandsWithBet {
+#[derive(Debug, PartialEq, Eq, Ord)]
+struct HandWithBet {
+    cards: [Card; 5],
+    hand: Hand,
+    bet: u64,
+    joker_rule: bool,
+}
+
+impl PartialOrd for HandWithBet {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         match self.hand.cmp(&other.hand) {
             Ordering::Equal => {
                 for (self_card, other_card) in self.cards.iter().zip(other.cards.iter()) {
+                    if self.joker_rule {
+                        if self_card == &Card::Jack && other_card != &Card::Jack {
+                            return Some(Ordering::Less);
+                        }
+
+                        if self_card != &Card::Jack && other_card == &Card::Jack {
+                            return Some(Ordering::Greater);
+                        }
+                    }
+
                     match self_card.cmp(other_card) {
                         Ordering::Equal => continue,
                         other => return Some(other),
@@ -54,48 +87,71 @@ impl PartialOrd for HandsWithBet {
     }
 }
 
-impl HandsWithBet {
+impl CardWithBet {
     fn new(cards: [Card; 5], bet: u64) -> Self {
-        HandsWithBet {
-            bet,
-            hand: HandsWithBet::hand_type(&cards),
-            cards,
+        CardWithBet { bet, cards }
+    }
+}
+
+impl HandWithBet {
+    fn new(cards_and_bet: CardWithBet, joker_rule: bool) -> Self {
+        HandWithBet {
+            bet: cards_and_bet.bet,
+            hand: HandWithBet::hand_type(&cards_and_bet.cards, joker_rule),
+            cards: cards_and_bet.cards,
+            joker_rule,
         }
     }
 
-    fn hand_type(cards: &[Card; 5]) -> Hand {
+    fn hand_type(cards: &[Card; 5], joker_rule: bool) -> Hand {
         let counts: HashMap<&Card, u8> = cards.iter().fold(HashMap::new(), |mut acc, card| {
+            if joker_rule && card == &Card::Jack {
+                return acc;
+            }
+
             let count = acc.entry(&card).or_insert(0);
             *count += 1;
 
             acc
         });
 
-        match counts.len() {
-            1 => Hand::FiveOfAKind,
+        let mut best_hand = match counts.iter().map(|(_, c)| c).max().unwrap_or(&0) {
+            // joker rule must be in effect and all of the cards are jacks/jokers
+            0 => Hand::FiveOfAKind,
+            1 => Hand::HighCard,
             2 => {
-                if counts.iter().any(|(_, c)| *c == 4) {
-                    Hand::FourOfAKind
+                if counts.iter().filter(|(_, c)| **c == 2).count() == 2 {
+                    Hand::TwoPair
                 } else {
-                    Hand::FullHouse
+                    Hand::OnePair
                 }
             }
             3 => {
-                if counts.iter().any(|(_, c)| *c == 3) {
-                    Hand::ThreeOfAKind
+                if counts.iter().filter(|(_, c)| **c >= 2).count() == 2 {
+                    Hand::FullHouse
                 } else {
-                    Hand::TwoPair
+                    Hand::ThreeOfAKind
                 }
             }
-            4 => Hand::OnePair,
-            5 => Hand::HighCard,
-            // there are only five cards, so this should be unreachable
+
+            4 => Hand::FourOfAKind,
+            5 => Hand::FiveOfAKind,
             _ => unreachable!(),
+        };
+
+        if joker_rule {
+            let joker_count = cards.iter().filter(|c| *c == &Card::Jack).count();
+
+            for _ in 0..joker_count {
+                best_hand.promote_with_joker_rule();
+            }
         }
+
+        best_hand
     }
 }
 
-impl FromStr for HandsWithBet {
+impl FromStr for CardWithBet {
     type Err = AoCError;
 
     fn from_str(s: &str) -> Result<Self> {
@@ -121,7 +177,7 @@ impl FromStr for HandsWithBet {
             [(); 5].map(|_| iter.next().unwrap())
         };
 
-        Ok(HandsWithBet::new(cards, bet))
+        Ok(CardWithBet::new(cards, bet))
     }
 }
 
@@ -176,6 +232,21 @@ enum Hand {
     FiveOfAKind,
 }
 
+impl Hand {
+    fn promote_with_joker_rule(&mut self) {
+        *self = match self {
+            Hand::HighCard => Hand::OnePair,
+            Hand::OnePair => Hand::ThreeOfAKind,
+            Hand::TwoPair => Hand::FullHouse,
+            // the full house case is a fiction - its not possible to start from a real full house
+            // and get a better hand with the joker rule. We must be in the middle of promoting
+            // from a original starting point of TwoPair
+            Hand::FullHouse | Hand::ThreeOfAKind => Hand::FourOfAKind,
+            Hand::FourOfAKind | Hand::FiveOfAKind => Hand::FiveOfAKind,
+        };
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -191,6 +262,7 @@ QQQJA 483";
         let solution = run(input).unwrap();
 
         assert_eq!(solution.part_one, "6440");
+        assert_eq!(solution.part_two, "5905");
     }
 
     #[test]
@@ -199,6 +271,7 @@ QQQJA 483";
 
         let solution = run(input).unwrap();
 
-        assert_eq!(solution.part_one, "3760");
+        assert_eq!(solution.part_one, "251287184");
+        assert_eq!(solution.part_two, "250757288");
     }
 }
