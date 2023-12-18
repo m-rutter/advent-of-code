@@ -1,4 +1,4 @@
-use itertools::Itertools;
+use num::integer::lcm;
 use std::{collections::HashMap, str::FromStr};
 
 use anyhow::anyhow;
@@ -13,7 +13,7 @@ use crate::{
 pub fn run(input: &str) -> Result<Solution> {
     let network = Network::from_str(input)?;
 
-    let steps = network.count_steps()?;
+    let steps = network.count_steps(Mode::Mortal)?;
     let ghost_steps = network.count_ghost_steps()?;
 
     Ok(Solution {
@@ -31,64 +31,43 @@ struct Network {
     nodes: HashMap<String, Node>,
 }
 
+#[derive(Debug, PartialEq, Eq)]
+enum Mode<'a> {
+    Mortal,
+    Ghost(&'a str),
+}
+
 impl Network {
     fn count_ghost_steps(&self) -> Result<usize> {
-        let starting_positions = self
+        Ok(self
             .nodes
             .iter()
             .filter(|(label, _)| label.ends_with('A'))
             .map(|(label, _)| label.to_owned())
-            .collect_vec();
-
-        let mut scaners = starting_positions
-            .iter()
-            .map(|start| {
-                let initial_node = self.nodes.get(start).unwrap();
-
-                self.instructions
-                    .iter()
-                    .cycle()
-                    .scan(initial_node, |state, direction| {
-                        match direction {
-                            Direction::Left => *state = self.nodes.get(&state.left).unwrap(),
-                            Direction::Right => *state = self.nodes.get(&state.right).unwrap(),
-                        }
-
-                        if state.label.ends_with('Z') {
-                            dbg!(&initial_node.label, &state.label);
-                            Some(true)
-                        } else {
-                            Some(false)
-                        }
-                    })
-            })
-            .collect_vec();
-
-        let mut step = 1;
-        loop {
-            let all_arrived = scaners
-                .iter_mut()
-                .map(|scanner| scanner.next())
-                .all(|opt| opt == Some(true));
-
-            if all_arrived {
-                break Ok(step);
-            } else {
-                step += 1
-            }
-        }
+            .map(|start| self.count_steps(Mode::Ghost(&start)).unwrap())
+            .fold(1, |acc, step| lcm(acc, step)))
     }
 
-    fn count_steps(&self) -> Result<usize> {
+    fn count_steps(&self, mode: Mode) -> Result<usize> {
         let mut iter = self.instructions.iter().cycle().enumerate();
 
-        let mut current_node = self.nodes.get("AAA").unwrap();
+        let mut current_node = if let Mode::Ghost(start) = mode {
+            self.nodes.get(start).unwrap()
+        } else {
+            self.nodes.get("AAA").unwrap()
+        };
 
         loop {
             let (step, direction) = iter.next().unwrap();
 
-            if current_node.label == "ZZZ" {
-                return Ok(step);
+            if mode == Mode::Mortal {
+                if current_node.label == "ZZZ" {
+                    return Ok(step);
+                }
+            } else {
+                if current_node.label.ends_with('Z') {
+                    return Ok(step);
+                }
             }
 
             match direction {
@@ -206,7 +185,7 @@ ZZZ = (ZZZ, ZZZ)";
 
         let network = Network::from_str(input).unwrap();
 
-        let count = network.count_steps().unwrap();
+        let count = network.count_steps(Mode::Mortal).unwrap();
 
         assert_eq!(count, 2);
     }
@@ -221,7 +200,7 @@ ZZZ = (ZZZ, ZZZ)";
 
         let network = Network::from_str(input).unwrap();
 
-        let count = network.count_steps().unwrap();
+        let count = network.count_steps(Mode::Mortal).unwrap();
 
         assert_eq!(count, 6);
     }
@@ -253,6 +232,6 @@ XXX = (XXX, XXX)";
         let solution = run(&input).unwrap();
 
         assert_eq!(solution.part_one, "20777");
-        assert_eq!(solution.part_two, "");
+        assert_eq!(solution.part_two, "13289612809129");
     }
 }
