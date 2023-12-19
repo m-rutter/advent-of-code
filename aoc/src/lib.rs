@@ -17,6 +17,7 @@
 //! };
 //!
 //! ```
+
 pub mod aoc2017;
 pub mod aoc2018;
 pub mod aoc2019;
@@ -76,87 +77,16 @@ impl Config {
 /// ```
 pub fn solve_day(config: &Config) -> error::Result<Solution> {
     match config.year {
-        2017 => match config.day {
-            1 => aoc2017::day01::run(&config.input),
-            2 => aoc2017::day02::run(&config.input),
-            3 => aoc2017::day03::run(&config.input),
-            4 => aoc2017::day04::run(&config.input),
-            5 => aoc2017::day05::run(&config.input),
-            6 => aoc2017::day06::run(&config.input),
-            7 => aoc2017::day07::run(&config.input),
-            _ => Err(error::AoCError::UnsupportedDay {
-                day: config.day,
-                year: config.year,
-            })?,
-        },
-        2018 => match config.day {
-            1 => aoc2018::day01::run(&config.input),
-            2 => aoc2018::day02::run(&config.input),
-            3 => aoc2018::day03::run(&config.input),
-            4 => aoc2018::day04::run(&config.input),
-            5 => aoc2018::day05::run(&config.input),
-            6 => aoc2018::day06::run(&config.input),
-            7 => aoc2018::day07::run(&config.input),
-            _ => Err(error::AoCError::UnsupportedDay {
-                day: config.day,
-                year: config.year,
-            })?,
-        },
-        2019 => match config.day {
-            1 => aoc2019::day01::run(&config.input),
-            2 => aoc2019::day02::run(&config.input),
-            _ => Err(error::AoCError::UnsupportedDay {
-                day: config.day,
-                year: config.year,
-            })?,
-        },
-        2020 => match config.day {
-            1 => aoc2020::day01::run(&config.input),
-            2 => aoc2020::day02::run(&config.input),
-            _ => Err(error::AoCError::UnsupportedDay {
-                day: config.day,
-                year: config.year,
-            })?,
-        },
-        2021 => match config.day {
-            1 => aoc2021::day01::run(&config.input),
-            2 => aoc2021::day02::run(&config.input),
-            3 => aoc2021::day03::run(&config.input),
-            _ => Err(error::AoCError::UnsupportedDay {
-                day: config.day,
-                year: config.year,
-            })?,
-        },
-        2022 => match config.day {
-            1 => aoc2022::day01::run(&config.input),
-            2 => aoc2022::day02::run(&config.input),
-            3 => aoc2022::day03::run(&config.input),
-            4 => aoc2022::day04::run(&config.input),
-            5 => aoc2022::day05::run(&config.input),
-            6 => aoc2022::day06::run(&config.input),
-            _ => Err(error::AoCError::UnsupportedDay {
-                day: config.day,
-                year: config.year,
-            })?,
-        },
-        2023 => match config.day {
-            1 => aoc2023::day01::run(&config.input),
-            2 => aoc2023::day02::run(&config.input),
-            3 => aoc2023::day03::run(&config.input),
-            4 => aoc2023::day04::run(&config.input),
-            5 => aoc2023::day05::run(&config.input),
-            6 => aoc2023::day06::run(&config.input),
-            7 => aoc2023::day07::run(&config.input),
-            8 => aoc2023::day08::run(&config.input),
-            9 => aoc2023::day09::run(&config.input),
-            _ => Err(error::AoCError::UnsupportedDay {
-                day: config.day,
-                year: config.year,
-            })?,
-        },
+        2017 => aoc2017::run(config),
+        2018 => aoc2018::run(config),
+        2019 => aoc2019::run(config),
+        2020 => aoc2020::run(config),
+        2021 => aoc2021::run(config),
+        2022 => aoc2022::run(config),
+        2023 => aoc2023::run(config),
         _ => Err(error::AoCError::UnsupportedDay {
             day: config.day,
             year: config.year,
-        })?,
+        }),
     }
 }
