@@ -52,7 +52,7 @@ cat ./input | aoc-cli --day 1 --year 2017
 | 6   | :star: :star: | :star: :star: |               |               |               | :star: :star: | :star: :star: |
 | 7   | :star:        |               |               |               |               |               | :star: :star: |
 | 8   |               |               |               |               |               |               | :star: :star: |
-| 9   |               |               |               |               |               |               |               |
+| 9   |               |               |               |               |               |               | :star: :star: |
 | 10  |               |               |               |               |               |               |               |
 | 11  |               |               |               |               |               |               |               |
 | 12  |               |               |               |               |               |               |               |
