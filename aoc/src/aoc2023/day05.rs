@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::str::FromStr;
+use std::{isize, str::FromStr};
 
 use anyhow::anyhow;
 use once_cell::sync::Lazy;
@@ -41,7 +41,17 @@ pub fn run(input: &str) -> Result<Solution> {
     let part_one = find_lowest_location(&seeds, &maps).unwrap();
 
     // get all of the ranges
-    let seeds: Vec<isize> = seeds
+
+    let part_two = find_lowest_location_seed_ranges(seeds, &maps).unwrap();
+
+    Ok(Solution {
+        part_one: part_one.to_string(),
+        part_two: part_two.to_string(),
+    })
+}
+
+fn find_lowest_location_seed_ranges(seeds: Vec<isize>, list_of_maps: &[Vec<Map>]) -> Option<isize> {
+    seeds
         .into_iter()
         // batch entries into pairs
         .batching(|it| match it.next() {
@@ -52,15 +62,29 @@ pub fn run(input: &str) -> Result<Solution> {
             },
         })
         // compute seed ranges
-        .flat_map(|(a, b)| (a..a + b).map(|n| n))
-        .collect();
+        .flat_map(|(a, b)| {
+            let v = (a..a + b).map(|n| n).collect_vec();
+            v.par_iter()
+                .map(|n| n)
+                .map(|seed| {
+                    let mut current_source = *seed;
+                    for map_list in list_of_maps {
+                        for map in map_list {
+                            let dest = map.from_source(current_source);
 
-    let part_two = find_lowest_location(&seeds, &maps).unwrap();
+                            if let Some(dest) = dest {
+                                current_source = dest;
+                                break;
+                            }
+                        }
+                    }
 
-    Ok(Solution {
-        part_one: part_one.to_string(),
-        part_two: part_two.to_string(),
-    })
+                    current_source
+                })
+                .min()
+        })
+        // using rayon to parallelise the brute force search
+        .min()
 }
 
 fn find_lowest_location(seeds: &[isize], list_of_maps: &[Vec<Map>]) -> Option<isize> {
