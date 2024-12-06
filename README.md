@@ -46,7 +46,7 @@ cat ./input | aoc-cli --day 1 --year 2017
 | --- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
 | 1   | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: |
 | 2   | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: |
-| 3   | :star: :star: | :star: :star: |               |               | :star:        | :star: :star: | :star: :star: |               |
+| 3   | :star: :star: | :star: :star: |               |               | :star:        | :star: :star: | :star: :star: | :star: :star: |
 | 4   | :star: :star: | :star: :star: |               |               |               | :star: :star: | :star: :star: |               |
 | 5   | :star: :star: | :star: :star: |               |               |               | :star: :star: | :star: :star: |               |
 | 6   | :star: :star: | :star: :star: |               |               |               | :star: :star: | :star: :star: |               |
