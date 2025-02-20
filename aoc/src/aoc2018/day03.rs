@@ -53,7 +53,7 @@ fn create_cloth(claims: &[Claim]) -> Cloth {
 }
 
 fn count_overlapping_claims(cloth: &Cloth) -> u32 {
-    cloth.iter().filter(|(_, &v)| v > 1).count() as u32
+    cloth.iter().filter(|&(_, &v)| v > 1).count() as u32
 }
 
 fn find_single_claim<'a>(claims: &'a [Claim], cloth: &Cloth) -> Option<&'a str> {
