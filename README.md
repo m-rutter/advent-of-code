@@ -42,30 +42,30 @@ cat ./input | aoc-cli --day 1 --year 2017
 
 ## Solution Coverage
 
-| Day | 2017          | 2018          | 2019          | 2020          | 2021          | 2022          | 2023          | 2024          |
-| --- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| 1   | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: |
-| 2   | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: |
-| 3   | :star: :star: | :star: :star: |               |               | :star:        | :star: :star: | :star: :star: | :star: :star: |
-| 4   | :star: :star: | :star: :star: |               |               |               | :star: :star: | :star: :star: |               |
-| 5   | :star: :star: | :star: :star: |               |               |               | :star: :star: | :star: :star: |               |
-| 6   | :star: :star: | :star: :star: |               |               |               | :star: :star: | :star: :star: | :star: :star: |
-| 7   | :star:        |               |               |               |               |               | :star: :star: |               |
-| 8   |               |               |               |               |               |               | :star: :star: |               |
-| 9   |               |               |               |               |               |               | :star: :star: |               |
-| 10  |               |               |               |               |               |               |               |               |
-| 11  |               |               |               |               |               |               |               |               |
-| 12  |               |               |               |               |               |               |               |               |
-| 13  |               |               |               |               |               |               |               |               |
-| 14  |               |               |               |               |               |               |               |               |
-| 15  |               |               |               |               |               |               |               |               |
+| Day | 2017          | 2018          | 2019          | 2020          | 2021          | 2022          | 2023          | 2024          | 2025          |
+| --- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+| 1   | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: |               |
+| 2   | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: | :star: :star: |               |
+| 3   | :star: :star: | :star: :star: |               |               | :star:        | :star: :star: | :star: :star: | :star: :star: |               |
+| 4   | :star: :star: | :star: :star: |               |               |               | :star: :star: | :star: :star: |               |               |
+| 5   | :star: :star: | :star: :star: |               |               |               | :star: :star: | :star: :star: |               |               |
+| 6   | :star: :star: | :star: :star: |               |               |               | :star: :star: | :star: :star: | :star: :star: |               |
+| 7   | :star:        |               |               |               |               |               | :star: :star: |               |               |
+| 8   |               |               |               |               |               |               | :star: :star: |               |               |
+| 9   |               |               |               |               |               |               | :star: :star: |               |               |
+| 10  |               |               |               |               |               |               |               |               |               |
+| 11  |               |               |               |               |               |               |               |               |               |
+| 12  |               |               |               |               |               |               |               |               |               |
+| 13  |               |               |               |               |               |               |               |               |               |
+| 14  |               |               |               |               |               |               |               |               |               |
+| 15  |               |               |               |               |               |               |               |               |               |
 | 16  |               |               |               |               |               |               |               |               |               |
-| 17  |               |               |               |               |               |               |               |               |
-| 18  |               |               |               |               |               |               |               |               |
-| 19  |               |               |               |               |               |               |               |               |
-| 20  |               |               |               |               |               |               |               |               |
-| 21  |               |               |               |               |               |               |               |               |
-| 22  |               |               |               |               |               |               |               |               |
-| 23  |               |               |               |               |               |               |               |               |
-| 24  |               |               |               |               |               |               |               |               |
-| 25  |               |               |               |               |               |               |               |               |
+| 17  |               |               |               |               |               |               |               |               |               |
+| 18  |               |               |               |               |               |               |               |               |               |
+| 19  |               |               |               |               |               |               |               |               |               |
+| 20  |               |               |               |               |               |               |               |               |               |
+| 21  |               |               |               |               |               |               |               |               |               |
+| 22  |               |               |               |               |               |               |               |               |               |
+| 23  |               |               |               |               |               |               |               |               |               |
+| 24  |               |               |               |               |               |               |               |               |               |
+| 25  |               |               |               |               |               |               |               |               |               |
