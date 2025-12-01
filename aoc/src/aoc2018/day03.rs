@@ -1,4 +1,4 @@
-use crate::{error, Solution};
+use crate::{Solution, error};
 use pest::{self, Parser};
 use pest_derive::Parser;
 use std::collections::HashMap;
@@ -86,7 +86,7 @@ fn find_single_claim<'a>(claims: &'a [Claim], cloth: &Cloth) -> Option<&'a str> 
     claim_id
 }
 
-fn parse(input: &str) -> error::Result<Vec<Claim>> {
+fn parse(input: &'_ str) -> error::Result<Vec<Claim<'_>>> {
     let mut claims = vec![];
 
     let files = Day03Parser::parse(Rule::file, input).map_err(|err| anyhow::anyhow!(err))?;

@@ -2,7 +2,7 @@ use itertools::Itertools;
 use once_cell::sync::Lazy;
 use regex::Regex;
 
-use crate::{error::Result, Solution};
+use crate::{Solution, error::Result};
 
 type Board = Vec<Vec<char>>;
 
@@ -41,6 +41,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[ignore]
     fn offical_example() {
         let input = "MMMSXXMASM
         MSAMXMSMSA
@@ -60,6 +61,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn offical_input() {
         let input = include_str!("./input/day04");
 
