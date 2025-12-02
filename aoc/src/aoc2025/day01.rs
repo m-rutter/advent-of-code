@@ -16,13 +16,13 @@ pub fn run(input: &str) -> Result<Solution> {
 
     let mut pos = 50;
     let mut zero_pos_count = 0;
-    for instruction in instructions.iter() {
-        match instruction.direction {
+    for Instruction { direction, turn } in instructions.iter() {
+        match direction {
             Direction::R => {
-                pos = (pos + instruction.turn) % 100;
+                pos = (pos + turn) % 100;
             }
             Direction::L => {
-                pos = (100 + pos - instruction.turn % 100) % 100;
+                pos = (100 + pos - turn % 100) % 100;
             }
         }
 
@@ -31,9 +31,34 @@ pub fn run(input: &str) -> Result<Solution> {
         }
     }
 
+    // I'm sure there must be a smarter way of doing this, but this works
+    let mut zero_click_count = 0;
+    let mut dial = 50;
+    for Instruction { direction, turn } in instructions.iter() {
+        for _ in 0..*turn {
+            if let Direction::R = direction {
+                dial += 1;
+            } else {
+                dial -= 1;
+            }
+
+            if dial > 99 {
+                dial = 0
+            }
+
+            if dial < 0 {
+                dial = 99
+            }
+
+            if dial == 0 {
+                zero_click_count += 1;
+            }
+        }
+    }
+
     Ok(Solution {
         part_one: zero_pos_count.to_string(),
-        part_two: "".to_string(),
+        part_two: zero_click_count.to_string(),
     })
 }
 
@@ -91,7 +116,7 @@ mod tests {
         let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "3");
-        // assert_eq!(result.part_two, "6");
+        assert_eq!(result.part_two, "6");
     }
 
     #[test]
@@ -105,7 +130,7 @@ mod tests {
         let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "2");
-        // assert_eq!(result.part_two, "6");
+        assert_eq!(result.part_two, "6");
     }
 
     #[test]
@@ -115,6 +140,6 @@ mod tests {
         let solution = run(&input).unwrap();
 
         assert_eq!(solution.part_one, "989");
-        // assert_eq!(result.part_two, "");
+        assert_eq!(solution.part_two, "");
     }
 }
