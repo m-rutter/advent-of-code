@@ -140,6 +140,6 @@ mod tests {
         let solution = run(&input).unwrap();
 
         assert_eq!(solution.part_one, "989");
-        assert_eq!(solution.part_two, "");
+        assert_eq!(solution.part_two, "5941");
     }
 }
