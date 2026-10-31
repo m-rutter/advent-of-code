@@ -2,7 +2,7 @@ use num::integer::lcm;
 use std::{collections::HashMap, str::FromStr};
 
 use anyhow::anyhow;
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use regex::Regex;
 
 use crate::{
@@ -22,8 +22,8 @@ pub fn run(input: &str) -> Result<Solution> {
     })
 }
 
-static NODE_RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"(?P<label>\w+) = \((?P<left>\w+), (?P<right>\w+)\)").unwrap());
+static NODE_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?P<label>\w+) = \((?P<left>\w+), (?P<right>\w+)\)").unwrap());
 
 #[derive(Debug)]
 struct Network {

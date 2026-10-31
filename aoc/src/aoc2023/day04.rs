@@ -1,11 +1,10 @@
 use std::{
     collections::{HashMap, HashSet},
     str::FromStr,
-    usize,
 };
 
 use anyhow::anyhow;
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use regex::Regex;
 
 use crate::{
@@ -65,11 +64,11 @@ impl Scratchcard {
     }
 }
 
-static CARD_NO_RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"Card\s+(?P<id>\d+):").expect("unable to compile card no regex"));
+static CARD_NO_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"Card\s+(?P<id>\d+):").expect("unable to compile card no regex"));
 
-static NUMBERS_RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"(?P<num>\d+)").expect("unable to compile number regex"));
+static NUMBERS_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?P<num>\d+)").expect("unable to compile number regex"));
 
 impl FromStr for Scratchcard {
     type Err = AoCError;

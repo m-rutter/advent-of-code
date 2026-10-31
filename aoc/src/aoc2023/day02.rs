@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
 use anyhow::anyhow;
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use regex::Regex;
 
 use crate::{error, error::Result, Solution};
@@ -85,10 +85,10 @@ impl Game {
     }
 }
 
-static GAME_RE: Lazy<Regex> =
-    Lazy::new(|| regex::Regex::new(r"Game (?P<id>\d+):").expect("Failed to compile game id regex"));
+static GAME_RE: LazyLock<Regex> =
+    LazyLock::new(|| regex::Regex::new(r"Game (?P<id>\d+):").expect("Failed to compile game id regex"));
 
-static ROUNDS_RE: Lazy<Regex> = Lazy::new(|| {
+static ROUNDS_RE: LazyLock<Regex> = LazyLock::new(|| {
     regex::Regex::new(r"((?P<count>\d+) (?P<color>\w+),?\s?)")
         .expect("Failed to compile rounds regex")
 });

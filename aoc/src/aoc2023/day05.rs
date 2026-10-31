@@ -1,8 +1,8 @@
 use itertools::Itertools;
-use std::{isize, str::FromStr};
+use std::str::FromStr;
 
 use anyhow::anyhow;
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use rayon::prelude::*;
 use regex::Regex;
 
@@ -152,8 +152,8 @@ impl FromStr for Map {
     }
 }
 
-static NUMBERS_RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"(?P<num>\d+)").expect("unable to compile number regex"));
+static NUMBERS_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?P<num>\d+)").expect("unable to compile number regex"));
 
 fn get_line_numbers(s: &str) -> Vec<isize> {
     NUMBERS_RE

@@ -1,4 +1,4 @@
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use regex::Regex;
 use std::str::FromStr;
 
@@ -7,7 +7,7 @@ use crate::{
     Solution,
 };
 
-static MOVEMENT_RE: Lazy<Regex> = Lazy::new(|| {
+static MOVEMENT_RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?P<dir>forward|down|up)\s*(?P<dist>\d{1,})").expect("Error compiling regex")
 });
 

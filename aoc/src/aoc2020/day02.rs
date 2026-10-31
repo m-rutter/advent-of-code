@@ -2,7 +2,7 @@ use std::convert::TryFrom;
 
 use crate::error;
 use crate::Solution;
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use regex::Regex;
 
 #[derive(Debug)]
@@ -18,7 +18,7 @@ struct Policy {
     char: char,
 }
 
-static RE: Lazy<Regex> = Lazy::new(|| {
+static RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?P<min>\d+)-(?P<max>\d+)\s(?P<char>[a-z]):\s(?P<password>[a-z]+)")
         .expect("Error compiling regex")
 });

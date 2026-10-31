@@ -1,12 +1,12 @@
 use itertools::Itertools;
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use regex::Regex;
 
 use crate::{Solution, error::Result};
 
 type Board = Vec<Vec<char>>;
 
-static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"XMAS|SAMX").expect("Error compiling regex"));
+static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"XMAS|SAMX").expect("Error compiling regex"));
 
 pub fn run(input: &str) -> Result<Solution> {
     let board: Board = input

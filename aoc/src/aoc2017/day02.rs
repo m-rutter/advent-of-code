@@ -42,8 +42,8 @@ fn users_are_odd(v: &[Vec<u32>]) -> u32 {
         .map(|inner_v| {
             inner_v
                 .iter()
-                .tuple_combinations()
-                .map(|(a, b)| {
+                .array_combinations()
+                .map(|[a, b]| {
                     let sum = if a % b == 0 { a / b } else { 0 };
 
                     if b % a == 0 {

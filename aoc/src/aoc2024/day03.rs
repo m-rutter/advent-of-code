@@ -1,11 +1,11 @@
 use crate::{error::Result, Solution};
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use regex::Regex;
 
-static PART_ONE_RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)").expect("Error compiling regex"));
+static PART_ONE_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)").expect("Error compiling regex"));
 
-static PART_TWO_RE: Lazy<Regex> = Lazy::new(|| {
+static PART_TWO_RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?<mull>mul)\((\d{1,3}),(\d{1,3})\)|(?P<conditional>don't|do)")
         .expect("Error compiling regex")
 });

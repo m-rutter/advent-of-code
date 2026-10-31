@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
 use itertools::Itertools;
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use regex::Regex;
 
 use crate::{
@@ -83,7 +83,7 @@ struct Procedure {
     to: usize,
 }
 
-static RE: Lazy<Regex> = Lazy::new(|| {
+static RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"move (?P<amount>\d+) from (?P<from>\d+) to (?P<to>\d+)")
         .expect("Error compiling regex")
 });
