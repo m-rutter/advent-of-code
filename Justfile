@@ -1,14 +1,11 @@
 _default:
     just --list
 
-install-tools:
-    mise install
-
 test-watch args='':
     watchexec -e rs -- cargo nextest run {{args}}
 
 check-watch:
-    watchexec -e rs -- cargo check --workspace --all-targets 
+    watchexec -e rs -- cargo check --workspace --all-targets
 
 clippy:
     cargo clippy --workspace --all-targets -- -D warnings
