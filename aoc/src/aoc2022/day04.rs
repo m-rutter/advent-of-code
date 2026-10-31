@@ -1,4 +1,4 @@
-use crate::{error::Result, Solution};
+use crate::{Solution, error::Result};
 
 pub fn run(input: &str) -> Result<Solution> {
     let mut part_one = 0;
@@ -23,9 +23,7 @@ pub fn run(input: &str) -> Result<Solution> {
         let end_a: u32 = end_a.parse()?;
         let end_b: u32 = end_b.parse()?;
 
-        if start_a <= start_b && end_a >= end_b {
-            part_one += 1;
-        } else if start_b <= start_a && end_b >= end_a {
+        if (start_a <= start_b && end_a >= end_b) || (start_b <= start_a && end_b >= end_a) {
             part_one += 1;
         }
 

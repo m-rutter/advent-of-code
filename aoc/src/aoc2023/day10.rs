@@ -147,7 +147,7 @@ impl FromStr for PipeGrid {
             .map(|line| {
                 line.trim()
                     .chars()
-                    .map(|c| Pipe::try_from(c))
+                    .map(Pipe::try_from)
                     .collect::<Result<_>>()
             })
             .collect::<Result<_>>()?;
@@ -193,22 +193,10 @@ impl Pipe {
         let pipe = self;
 
         match origin {
-            Direction::North => match pipe {
-                Pipe::Vertical | Pipe::SouthWest | Pipe::SouthEast | Pipe::Start => true,
-                _ => false,
-            },
-            Direction::South => match pipe {
-                Pipe::Vertical | Pipe::NorthWest | Pipe::NorthEast | Pipe::Start => true,
-                _ => false,
-            },
-            Direction::East => match pipe {
-                Pipe::Horizontal | Pipe::SouthWest | Pipe::NorthWest | Pipe::Start => true,
-                _ => false,
-            },
-            Direction::West => match pipe {
-                Pipe::Horizontal | Pipe::SouthEast | Pipe::NorthEast | Pipe::Start => true,
-                _ => false,
-            },
+            Direction::North => matches!(pipe, Pipe::Vertical | Pipe::SouthWest | Pipe::SouthEast | Pipe::Start),
+            Direction::South => matches!(pipe, Pipe::Vertical | Pipe::NorthWest | Pipe::NorthEast | Pipe::Start),
+            Direction::East => matches!(pipe, Pipe::Horizontal | Pipe::SouthWest | Pipe::NorthWest | Pipe::Start),
+            Direction::West => matches!(pipe, Pipe::Horizontal | Pipe::SouthEast | Pipe::NorthEast | Pipe::Start),
         }
     }
 
@@ -284,7 +272,7 @@ L|7||
 -L-J|
 L|-JF";
 
-        let solution = run(&input).unwrap();
+        let solution = run(input).unwrap();
 
         assert_eq!(solution.part_one, "4");
         assert_eq!(solution.part_two, "");
@@ -294,7 +282,7 @@ L|-JF";
     fn test_offical_input() {
         let input = include_str!("./input/day10");
 
-        let solution = run(&input).unwrap();
+        let solution = run(input).unwrap();
 
         assert_eq!(solution.part_one, "7030");
         assert_eq!(solution.part_two, "");

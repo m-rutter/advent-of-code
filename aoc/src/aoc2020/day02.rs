@@ -108,7 +108,7 @@ mod test {
         "
         .trim();
 
-        let result = run(&input).unwrap();
+        let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "2");
         assert_eq!(result.part_two, "1");
@@ -118,7 +118,7 @@ mod test {
     fn matches_offical_result() {
         let input = include_str!("./input/day02");
 
-        let result = run(&input).unwrap();
+        let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "396");
         assert_eq!(result.part_two, "428");

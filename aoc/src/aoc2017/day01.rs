@@ -3,7 +3,7 @@ use crate::Solution;
 
 /// Compute the solution to day 1 of AoC 2017
 pub fn run(input: &str) -> error::Result<Solution> {
-    let parsed_input = parser(&input);
+    let parsed_input = parser(input);
 
     if parsed_input.is_empty() {
         Err(error::ParsingError::ParseError)?;
@@ -39,7 +39,7 @@ mod tests {
     fn day_01_2017_matches_offical_result() {
         let input = include_str!("./input/day01");
 
-        let result = run(&input).unwrap();
+        let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "1228");
         assert_eq!(result.part_two, "1238");

@@ -24,7 +24,7 @@ pub fn run(input: &str) -> Result<Solution> {
 }
 
 fn parse(input: &str) -> Result<Vec<Vec<u32>>> {
-    Ok(input
+    input
         .trim()
         .split("\n\n")
         .map(|group| {
@@ -34,7 +34,7 @@ fn parse(input: &str) -> Result<Vec<Vec<u32>>> {
                 .map(|line| line.parse::<u32>().map_err(|err| err.into()))
                 .collect()
         })
-        .collect::<Result<_>>()?)
+        .collect::<Result<_>>()
 }
 
 #[cfg(test)]

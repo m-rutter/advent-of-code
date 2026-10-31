@@ -69,7 +69,7 @@ impl Round {
             _ => 0,
         };
 
-        return base + outcome;
+        base + outcome
     }
 }
 
@@ -109,7 +109,7 @@ impl From<&Round> for Stratagem {
 
         Self {
             opener: round.opener.clone(),
-            outcome: outcome,
+            outcome,
         }
     }
 }
@@ -138,8 +138,8 @@ impl FromStr for Round {
         };
 
         Ok(Round {
-            opener: opener,
-            response: response,
+            opener,
+            response,
         })
     }
 }

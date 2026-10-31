@@ -24,7 +24,7 @@ impl FromStr for Movement {
     fn from_str(s: &str) -> Result<Self> {
         let captures = MOVEMENT_RE
             .captures(s)
-            .ok_or_else(|| error::ParsingError::ParseError)?;
+            .ok_or(error::ParsingError::ParseError)?;
 
         let dir = &captures["dir"];
         let dist: u32 = captures["dist"].parse()?;
@@ -63,8 +63,8 @@ pub fn run(input: &str) -> Result<Solution> {
     let part_two = (depth * distance).to_string();
 
     Ok(Solution {
-        part_one: part_one,
-        part_two: part_two,
+        part_one,
+        part_two,
     })
 }
 
@@ -72,7 +72,7 @@ fn parse(input: &str) -> Result<Vec<Movement>> {
     input
         .trim()
         .lines()
-        .map(|line| Movement::from_str(line))
+        .map(Movement::from_str)
         .collect()
 }
 
@@ -117,7 +117,7 @@ mod tests {
         forward 2
         ";
 
-        let result = run(&input).unwrap();
+        let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "150");
         assert_eq!(result.part_two, "900");
@@ -127,7 +127,7 @@ mod tests {
     fn matches_offical_result() {
         let input = include_str!("./input/day02");
 
-        let result = run(&input).unwrap();
+        let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "1762050");
         assert_eq!(result.part_two, "1855892637");

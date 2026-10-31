@@ -23,7 +23,7 @@ fn reduce_polymer<'a>(input: impl Iterator<Item = &'a char>) -> u32 {
         match v.last() {
             None => v.push(*ch1),
             Some(ch2) => {
-                if ch1.to_ascii_lowercase() == ch2.to_ascii_lowercase() && ch1 != ch2 {
+                if ch1.eq_ignore_ascii_case(ch2) && ch1 != ch2 {
                     v.pop();
                 } else {
                     v.push(*ch1)

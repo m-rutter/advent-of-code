@@ -45,7 +45,7 @@ impl Network {
             .filter(|(label, _)| label.ends_with('A'))
             .map(|(label, _)| label.to_owned())
             .map(|start| self.count_steps(Mode::Ghost(&start)).unwrap())
-            .fold(1, |acc, step| lcm(acc, step)))
+            .fold(1, lcm))
     }
 
     fn count_steps(&self, mode: Mode) -> Result<usize> {
@@ -229,7 +229,7 @@ XXX = (XXX, XXX)";
     fn test_offical_input() {
         let input = include_str!("./input/day08");
 
-        let solution = run(&input).unwrap();
+        let solution = run(input).unwrap();
 
         assert_eq!(solution.part_one, "20777");
         assert_eq!(solution.part_two, "13289612809129");

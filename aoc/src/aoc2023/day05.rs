@@ -54,23 +54,16 @@ fn find_lowest_location_seed_ranges(seeds: Vec<isize>, list_of_maps: &[Vec<Map>]
     seeds
         .into_iter()
         // batch entries into pairs
-        .batching(|it| match it.next() {
-            None => None,
-            Some(x) => match it.next() {
-                None => None,
-                Some(y) => Some((x, y)),
-            },
-        })
+        .batching(|it| Some((it.next()?, it.next()?)))
         // compute seed ranges
         .flat_map(|(a, b)| {
-            let v = (a..a + b).map(|n| n).collect_vec();
+            let v = (a..a + b).collect_vec();
             v.par_iter()
-                .map(|n| n)
                 .map(|seed| {
                     let mut current_source = *seed;
                     for map_list in list_of_maps {
                         for map in map_list {
-                            let dest = map.from_source(current_source);
+                            let dest = map.destination_for(current_source);
 
                             if let Some(dest) = dest {
                                 current_source = dest;
@@ -95,7 +88,7 @@ fn find_lowest_location(seeds: &[isize], list_of_maps: &[Vec<Map>]) -> Option<is
             let mut current_source = *seed;
             for map_list in list_of_maps {
                 for map in map_list {
-                    let dest = map.from_source(current_source);
+                    let dest = map.destination_for(current_source);
 
                     if let Some(dest) = dest {
                         current_source = dest;
@@ -117,7 +110,7 @@ struct Map {
 }
 
 impl Map {
-    fn from_source(&self, source: isize) -> Option<isize> {
+    fn destination_for(&self, source: isize) -> Option<isize> {
         let source_end = self.source_start + self.range_length;
 
         match source {
@@ -168,7 +161,7 @@ fn get_line_numbers(s: &str) -> Vec<isize> {
         .collect()
 }
 fn get_maps(section: &str) -> Result<Vec<Map>> {
-    section.lines().skip(1).map(|line| line.parse()).collect()
+    section.lines().skip(1).map(str::parse).collect()
 }
 
 #[cfg(test)]

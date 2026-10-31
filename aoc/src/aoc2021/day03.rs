@@ -74,7 +74,7 @@ mod tests {
     fn matches_offical_result() {
         let input = include_str!("./input/day03");
 
-        let result = run(&input).unwrap();
+        let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "2724524");
         assert_eq!(result.part_two, "1855892637");

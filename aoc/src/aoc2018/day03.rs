@@ -19,7 +19,7 @@ struct Claim<'a> {
 type Cloth = HashMap<(u32, u32), u32>;
 
 pub fn run(input: &str) -> error::Result<Solution> {
-    let claims = parse(&input)?;
+    let claims = parse(input)?;
 
     if claims.is_empty() {
         Err(anyhow::anyhow!(&"No claims parsed from input"))?
@@ -68,12 +68,11 @@ fn find_single_claim<'a>(claims: &'a [Claim], cloth: &Cloth) -> Option<&'a str> 
                 let cood = (x, y);
                 let value = cloth.get(&cood);
 
-                if let Some(v) = value {
-                    if *v > 1 {
+                if let Some(v) = value
+                    && *v > 1 {
                         overlapping = true;
                         break;
                     }
-                }
             }
         }
 

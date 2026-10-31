@@ -21,7 +21,7 @@ struct Node {
 
 /// Compute the solution to day 7 of AoC 2017
 pub fn run(input: &str) -> error::Result<Solution> {
-    let nodes = parser(&input)?;
+    let nodes = parser(input)?;
 
     if nodes.is_empty() {
         Err(error::ParsingError::ParseError)?
@@ -44,8 +44,7 @@ fn find_root_node(nodes: &HashMap<String, Node>) -> String {
     }
 
     names
-        .into_iter()
-        .nth(0)
+        .into_iter().next()
         .expect("There should be at least one node")
         .to_string()
 }

@@ -43,7 +43,7 @@ macro_rules! impl_into_aoc_error {
     ($ty: ty) => {
         impl From<$ty> for AoCError {
             fn from(error: $ty) -> Self {
-                error.into()
+                AoCError::ParseError(ParsingError::from(error))
             }
         }
     };

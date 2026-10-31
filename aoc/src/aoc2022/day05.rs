@@ -37,8 +37,8 @@ pub fn run(input: &str) -> Result<Solution> {
 
         items.reverse();
 
-        for index in 0..items.len() {
-            slots2[procedure.to].push(items[index])
+        for item in items {
+            slots2[procedure.to].push(item)
         }
     }
 
@@ -53,8 +53,8 @@ pub fn run(input: &str) -> Result<Solution> {
         .collect::<String>();
 
     Ok(Solution {
-        part_one: part_one,
-        part_two: part_two,
+        part_one,
+        part_two,
     })
 }
 
@@ -101,7 +101,7 @@ impl FromStr for Procedure {
         let to: usize = captures["to"].parse().unwrap();
 
         Ok(Procedure {
-            amount: amount,
+            amount,
             from: from - 1,
             to: to - 1,
         })

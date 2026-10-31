@@ -4,7 +4,7 @@ use std::ops::Range;
 use std::str::FromStr;
 
 pub fn run(input: &str) -> error::Result<Solution> {
-    let coordinates = parse(&input);
+    let coordinates = parse(input);
 
     if coordinates.is_empty() {
         Err(anyhow::anyhow!("Insufficent coordinates parsed from input",))?
@@ -26,17 +26,16 @@ pub fn run(input: &str) -> error::Result<Solution> {
     let mut regions = vec![0; coordinates.len()];
     for x in range.clone() {
         for y in range.clone() {
-            if let Some(coordinates) = grid[x][y] {
-                if !coordinates_to_ignore.contains(&coordinates) {
+            if let Some(coordinates) = grid[x][y]
+                && !coordinates_to_ignore.contains(&coordinates) {
                     regions[coordinates] += 1;
                 }
-            }
         }
     }
 
     let largest_area_size = regions
         .iter()
-        .max_by(|a, b| a.cmp(&b))
+        .max_by(|a, b| a.cmp(b))
         .expect("There should be at least one region by this point");
 
     let mut optimial_region_size = 0;
@@ -110,7 +109,7 @@ fn find_coordinates_to_ignore(grid: &Grid, range: &Range<usize>) -> HashSet<usiz
 fn parse(input: &str) -> Vec<Coordinates> {
     input
         .lines()
-        .filter_map(|line| Coordinates::from_str(&line).ok())
+        .filter_map(|line| Coordinates::from_str(line).ok())
         .collect()
 }
 
@@ -138,7 +137,7 @@ impl FromStr for Coordinates {
             .next()
             .ok_or_else(|| anyhow::anyhow!(&"No y coordinate"))?;
 
-        Ok(Coordinates { x: x, y: y })
+        Ok(Coordinates { x, y })
     }
 }
 
@@ -155,7 +154,7 @@ mod test {
                 5, 5
                 8, 9"#;
 
-        let coordinates = parse(&input);
+        let coordinates = parse(input);
 
         assert_eq!(coordinates.len(), 6);
 
@@ -165,7 +164,7 @@ mod test {
         assert_eq!(coordinates[5].x, 8);
         assert_eq!(coordinates[5].y, 9);
 
-        let r = run(&input).unwrap();
+        let r = run(input).unwrap();
 
         assert_eq!(r.part_one, "17");
     }

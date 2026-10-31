@@ -51,7 +51,7 @@ struct CardWithBet {
     bet: u64,
 }
 
-#[derive(Debug, PartialEq, Eq, Ord)]
+#[derive(Debug, PartialEq, Eq)]
 struct HandWithBet {
     cards: [Card; 5],
     hand: Hand,
@@ -59,31 +59,37 @@ struct HandWithBet {
     joker_rule: bool,
 }
 
-impl PartialOrd for HandWithBet {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+impl Ord for HandWithBet {
+    fn cmp(&self, other: &Self) -> Ordering {
         match self.hand.cmp(&other.hand) {
             Ordering::Equal => {
                 for (self_card, other_card) in self.cards.iter().zip(other.cards.iter()) {
                     if self.joker_rule {
                         if self_card == &Card::Jack && other_card != &Card::Jack {
-                            return Some(Ordering::Less);
+                            return Ordering::Less;
                         }
 
                         if self_card != &Card::Jack && other_card == &Card::Jack {
-                            return Some(Ordering::Greater);
+                            return Ordering::Greater;
                         }
                     }
 
                     match self_card.cmp(other_card) {
                         Ordering::Equal => continue,
-                        other => return Some(other),
+                        other => return other,
                     }
                 }
 
-                Some(Ordering::Equal)
+                Ordering::Equal
             }
-            other => Some(other),
+            other => other,
         }
+    }
+}
+
+impl PartialOrd for HandWithBet {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }
 
@@ -109,13 +115,13 @@ impl HandWithBet {
                 return acc;
             }
 
-            let count = acc.entry(&card).or_insert(0);
+            let count = acc.entry(card).or_insert(0);
             *count += 1;
 
             acc
         });
 
-        let mut best_hand = match counts.iter().map(|(_, c)| c).max().unwrap_or(&0) {
+        let mut best_hand = match counts.values().max().unwrap_or(&0) {
             // joker rule must be in effect and all of the cards are jacks/jokers
             0 => Hand::FiveOfAKind,
             1 => Hand::HighCard,
@@ -170,7 +176,7 @@ impl FromStr for CardWithBet {
 
         let cards = {
             if cards.len() != 5 {
-                return Err(anyhow!("expected 5 cards, got {}", cards.len()))?;
+                Err(anyhow!("expected 5 cards, got {}", cards.len()))?;
             }
             let mut iter = cards.into_iter();
 

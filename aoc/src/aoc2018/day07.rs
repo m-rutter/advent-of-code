@@ -4,7 +4,7 @@ use std::collections::{HashSet, VecDeque};
 use std::str::FromStr;
 
 pub fn run(input: &str) -> error::Result<Solution> {
-    let conditionals = parse(&input);
+    let conditionals = parse(input);
 
     if conditionals.is_empty() {
         Err(anyhow::anyhow!("No conditionals parsed from input"))?
@@ -24,7 +24,7 @@ fn parse(s: &str) -> Vec<Dependency> {
 
 fn compute_sequence(dependencies: &[Dependency]) -> String {
     let sequence: VecDeque<char> = VecDeque::new();
-    let mut nodes_without_incoming_edges: Vec<_> = nodes_without_incoming_edges(&dependencies)
+    let mut nodes_without_incoming_edges: Vec<_> = nodes_without_incoming_edges(dependencies)
         .into_iter()
         .collect();
 
@@ -90,8 +90,8 @@ impl FromStr for Dependency {
             .expect("should be impossible");
 
         Ok(Dependency {
-            antecedent: antecedent,
-            consequent: consequent,
+            antecedent,
+            consequent,
         })
     }
 }
@@ -112,7 +112,7 @@ mod test {
         Step F must be finished before step E can begin.
         "#;
 
-        let dependencies = parse(&input);
+        let dependencies = parse(input);
 
         assert_eq!(dependencies.len(), 7);
         assert_eq!(dependencies[0].antecedent, 'C');

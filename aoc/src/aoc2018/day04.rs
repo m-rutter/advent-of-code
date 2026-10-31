@@ -27,7 +27,7 @@ fn parse(input: &str) -> Vec<GuardEvent> {
         .filter_map(|line| GuardEvent::from_str(line.trim()).ok())
         .collect::<Vec<GuardEvent>>();
 
-    v.sort_by(|a, b| a.date.cmp(&b.date));
+    v.sort_by_key(|a| a.date);
 
     v
 }
@@ -35,7 +35,7 @@ fn parse(input: &str) -> Vec<GuardEvent> {
 type GroupedGuardEvents<'a> = HashMap<u32, Vec<&'a GuardEvent>>;
 
 fn find_sleepy_guard_minute_hash(grouped_guard_events: &GroupedGuardEvents) -> SleepyGuard {
-    sleeper_stats(&grouped_guard_events)
+    sleeper_stats(grouped_guard_events)
         .into_iter()
         .max_by(|a, b| a.minutes_alseep.cmp(&b.minutes_alseep))
         .unwrap()
@@ -50,8 +50,8 @@ fn sleeper_stats(grouped_guard_events: &GroupedGuardEvents) -> Vec<SleepyGuard> 
             let mut minutes_alseep = 0;
 
             for event in events.iter().filter(|event| event.date.hour() == 0) {
-                if let Some(last_event) = last_event {
-                    if let GuardEventKind::FallingAsleep = last_event.kind {
+                if let Some(last_event) = last_event
+                    && let GuardEventKind::FallingAsleep = last_event.kind {
                         if last_event.date.date() == event.date.date() {
                             let time_elasped = event.date.minute() - last_event.date.minute();
                             minutes_alseep += time_elasped;
@@ -70,28 +70,27 @@ fn sleeper_stats(grouped_guard_events: &GroupedGuardEvents) -> Vec<SleepyGuard> 
                             }
                         }
                     }
-                }
 
                 last_event = Some(event);
             }
 
             let ideal_minute = minute_blocks
                 .iter()
-                .max_by(|a, b| a.1.cmp(&b.1))
+                .max_by(|a, b| a.1.cmp(b.1))
                 .unwrap_or((&0, &0));
 
             SleepyGuard {
-                id: id,
-                minutes_alseep: minutes_alseep,
+                id,
+                minutes_alseep,
                 ideal_minute: *ideal_minute.0,
-                minute_blocks: minute_blocks,
+                minute_blocks,
             }
         })
         .collect()
 }
 
 fn find_consistent_sleepy_guard(grouped_guard_events: &GroupedGuardEvents) -> (u32, u32) {
-    let sleppy_guards = sleeper_stats(&grouped_guard_events);
+    let sleppy_guards = sleeper_stats(grouped_guard_events);
 
     let best_guard = sleppy_guards
         .iter()
@@ -99,13 +98,13 @@ fn find_consistent_sleepy_guard(grouped_guard_events: &GroupedGuardEvents) -> (u
             let a = a
                 .minute_blocks
                 .iter()
-                .max_by(|a, b| a.1.cmp(&b.1))
+                .max_by(|a, b| a.1.cmp(b.1))
                 .unwrap_or((&0, &0));
 
             let b = b
                 .minute_blocks
                 .iter()
-                .max_by(|a, b| a.1.cmp(&b.1))
+                .max_by(|a, b| a.1.cmp(b.1))
                 .unwrap_or((&0, &0));
 
             a.1.cmp(b.1)
@@ -189,7 +188,7 @@ impl FromStr for GuardEvent {
         };
 
         Ok(GuardEvent {
-            date: date,
+            date,
             kind: event,
         })
     }
@@ -228,7 +227,7 @@ mod test {
         [1518-11-05 00:55] wakes up
         "#;
 
-        let guard_events = parse(&input);
+        let guard_events = parse(input);
         assert_eq!(guard_events.len(), 17);
 
         let grouped_guard_events = group_event_by_guard(&guard_events);

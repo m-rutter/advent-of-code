@@ -8,7 +8,7 @@ pub fn run(input: &str) -> Result<Solution> {
     let mut list2 = vec![];
 
     for (line_idx, line) in input.trim().lines().enumerate() {
-        for (col_idx, location) in line.trim().split_whitespace().enumerate() {
+        for (col_idx, location) in line.split_whitespace().enumerate() {
             let location = location.parse::<usize>()?;
 
             if col_idx == 0 {
@@ -19,7 +19,7 @@ pub fn run(input: &str) -> Result<Solution> {
                 continue;
             }
 
-            return Err(anyhow!(
+            Err(anyhow!(
                 "Unexcepted extra input on line {line_idx} col {col_idx}"
             ))?;
         }
@@ -65,7 +65,7 @@ mod tests {
     fn test_offical_input() {
         let input = include_str!("./input/day01");
 
-        let solution = run(&input).unwrap();
+        let solution = run(input).unwrap();
 
         assert_eq!(solution.part_one, "1722302");
         assert_eq!(solution.part_two, "20373490");

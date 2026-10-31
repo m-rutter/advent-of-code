@@ -8,7 +8,7 @@ pub fn run(input: &str) -> Result<Solution> {
     let part_one: u64 = races
         .iter()
         .map(|race| race.count_solutions())
-        .fold(1, |acc, count| acc * count);
+        .product();
 
     let races = parse(input, true)?;
 
@@ -67,7 +67,7 @@ fn parse(s: &str, part_two: bool) -> Result<Vec<Race>> {
 
     Ok(time
         .into_iter()
-        .zip(distance.into_iter())
+        .zip(distance)
         .map(|(time, distance)| Race {
             time,
             distance_record: distance,
@@ -77,7 +77,7 @@ fn parse(s: &str, part_two: bool) -> Result<Vec<Race>> {
 
 fn get_num_values(s: &str) -> Result<Vec<u64>> {
     s.split(':')
-        .last()
+        .next_back()
         .ok_or(anyhow!("expected time entry"))?
         .split_whitespace()
         .map(|s| s.parse::<u64>().map_err(|err| err.into()))
@@ -86,7 +86,7 @@ fn get_num_values(s: &str) -> Result<Vec<u64>> {
 
 fn get_num_values_part_two(s: &str) -> Result<u64> {
     s.split(':')
-        .last()
+        .next_back()
         .ok_or(anyhow!("expected time entry"))?
         .split_whitespace()
         .collect::<String>()

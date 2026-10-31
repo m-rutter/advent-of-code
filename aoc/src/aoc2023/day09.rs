@@ -7,8 +7,7 @@ pub fn run(input: &str) -> Result<Solution> {
         .trim()
         .lines()
         .map(|line| {
-            line.trim()
-                .split_whitespace()
+            line.split_whitespace()
                 .map(|s| s.parse::<i64>().map_err(|err| err.into()))
                 .collect::<Result<_>>()
         })
@@ -62,7 +61,7 @@ mod tests {
 1 3 6 10 15 21
 10 13 16 21 30 45";
 
-        let solution = run(&input).unwrap();
+        let solution = run(input).unwrap();
 
         assert_eq!(solution.part_one, "114");
         assert_eq!(solution.part_two, "2");
@@ -72,7 +71,7 @@ mod tests {
     fn test_offical_input() {
         let input = include_str!("./input/day09");
 
-        let solution = run(&input).unwrap();
+        let solution = run(input).unwrap();
 
         assert_eq!(solution.part_one, "1684566095");
         assert_eq!(solution.part_two, "1136");

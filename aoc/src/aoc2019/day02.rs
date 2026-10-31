@@ -12,7 +12,7 @@ pub fn run(input: &str) -> error::Result<Solution> {
 }
 
 fn part_one(program: &[Value]) -> error::Result<Value> {
-    let mut executor = IntCodeExecutor::new(&program);
+    let mut executor = IntCodeExecutor::new(program);
     executor.modify_with_address(1, 12)?;
     executor.modify_with_address(2, 2)?;
 
@@ -55,7 +55,7 @@ mod tests {
     fn matches_offical_result() {
         let input = include_str!("./input/day02");
 
-        let result = run(&input).unwrap();
+        let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "3716250");
         assert_eq!(result.part_two, "6472");

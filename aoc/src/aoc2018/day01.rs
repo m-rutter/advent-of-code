@@ -3,7 +3,7 @@ use crate::Solution;
 use std::collections::HashSet;
 
 pub fn run(input: &str) -> error::Result<Solution> {
-    let modulations = parse(&input);
+    let modulations = parse(input);
 
     if modulations.is_empty() {
         Err(anyhow::anyhow!(
@@ -55,7 +55,7 @@ mod test {
     fn matches_offical_result() {
         let input = include_str!("./input/day01");
 
-        let result = run(&input).unwrap();
+        let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "505");
         assert_eq!(result.part_two, "72330");

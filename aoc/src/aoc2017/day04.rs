@@ -4,7 +4,7 @@ use crate::{error, Solution};
 
 /// Compute the solution to day 4 of AoC 2017
 pub fn run(input: &str) -> error::Result<Solution> {
-    let input = parser(&input);
+    let input = parser(input);
 
     if input.is_empty() {
         Err(error::ParsingError::ParseError)?;
@@ -86,7 +86,7 @@ mod tests {
     fn matches_offical_result() {
         let input = include_str!("./input/day04");
 
-        let result = run(&input).unwrap();
+        let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "325");
         assert_eq!(result.part_two, "119");

@@ -4,7 +4,7 @@ use crate::{error, Solution};
 
 /// Compute the solution to day 6 of AoC 2017
 pub fn run(input: &str) -> error::Result<Solution> {
-    let input = parser(&input);
+    let input = parser(input);
 
     if input.is_empty() {
         Err(error::ParsingError::ParseError)?;
@@ -56,7 +56,7 @@ fn relocate_until_repeat(banks: &[u32]) -> (u32, u32) {
     (cycles, loop_size)
 }
 
-fn cycle(banks: &mut Vec<u32>, start: usize) {
+fn cycle(banks: &mut [u32], start: usize) {
     let length = banks.len();
     let mut blocks = banks[start];
     banks[start] = 0;
@@ -76,7 +76,6 @@ fn cycle(banks: &mut Vec<u32>, start: usize) {
 
 fn parser(input: &str) -> Vec<u32> {
     input
-        .trim()
         .split_whitespace()
         .filter_map(|bank| bank.parse().ok())
         .collect()
@@ -89,7 +88,7 @@ mod tests {
     fn matches_offical_result() {
         let input = include_str!("./input/day06");
 
-        let result = run(&input).unwrap();
+        let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "12841");
         assert_eq!(result.part_two, "8038");

@@ -24,17 +24,17 @@ pub fn run(input: &str) -> Result<Solution> {
     let mut pile_of_cards: HashMap<usize, usize> = HashMap::new();
 
     for card in cards {
-        let count = pile_of_cards.entry(card.id).or_insert(1).clone();
+        let count = *pile_of_cards.entry(card.id).or_insert(1);
         let wins = card.winning_count();
 
         for i in card.id + 1..=card.id + wins {
             let current_dupe_count = pile_of_cards.entry(i).or_insert(1);
 
-            *current_dupe_count = *current_dupe_count + count;
+            *current_dupe_count += count;
         }
     }
 
-    let part_two: usize = pile_of_cards.iter().map(|(_, v)| v).sum();
+    let part_two: usize = pile_of_cards.values().sum();
 
     Ok(Solution {
         part_one: part_one.to_string(),
@@ -76,14 +76,13 @@ impl FromStr for Scratchcard {
     fn from_str(s: &str) -> Result<Self> {
         let id: usize = CARD_NO_RE
             .captures(s)
-            .and_then(|capture| capture.name("id"))
-            .and_then(|name| Some(name.as_str()))
+            .and_then(|capture| capture.name("id")).map(|name| name.as_str())
             .ok_or_else(|| anyhow!("Failed to parse game: {s}"))?
             .parse()?;
 
         let mut numbers = s
             .split(':')
-            .last()
+            .next_back()
             .ok_or_else(|| anyhow!("failed to parse numbers: {s}"))?
             .split('|');
 

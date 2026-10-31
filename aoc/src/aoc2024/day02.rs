@@ -12,7 +12,7 @@ pub fn run(input: &str) -> Result<Solution> {
         .trim()
         .lines()
         .filter(|line| !line.trim().is_empty())
-        .map(|line| Report::from_str(line))
+        .map(Report::from_str)
         .collect::<Result<_>>()?;
 
     let safe_reports_count = reports.iter().filter(|report| report.is_safe()).count();
@@ -37,11 +37,10 @@ impl Report {
     fn _is_safe(levels: &[u32]) -> bool {
         match levels.len() {
             1 => return true,
-            2 => {
-                if levels[0].abs_diff(levels[1]) > 3 {
+            2
+                if levels[0].abs_diff(levels[1]) > 3 => {
                     return false;
                 }
-            }
             _ => {}
         };
 
@@ -93,7 +92,6 @@ impl FromStr for Report {
 
     fn from_str(s: &str) -> Result<Self> {
         let levels = s
-            .trim()
             .split_whitespace()
             .map(|level| level.parse::<u32>().map_err(|err| err.into()))
             .collect::<Result<_>>()?;

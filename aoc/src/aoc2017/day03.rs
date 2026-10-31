@@ -4,7 +4,7 @@ use crate::{error, Solution};
 
 /// Compute the solution to day 3 of AoC 2017
 pub fn run(input: &str) -> error::Result<Solution> {
-    let input = parser(&input)?;
+    let input = parser(input)?;
 
     let part_one = distance(input);
     let part_two = memory_walk(input);
@@ -174,7 +174,7 @@ mod tests {
     fn matches_offical_result() {
         let input = include_str!("./input/day03");
 
-        let result = run(&input).unwrap();
+        let result = run(input).unwrap();
 
         assert_eq!(result.part_one, "438");
         assert_eq!(result.part_two, "266330");

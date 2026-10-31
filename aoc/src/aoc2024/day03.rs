@@ -30,14 +30,13 @@ pub fn run(input: &str) -> Result<Solution> {
     let mut part_two = 0;
 
     for cap in PART_TWO_RE.captures_iter(input) {
-        if let Some(_) = cap.name("mull") {
-            if let State::Do = state {
+        if cap.name("mull").is_some()
+            && let State::Do = state {
                 let x: u32 = cap.get(2).unwrap().as_str().parse().unwrap();
                 let y: u32 = cap.get(3).unwrap().as_str().parse().unwrap();
 
                 part_two += x * y
             }
-        }
 
         if let Some(m) = cap.name("conditional") {
             match m.as_str() {

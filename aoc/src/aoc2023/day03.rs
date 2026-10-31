@@ -7,7 +7,7 @@ pub fn run(input: &str) -> Result<Solution> {
         .trim()
         .lines()
         .map(|line| line.trim().chars())
-        .map(|chars| chars.map(|c| SchematicItem::from(c)))
+        .map(|chars| chars.map(SchematicItem::from))
         .map(|row| row.collect())
         .collect();
 
@@ -153,7 +153,7 @@ impl From<char> for SchematicItem {
     fn from(value: char) -> Self {
         match value {
             '.' => SchematicItem::FullStop,
-            c if c.is_digit(10) => SchematicItem::Num(c),
+            c if c.is_ascii_digit() => SchematicItem::Num(c),
             _ => SchematicItem::Symbol(value),
         }
     }

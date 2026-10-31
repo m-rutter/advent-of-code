@@ -137,7 +137,7 @@ mod tests {
     fn test_offical_input() {
         let input = include_str!("./input/day01");
 
-        let solution = run(&input).unwrap();
+        let solution = run(input).unwrap();
 
         assert_eq!(solution.part_one, "989");
         assert_eq!(solution.part_two, "5941");

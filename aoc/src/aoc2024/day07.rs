@@ -42,7 +42,7 @@ impl Calibration {
     fn is_solvable(&self, with_concat: bool) -> bool {
         let initial = self.operands[0];
 
-        return Calibration::_is_solvable(initial, self.target, &self.operands[1..], with_concat);
+        Calibration::_is_solvable(initial, self.target, &self.operands[1..], with_concat)
     }
 
     fn _is_solvable(acc: u64, target: u64, operands: &[u64], with_concat: bool) -> bool {
@@ -71,9 +71,9 @@ impl Calibration {
 
             let concat_acc = format!("{acc}{next}").parse::<u64>().unwrap();
 
-            return Calibration::_is_solvable(concat_acc, target, &operands[1..], with_concat);
+            Calibration::_is_solvable(concat_acc, target, &operands[1..], with_concat)
         } else {
-            return false;
+            false
         }
     }
 }

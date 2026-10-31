@@ -2,14 +2,19 @@ _default:
     just --list
 
 install-tools:
-    cargo install cargo-nextest --locked
-    cargo install cargo-watch
+    mise install
 
 test-watch args='':
-    cargo watch -x 'nextest run {{args}}'
+    watchexec -e rs -- cargo nextest run {{args}}
 
 check-watch:
-    cargo watch -x check 
+    watchexec -e rs -- cargo check --workspace --all-targets 
 
-watch year day: 
-    cargo watch -x 'run -- -y {{year}} -d {{day}} -p ./aoc/src/aoc{{year}}/input/day{{day}}'
+clippy:
+    cargo clippy --workspace --all-targets -- -D warnings
+
+clippy-fix:
+    cargo clippy --workspace --all-targets --fix --allow-dirty --allow-staged
+
+watch year day:
+    watchexec -e rs -- cargo run -- -y {{year}} -d {{day}} -p ./aoc/src/aoc{{year}}/input/day{{day}}

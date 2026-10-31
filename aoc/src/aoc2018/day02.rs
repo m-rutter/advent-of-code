@@ -2,7 +2,7 @@ use crate::{error, Solution};
 use std::collections::HashMap;
 
 pub fn run(input: &str) -> error::Result<Solution> {
-    let ids = parse(&input);
+    let ids = parse(input);
 
     if ids.is_empty() {
         Err(anyhow::anyhow!(&"No inventory ids parsed from input"))?
