@@ -2,10 +2,8 @@ use std::sync::LazyLock;
 use regex::Regex;
 use std::str::FromStr;
 
-use crate::{
-    error::{self, Result},
-    Solution,
-};
+use anyhow::{anyhow, bail, Result};
+use crate::Solution;
 
 static MOVEMENT_RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?P<dir>forward|down|up)\s*(?P<dist>\d{1,})").expect("Error compiling regex")
@@ -19,12 +17,12 @@ enum Movement {
 }
 
 impl FromStr for Movement {
-    type Err = error::AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self> {
         let captures = MOVEMENT_RE
             .captures(s)
-            .ok_or(error::ParsingError::ParseError)?;
+            .ok_or_else(|| anyhow!("no movement match in line: {s:?}"))?;
 
         let dir = &captures["dir"];
         let dist: u32 = captures["dist"].parse()?;
@@ -33,7 +31,7 @@ impl FromStr for Movement {
             "forward" => Movement::Forward(dist),
             "up" => Movement::Up(dist),
             "down" => Movement::Down(dist),
-            _ => Err(error::ParsingError::ParseError)?,
+            _ => bail!("unknown movement direction: {dir}"),
         })
     }
 }

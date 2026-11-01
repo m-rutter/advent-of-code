@@ -1,4 +1,5 @@
-use crate::{Solution, error};
+use anyhow::ensure;
+use crate::Solution;
 use pest::{self, Parser};
 use pest_derive::Parser;
 use std::collections::HashMap;
@@ -18,12 +19,10 @@ struct Claim<'a> {
 
 type Cloth = HashMap<(u32, u32), u32>;
 
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let claims = parse(input)?;
 
-    if claims.is_empty() {
-        Err(anyhow::anyhow!(&"No claims parsed from input"))?
-    }
+    ensure!(!claims.is_empty(), "no claims parsed from input");
 
     let cloth = create_cloth(&claims);
 
@@ -85,7 +84,7 @@ fn find_single_claim<'a>(claims: &'a [Claim], cloth: &Cloth) -> Option<&'a str> 
     claim_id
 }
 
-fn parse(input: &'_ str) -> error::Result<Vec<Claim<'_>>> {
+fn parse(input: &'_ str) -> anyhow::Result<Vec<Claim<'_>>> {
     let mut claims = vec![];
 
     let files = Day03Parser::parse(Rule::file, input).map_err(|err| anyhow::anyhow!(err))?;

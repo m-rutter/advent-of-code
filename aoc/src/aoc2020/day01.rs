@@ -1,7 +1,6 @@
-use crate::error;
 use crate::Solution;
 
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let expenses: Vec<u32> = input
         .lines()
         .filter_map(|line| line.trim().parse::<u32>().ok())

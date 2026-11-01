@@ -1,9 +1,7 @@
 use std::str::FromStr;
 
-use crate::{
-    error::{AoCError, Result},
-    Solution,
-};
+use anyhow::Result;
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let calibrations: Vec<Calibration> = input
@@ -79,7 +77,7 @@ impl Calibration {
 }
 
 impl FromStr for Calibration {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
         let mut parts = s.split(":");

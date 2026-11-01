@@ -27,7 +27,8 @@ pub mod aoc2022;
 pub mod aoc2023;
 pub mod aoc2024;
 pub mod aoc2025;
-pub mod error;
+
+use anyhow::bail;
 
 /// AoC config
 #[derive(Debug)]
@@ -77,7 +78,7 @@ impl Config {
 /// };
 ///
 /// ```
-pub fn solve_day(config: &Config) -> error::Result<Solution> {
+pub fn solve_day(config: &Config) -> anyhow::Result<Solution> {
     match config.year {
         2017 => aoc2017::run(config),
         2018 => aoc2018::run(config),
@@ -88,9 +89,6 @@ pub fn solve_day(config: &Config) -> error::Result<Solution> {
         2023 => aoc2023::run(config),
         2024 => aoc2024::run(config),
         2025 => aoc2025::run(config),
-        _ => Err(error::AoCError::UnsupportedDay {
-            day: config.day,
-            year: config.year,
-        }),
+        _ => bail!("not implemented yet"),
     }
 }

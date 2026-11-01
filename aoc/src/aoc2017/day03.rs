@@ -1,9 +1,9 @@
 use std::collections::{HashMap, HashSet};
 
-use crate::{error, Solution};
+use crate::Solution;
 
 /// Compute the solution to day 3 of AoC 2017
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let input = parser(input)?;
 
     let part_one = distance(input);
@@ -163,7 +163,7 @@ fn memory_walk(limit: u64) -> u64 {
     matrix[&previous]
 }
 
-fn parser(input: &str) -> error::Result<u64> {
+fn parser(input: &str) -> anyhow::Result<u64> {
     Ok(input.trim().parse()?)
 }
 

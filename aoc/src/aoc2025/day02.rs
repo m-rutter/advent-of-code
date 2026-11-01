@@ -1,4 +1,5 @@
-use crate::{Solution, error::Result};
+use anyhow::Result;
+use crate::Solution;
 
 pub fn run(_input: &str) -> Result<Solution> {
     unimplemented!()

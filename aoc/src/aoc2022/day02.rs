@@ -1,6 +1,7 @@
 use std::str::FromStr;
 
-use crate::{error::AoCError, error::Result, Solution};
+use anyhow::{bail, ensure, Result};
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let rounds: Vec<Round> = input
@@ -115,26 +116,24 @@ impl From<&Round> for Stratagem {
 }
 
 impl FromStr for Round {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self> {
         let pair: Vec<&str> = s.split_whitespace().collect();
-        if pair.len() != 2 {
-            return Err(crate::error::ParsingError::ParseError.into());
-        }
+        ensure!(pair.len() == 2, "expected two moves per round, got: {s:?}");
 
         let opener = match pair[0] {
             "A" => Move::Rock,
             "B" => Move::Paper,
             "C" => Move::Scissors,
-            _ => return Err(crate::error::ParsingError::ParseError.into()),
+            _ => bail!("unknown opener move: {}", pair[0]),
         };
 
         let response = match pair[1] {
             "X" => Move::Rock,
             "Y" => Move::Paper,
             "Z" => Move::Scissors,
-            _ => return Err(crate::error::ParsingError::ParseError.into()),
+            _ => bail!("unknown response move: {}", pair[1]),
         };
 
         Ok(Round {

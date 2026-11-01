@@ -1,14 +1,13 @@
 use std::collections::HashSet;
 
-use crate::{error, Solution};
+use anyhow::ensure;
+use crate::Solution;
 
 /// Compute the solution to day 4 of AoC 2017
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let input = parser(input);
 
-    if input.is_empty() {
-        Err(error::ParsingError::ParseError)?;
-    }
+    ensure!(!input.is_empty(), "no passphrases parsed from input");
 
     let valid_passprase_count = valid_passprase_count(&input);
     let valid_passprase_count_no_anagrams = valid_passprase_anagrams(&input);

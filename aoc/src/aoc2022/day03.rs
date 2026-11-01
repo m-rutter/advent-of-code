@@ -1,6 +1,7 @@
 use itertools::Itertools;
 
-use crate::{error::Result, Solution};
+use anyhow::Result;
+use crate::Solution;
 use std::collections::HashSet;
 
 pub fn run(input: &str) -> Result<Solution> {

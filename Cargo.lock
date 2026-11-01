@@ -18,7 +18,6 @@ dependencies = [
  "rayon",
  "regex",
  "strum",
- "thiserror",
 ]
 
 [[package]]
@@ -100,6 +99,7 @@ name = "aoc-cli"
 version = "0.1.0"
 dependencies = [
  "advent_of_code",
+ "anyhow",
  "clap",
 ]
 

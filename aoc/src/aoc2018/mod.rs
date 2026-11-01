@@ -7,9 +7,10 @@ pub mod day05;
 pub mod day06;
 pub mod day07;
 
-use crate::{error, Config, Solution};
+use anyhow::bail;
+use crate::{Config, Solution};
 
-pub fn run(config: &Config) -> error::Result<Solution> {
+pub fn run(config: &Config) -> anyhow::Result<Solution> {
     match config.day {
         1 => day01::run(&config.input),
         2 => day02::run(&config.input),
@@ -18,9 +19,6 @@ pub fn run(config: &Config) -> error::Result<Solution> {
         5 => day05::run(&config.input),
         6 => day06::run(&config.input),
         7 => day07::run(&config.input),
-        _ => Err(error::AoCError::UnsupportedDay {
-            day: config.day,
-            year: config.year,
-        }),
+        _ => bail!("not implemented yet"),
     }
 }

@@ -3,7 +3,7 @@ use crate::error::{Error, IntCodeResult};
 pub type Cursor = usize;
 pub type Value = isize;
 
-/// Intcode executor. Will exceute intcode programs
+/// Intcode executor. Will execute intcode programs
 #[derive(Debug, Default)]
 pub struct IntCodeExecutor {
     memory: Vec<Value>,
@@ -33,7 +33,7 @@ impl IntCodeExecutor {
     /// Consume Intcode executor to get the result
     pub fn execute(mut self) -> IntCodeResult<Value> {
         loop {
-            if self.cursor > self.memory.len() - 1 {
+            if self.cursor >= self.memory.len() {
                 Err(Error::OutOfBoundsOpCodeRead(self.cursor))?;
             }
 
@@ -109,7 +109,7 @@ impl TryFrom<&[Value]> for Instruction {
             }
             [99, ..] => Instruction::Terminal,
             [1, ..] | [2, ..] => Err(Error::ParseErrorOutOfBoundsArguments(ops[0]))?,
-            [code, ..] => Err(Error::ParseErrorUnsupportOpCode(*code))?,
+            [code, ..] => Err(Error::ParseErrorUnsupportedOpCode(*code))?,
             [] => Err(Error::ParseErrorNoOpCodeProvided)?,
         })
     }
@@ -139,6 +139,13 @@ mod tests {
             .expect("Error unwrapping op");
 
         assert_eq!(3500, code);
+    }
+
+    #[test]
+    fn execute_empty_program_returns_error() {
+        let result = IntCodeExecutor::new(&[]).execute();
+
+        assert!(matches!(result, Err(Error::OutOfBoundsOpCodeRead(0))));
     }
 
     #[test]

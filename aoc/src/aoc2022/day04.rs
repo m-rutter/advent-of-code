@@ -1,4 +1,5 @@
-use crate::{Solution, error::Result};
+use anyhow::Result;
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let mut part_one = 0;

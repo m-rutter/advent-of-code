@@ -1,7 +1,8 @@
+use anyhow::{Context, Result};
 use advent_of_code::{solve_day, Config};
 use clap::Parser;
 use std::fs::File;
-use std::io::{self, Read};
+use std::io::{self, IsTerminal, Read};
 use std::path::PathBuf;
 use std::process;
 
@@ -21,15 +22,23 @@ struct Opt {
 
 fn main() {
     let opt = Opt::parse();
-    let config = create_config(&opt).unwrap_or_else(|err| {
-        eprintln!("Error reading input: {}", err);
-        process::exit(1);
-    });
 
-    let solution = solve_day(&config).unwrap_or_else(|err| {
-        eprintln!("Error when attempting to solve day: {}", err);
+    if let Err(err) = run(&opt) {
+        // anyhow's alternate Display flattens the context chain: "context: cause"
+        if io::stderr().is_terminal() {
+            eprintln!("\x1b[31merror:\x1b[0m {err:#}");
+        } else {
+            eprintln!("error: {err:#}");
+        }
         process::exit(1);
-    });
+    }
+}
+
+fn run(opt: &Opt) -> Result<()> {
+    let config = create_config(opt)?;
+
+    let solution = solve_day(&config)
+        .with_context(|| format!("failed to solve year {} day {}", opt.year, opt.day))?;
 
     println!(
         "Solution to part 1 of day {} is: \n{}",
@@ -39,25 +48,31 @@ fn main() {
         "Solution to part 2 of day {} is: \n{}",
         config.day, solution.part_two
     );
+
+    Ok(())
 }
 
-fn create_config(opt: &Opt) -> io::Result<Config> {
+fn create_config(opt: &Opt) -> Result<Config> {
     let input = read_input_data(&opt.path)?;
 
     Ok(Config::new(opt.year, opt.day, input))
 }
 
-fn read_input_data(input_type: &Option<PathBuf>) -> io::Result<String> {
+fn read_input_data(input_type: &Option<PathBuf>) -> Result<String> {
     let mut buff = String::new();
 
     match input_type {
         Some(path) => {
-            let mut file = File::open(path)?;
-            file.read_to_string(&mut buff)?;
+            let mut file = File::open(path)
+                .with_context(|| format!("failed to open {}", path.display()))?;
+            file.read_to_string(&mut buff)
+                .with_context(|| format!("failed to read {}", path.display()))?;
         }
         None => {
             let mut stdin = io::stdin();
-            stdin.read_to_string(&mut buff)?;
+            stdin
+                .read_to_string(&mut buff)
+                .context("failed to read input from stdin")?;
         }
     }
 

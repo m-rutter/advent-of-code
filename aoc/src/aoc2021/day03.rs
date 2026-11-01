@@ -1,7 +1,5 @@
-use crate::{
-    error::{self, Result},
-    Solution,
-};
+use anyhow::{bail, Result};
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let lines = input.trim().lines().map(|line| line.trim());
@@ -14,7 +12,7 @@ pub fn run(input: &str) -> Result<Solution> {
             match char {
                 '0' => counts[index].0 += 1,
                 '1' => counts[index].1 += 1,
-                _ => Err(error::ParsingError::ParseError)?,
+                _ => bail!("unexpected character {char} in diagnostic report"),
             };
         }
     }

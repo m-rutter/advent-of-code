@@ -1,14 +1,13 @@
 use itertools::Itertools;
 
-use crate::{error, Solution};
+use anyhow::ensure;
+use crate::Solution;
 
 /// Compute the solution to day 2 of AoC 2017
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let input = parse_input(input);
 
-    if input.is_empty() {
-        Err(error::ParsingError::ParseError)?;
-    }
+    ensure!(!input.is_empty(), "no spreadsheet rows parsed from input");
 
     let checksum = gen_checksum(&input);
     let sum_of_even_divisons = users_are_odd(&input);

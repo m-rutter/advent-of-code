@@ -1,14 +1,13 @@
-use crate::{error, Solution};
+use anyhow::ensure;
+use crate::Solution;
 use pest::Parser;
 use std::collections::{HashSet, VecDeque};
 use std::str::FromStr;
 
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let conditionals = parse(input);
 
-    if conditionals.is_empty() {
-        Err(anyhow::anyhow!("No conditionals parsed from input"))?
-    }
+    ensure!(!conditionals.is_empty(), "no conditionals parsed from input");
 
     Ok(Solution {
         part_one: compute_sequence(&conditionals),
@@ -64,9 +63,9 @@ struct Dependency {
 }
 
 impl FromStr for Dependency {
-    type Err = error::AoCError;
+    type Err = anyhow::Error;
 
-    fn from_str(s: &str) -> Result<Dependency, error::AoCError> {
+    fn from_str(s: &str) -> anyhow::Result<Dependency> {
         let mut pair = parser::Day07Parser::parse(parser::Rule::conditional, s)
             .map_err(|err| anyhow::anyhow!(err))?
             .next()

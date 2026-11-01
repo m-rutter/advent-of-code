@@ -1,6 +1,7 @@
 use itertools::Itertools;
 
-use crate::{error::Result, Solution};
+use anyhow::Result;
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let calorie_groups = parse(input)?;

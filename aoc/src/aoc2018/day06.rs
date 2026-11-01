@@ -1,14 +1,13 @@
-use crate::{error, Solution};
+use anyhow::ensure;
+use crate::Solution;
 use std::collections::HashSet;
 use std::ops::Range;
 use std::str::FromStr;
 
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let coordinates = parse(input);
 
-    if coordinates.is_empty() {
-        Err(anyhow::anyhow!("Insufficent coordinates parsed from input",))?
-    }
+    ensure!(!coordinates.is_empty(), "insufficient coordinates parsed from input");
 
     let upper_bound = 1 + coordinates
         .iter()
@@ -125,9 +124,9 @@ impl Coordinates {
 }
 
 impl FromStr for Coordinates {
-    type Err = error::AoCError;
+    type Err = anyhow::Error;
 
-    fn from_str(s: &str) -> error::Result<Coordinates> {
+    fn from_str(s: &str) -> anyhow::Result<Coordinates> {
         let mut v = s.split(',').filter_map(|s| s.trim().parse::<i32>().ok());
 
         let x = v

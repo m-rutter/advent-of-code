@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 
-use crate::{error::Result, Solution};
+use anyhow::Result;
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let chars_with_index = input.chars().enumerate().collect::<Vec<(usize, char)>>();

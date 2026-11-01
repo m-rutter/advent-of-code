@@ -1,15 +1,11 @@
-use crate::error;
+use anyhow::ensure;
 use crate::Solution;
 use std::collections::HashSet;
 
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let modulations = parse(input);
 
-    if modulations.is_empty() {
-        Err(anyhow::anyhow!(
-            &"No frequency modulations parsed from input",
-        ))?
-    }
+    ensure!(!modulations.is_empty(), "no frequency modulations parsed from input");
 
     Ok(Solution {
         part_one: fold_frequency_modulations(&modulations).to_string(),

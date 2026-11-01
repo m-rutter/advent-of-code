@@ -1,13 +1,11 @@
-use crate::error;
+use anyhow::ensure;
 use crate::Solution;
 
 /// Compute the solution to day 1 of AoC 2017
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let parsed_input = parser(input);
 
-    if parsed_input.is_empty() {
-        Err(error::ParsingError::ParseError)?;
-    }
+    ensure!(!parsed_input.is_empty(), "no digits found in input");
 
     let part_one = circular_match_and_sum(&parsed_input, 1);
     let part_two = circular_match_and_sum(&parsed_input, parsed_input.len() / 2);

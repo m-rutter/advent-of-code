@@ -6,7 +6,8 @@ use std::sync::LazyLock;
 use rayon::prelude::*;
 use regex::Regex;
 
-use crate::{error::AoCError, error::Result, Solution};
+use anyhow::Result;
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     // spliting on empty new lines
@@ -126,7 +127,7 @@ impl Map {
 }
 
 impl FromStr for Map {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> std::prelude::v1::Result<Self, Self::Err> {
         let nums = get_line_numbers(s);

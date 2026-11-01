@@ -1,11 +1,8 @@
 use std::str::FromStr;
 
-use anyhow::anyhow;
+use anyhow::{bail, Context, Result};
 
-use crate::{
-    Solution,
-    error::{AoCError, Result},
-};
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let instructions: Vec<Instruction> = input
@@ -75,12 +72,14 @@ enum Direction {
 }
 
 impl FromStr for Instruction {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
         let mut chars = s.chars();
         let direction = chars.next();
-        let movement: i32 = String::from_iter(chars).parse()?;
+        let movement: i32 = String::from_iter(chars)
+            .parse()
+            .with_context(|| format!("invalid turn value in line: {s:?}"))?;
 
         Ok(match direction {
             Some('L') => Self {
@@ -91,7 +90,7 @@ impl FromStr for Instruction {
                 direction: Direction::R,
                 turn: movement,
             },
-            _ => return Err(anyhow!("expected 'L' or 'R' char at start of each line").into()),
+            _ => bail!("expected 'L' or 'R' at start of line: {s:?}"),
         })
     }
 }

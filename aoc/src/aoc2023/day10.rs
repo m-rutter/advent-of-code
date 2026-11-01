@@ -1,12 +1,9 @@
 use std::str::FromStr;
 
-use anyhow::anyhow;
+use anyhow::{anyhow, Result};
 use strum::IntoEnumIterator;
 
-use crate::{
-    error::{AoCError, Result},
-    Solution,
-};
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let grid = PipeGrid::from_str(input)?;
@@ -138,7 +135,7 @@ impl PipeGrid {
 }
 
 impl FromStr for PipeGrid {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self> {
         let grid: Vec<Vec<Pipe>> = s
@@ -241,7 +238,7 @@ impl Pipe {
 }
 
 impl TryFrom<char> for Pipe {
-    type Error = AoCError;
+    type Error = anyhow::Error;
 
     fn try_from(value: char) -> Result<Self> {
         use Pipe::*;

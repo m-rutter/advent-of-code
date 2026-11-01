@@ -1,14 +1,11 @@
 use num::integer::lcm;
 use std::{collections::HashMap, str::FromStr};
 
-use anyhow::anyhow;
+use anyhow::{anyhow, Result};
 use std::sync::LazyLock;
 use regex::Regex;
 
-use crate::{
-    error::{AoCError, Result},
-    Solution,
-};
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let network = Network::from_str(input)?;
@@ -83,7 +80,7 @@ impl Network {
 }
 
 impl FromStr for Network {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self> {
         let mut instructions = Vec::new();
@@ -119,7 +116,7 @@ enum Direction {
 }
 
 impl TryFrom<&char> for Direction {
-    type Error = AoCError;
+    type Error = anyhow::Error;
 
     fn try_from(s: &char) -> Result<Self> {
         Ok(match s {
@@ -138,7 +135,7 @@ struct Node {
 }
 
 impl FromStr for Node {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self> {
         let captures = NODE_RE

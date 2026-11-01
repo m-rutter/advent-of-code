@@ -2,10 +2,8 @@
 
 use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
-use crate::{
-    error::{AoCError, Result},
-    Solution,
-};
+use anyhow::Result;
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let fs = HashMap::<PathBuf, Entity>::new();
@@ -30,7 +28,7 @@ enum Command {
 }
 
 impl FromStr for Command {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Command> {
         todo!()

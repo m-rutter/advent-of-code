@@ -3,14 +3,11 @@ use std::{
     str::FromStr,
 };
 
-use anyhow::anyhow;
+use anyhow::{anyhow, Result};
 use std::sync::LazyLock;
 use regex::Regex;
 
-use crate::{
-    error::{AoCError, Result},
-    Solution,
-};
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let cards: Vec<Scratchcard> = input
@@ -71,7 +68,7 @@ static NUMBERS_RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"(?P<num>\d+)").expect("unable to compile number regex"));
 
 impl FromStr for Scratchcard {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self> {
         let id: usize = CARD_NO_RE

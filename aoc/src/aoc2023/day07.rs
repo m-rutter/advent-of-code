@@ -1,12 +1,9 @@
 use std::{cmp::Ordering, collections::HashMap, str::FromStr};
 
-use anyhow::anyhow;
+use anyhow::{anyhow, Result};
 use itertools::Itertools;
 
-use crate::{
-    error::{AoCError, Result},
-    Solution,
-};
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let iter = input
@@ -158,7 +155,7 @@ impl HandWithBet {
 }
 
 impl FromStr for CardWithBet {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self> {
         let mut parts = s.split_whitespace();
@@ -205,7 +202,7 @@ enum Card {
 }
 
 impl TryFrom<&char> for Card {
-    type Error = AoCError;
+    type Error = anyhow::Error;
 
     fn try_from(s: &char) -> Result<Self> {
         Ok(match s {

@@ -1,4 +1,5 @@
-use crate::{error::Result, Solution};
+use anyhow::Result;
+use crate::Solution;
 use std::sync::LazyLock;
 use regex::Regex;
 

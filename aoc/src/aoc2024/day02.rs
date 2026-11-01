@@ -2,10 +2,8 @@ use std::str::FromStr;
 
 use itertools::Itertools;
 
-use crate::{
-    error::{AoCError, Result},
-    Solution,
-};
+use anyhow::Result;
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let reports: Vec<Report> = input
@@ -88,7 +86,7 @@ impl Report {
 }
 
 impl FromStr for Report {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self> {
         let levels = s

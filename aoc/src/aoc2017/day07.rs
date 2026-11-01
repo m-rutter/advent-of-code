@@ -1,4 +1,5 @@
-use crate::{error, Solution};
+use anyhow::ensure;
+use crate::Solution;
 use pest::{self, Parser};
 use std::collections::{HashMap, HashSet};
 
@@ -20,12 +21,10 @@ struct Node {
 }
 
 /// Compute the solution to day 7 of AoC 2017
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let nodes = parser(input)?;
 
-    if nodes.is_empty() {
-        Err(error::ParsingError::ParseError)?
-    }
+    ensure!(!nodes.is_empty(), "no tower programs parsed from input");
 
     let _root = find_root_node(&nodes);
 
@@ -49,7 +48,7 @@ fn find_root_node(nodes: &HashMap<String, Node>) -> String {
         .to_string()
 }
 
-fn parser(input: &str) -> error::Result<HashMap<String, Node>> {
+fn parser(input: &str) -> anyhow::Result<HashMap<String, Node>> {
     let mut nodes = HashMap::new();
 
     let file = parser::Day07Parser::parse(parser::Rule::file, input)

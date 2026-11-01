@@ -2,7 +2,8 @@ use itertools::Itertools;
 use std::sync::LazyLock;
 use regex::Regex;
 
-use crate::{Solution, error::Result};
+use anyhow::Result;
+use crate::Solution;
 
 type Board = Vec<Vec<char>>;
 

@@ -1,14 +1,13 @@
 use std::collections::HashMap;
 
-use crate::{error, Solution};
+use anyhow::ensure;
+use crate::Solution;
 
 /// Compute the solution to day 6 of AoC 2017
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let input = parser(input);
 
-    if input.is_empty() {
-        Err(error::ParsingError::ParseError)?;
-    }
+    ensure!(!input.is_empty(), "no memory banks parsed from input");
 
     let (part_one, part_two) = relocate_until_repeat(&input);
 

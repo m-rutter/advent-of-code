@@ -1,14 +1,11 @@
-use crate::{error, Solution};
+use anyhow::ensure;
+use crate::Solution;
 use std::collections::HashSet;
 
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let v: Vec<char> = input.chars().collect();
 
-    if v.is_empty() {
-        Err(anyhow::anyhow!(
-            &"Insufficent polymer sequence length provided in input",
-        ))?
-    }
+    ensure!(!v.is_empty(), "insufficient polymer sequence length provided in input");
 
     Ok(Solution {
         part_one: reduce_polymer(v.iter()).to_string(),

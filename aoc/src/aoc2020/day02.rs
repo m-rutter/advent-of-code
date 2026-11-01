@@ -1,6 +1,5 @@
 use std::convert::TryFrom;
 
-use crate::error;
 use crate::Solution;
 use std::sync::LazyLock;
 use regex::Regex;
@@ -52,9 +51,9 @@ impl PasswordWithPolicy {
 }
 
 impl TryFrom<&str> for PasswordWithPolicy {
-    type Error = error::AoCError;
+    type Error = anyhow::Error;
 
-    fn try_from(s: &str) -> error::Result<PasswordWithPolicy> {
+    fn try_from(s: &str) -> anyhow::Result<PasswordWithPolicy> {
         let captures = RE.captures(s).unwrap();
 
         let password = &captures["password"];
@@ -73,7 +72,7 @@ impl TryFrom<&str> for PasswordWithPolicy {
     }
 }
 
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let passwords_with_policy: Vec<_> = input
         .lines()
         .filter_map(|line| PasswordWithPolicy::try_from(line).ok())

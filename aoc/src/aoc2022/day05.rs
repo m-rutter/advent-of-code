@@ -4,10 +4,8 @@ use itertools::Itertools;
 use std::sync::LazyLock;
 use regex::Regex;
 
-use crate::{
-    error::{AoCError, Result},
-    Solution,
-};
+use anyhow::Result;
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let (layout, procedures) = input.split_once("\n\n").ok_or_else(|| {
@@ -89,7 +87,7 @@ static RE: LazyLock<Regex> = LazyLock::new(|| {
 });
 
 impl FromStr for Procedure {
-    type Err = AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self> {
         let captures = RE

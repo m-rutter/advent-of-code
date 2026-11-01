@@ -14,14 +14,14 @@ pub enum Error {
     #[error("Out of bounds reads for op: {0:?}")]
     OutOfBoundsOpParamsRead(Instruction),
 
-    #[error("Out of bound write for op: {0:?}")]
+    #[error("Out of bounds write for op: {0:?}")]
     OutOfBoundsOpParamsWrite(Instruction),
 
-    #[error("Unsufficient arugments for opcode: {0}")]
+    #[error("Insufficient arguments for opcode: {0}")]
     ParseErrorOutOfBoundsArguments(Value),
 
     #[error("Unrecognised op code: {0}")]
-    ParseErrorUnsupportOpCode(Value),
+    ParseErrorUnsupportedOpCode(Value),
 
     #[error("No op code provided, memory might not be initialised")]
     ParseErrorNoOpCodeProvided,

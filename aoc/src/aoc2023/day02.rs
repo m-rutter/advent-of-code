@@ -4,7 +4,8 @@ use anyhow::anyhow;
 use std::sync::LazyLock;
 use regex::Regex;
 
-use crate::{error, error::Result, Solution};
+use anyhow::Result;
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let games: Vec<Game> = input
@@ -94,7 +95,7 @@ static ROUNDS_RE: LazyLock<Regex> = LazyLock::new(|| {
 });
 
 impl FromStr for Game {
-    type Err = error::AoCError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self> {
         let captures = GAME_RE

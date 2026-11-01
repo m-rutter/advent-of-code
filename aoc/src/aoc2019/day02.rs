@@ -1,8 +1,8 @@
-use crate::error;
+use anyhow::bail;
 use crate::Solution;
 use intcode::intcode::{IntCodeExecutor, Value};
 
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let program = parse(input);
 
     Ok(Solution {
@@ -11,18 +11,15 @@ pub fn run(input: &str) -> error::Result<Solution> {
     })
 }
 
-fn part_one(program: &[Value]) -> error::Result<Value> {
+fn part_one(program: &[Value]) -> anyhow::Result<Value> {
     let mut executor = IntCodeExecutor::new(program);
     executor.modify_with_address(1, 12)?;
     executor.modify_with_address(2, 2)?;
 
-    Ok(match executor.execute() {
-        Ok(res) => res,
-        Err(e) => Err(e)?,
-    })
+    Ok(executor.execute()?)
 }
 
-fn part_two(program: &[Value]) -> error::Result<Value> {
+fn part_two(program: &[Value]) -> anyhow::Result<Value> {
     for noun in 0..99 {
         for verb in 0..99 {
             let mut executor = IntCodeExecutor::new(program);
@@ -37,7 +34,7 @@ fn part_two(program: &[Value]) -> error::Result<Value> {
         }
     }
 
-    Err(anyhow::anyhow!("Could not find a correct noun and verb combination",).into())
+    bail!("could not find a correct noun and verb combination")
 }
 
 fn parse(input: &str) -> Vec<Value> {

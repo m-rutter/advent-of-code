@@ -1,7 +1,8 @@
 use anyhow::anyhow;
 use strum::IntoEnumIterator;
 
-use crate::{error::Result, Solution};
+use anyhow::Result;
+use crate::Solution;
 
 pub fn run(input: &str) -> Result<Solution> {
     let lines: Vec<&str> = input.trim().lines().map(|line| line.trim()).collect();

@@ -1,15 +1,14 @@
-use crate::{error, Solution};
+use anyhow::ensure;
+use crate::Solution;
 use chrono::{NaiveDateTime, Timelike};
 use pest::Parser;
 use std::collections::HashMap;
 use std::str::FromStr;
 
-pub fn run(input: &str) -> error::Result<Solution> {
+pub fn run(input: &str) -> anyhow::Result<Solution> {
     let guard_events = parse(input);
 
-    if guard_events.is_empty() {
-        Err(anyhow::anyhow!(&"No guard events parsed from input"))?
-    }
+    ensure!(!guard_events.is_empty(), "no guard events parsed from input");
 
     let grouped_guard_events = group_event_by_guard(&guard_events);
     let sleepy = find_sleepy_guard_minute_hash(&grouped_guard_events);
@@ -158,9 +157,9 @@ struct SleepyGuard {
 }
 
 impl FromStr for GuardEvent {
-    type Err = error::AoCError;
+    type Err = anyhow::Error;
 
-    fn from_str(s: &str) -> Result<GuardEvent, error::AoCError> {
+    fn from_str(s: &str) -> anyhow::Result<GuardEvent> {
         let mut pair = parser::Day04Parser::parse(parser::Rule::event, s)
             .map_err(|err| anyhow::anyhow!(err))?
             .next()
